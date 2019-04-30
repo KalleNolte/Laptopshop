@@ -1,0 +1,34 @@
+<section class="headSection" fxLayout="row" fxLayoutAlign="start">
+  <button class="detailsButton" mat-raised-button color="primary" routerLink="/details">
+    Routerlink to Detailspage
+  </button>
+  <div class="searchInput">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Enter search text ..."
+          ngModel
+          name="searchValue"
+        />
+      </mat-form-field>
+    </form>
+  </div>
+</section>
+
+<div class="mainArea" fxLayout="row" fxLayoutAlign="start">
+  <section class="widgetArea" fxLayout="column" fxLayoutAlign="start">
+    Widgets will go here
+  </section>
+
+  <section class="listArea" fxLayout="column" fxLayoutAlign="start">
+    Product list will go here
+    <mat-list>
+      <mat-list-item *ngFor="let laptop of laptops">
+        <h3 matLine>{{ laptop.productTitle }}</h3>
+        <p matLine>{{ laptop.price }} €</p>
+      </mat-list-item>
+    </mat-list>
+  </section>
+</div>
