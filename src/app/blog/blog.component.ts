@@ -27,15 +27,18 @@ export class BlogComponent implements OnInit {
 
   ngOnInit() {
   }
- compteur_plus(){
+ compteur(){
     if(this.love> 0){
       return 'green';
     }else{
       return 'red';
     }
   }
-  compteur_minus(){
-
+  compteur_plus(){
+    this.love= this.love+1;
+  }
+ compteur_minus(){
+    this.love= this.love-1;
   }
 
 }
