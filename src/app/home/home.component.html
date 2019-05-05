@@ -1,7 +1,5 @@
-<section class="headSection" fxLayout="row" fxLayoutAlign="start">
-  <button class="detailsButton" mat-raised-button color="primary" routerLink="/details">
-    Routerlink to Detailspage
-  </button>
+<section class="headSection" fxLayout="row" fxLayoutAlign="start end">
+  <img id="logo" alt="Laptopshop Logo" src="../assets/images/laptop-icon.jpg" />
   <div class="searchInput">
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <mat-form-field>
@@ -19,15 +17,27 @@
 
 <div class="mainArea" fxLayout="row" fxLayoutAlign="start">
   <section class="widgetArea" fxLayout="column" fxLayoutAlign="start">
-    Widgets will go here
+    <mat-card class="manufacturerWidget">
+      <mat-card-title>Brand</mat-card-title>
+      <div *ngFor="let laptop of laptops">
+        <mat-checkbox>
+          {{ laptop.brandName }}
+        </mat-checkbox>
+      </div>
+    </mat-card>
+    <mat-card class="pricerWidget">
+      <mat-card-title>Price</mat-card-title>
+      <mat-slider min="100" max="5000" step="100" value="500"></mat-slider>
+    </mat-card>
   </section>
 
   <section class="listArea" fxLayout="column" fxLayoutAlign="start">
-    Product list will go here
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops">
+      <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
         <h3 matLine>{{ laptop.productTitle }}</h3>
-        <p matLine>{{ laptop.price }} €</p>
+        <p matLine>Price {{ laptop.price }} €</p>
+        <p matLine>Processor Type: {{ laptop.processorType }} @ {{ laptop.processorCount}} x {{ laptop.processorSpeed }} Ghz</p>
+        <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>
   </section>

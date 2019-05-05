@@ -2,15 +2,11 @@
   width: 100%;
 }
 
-.detailsButton {
-  width: 23%;
-  height: 3rem;
-  margin: 0 2rem 0 0;
-}
-
-.searchInput {
-  width: 50%;
-}
+#logo {
+  height: 100px;
+  width: 100px;
+  margin-right: 4rem;
+  }
 
 .mainArea {
   width: 100%;
@@ -20,4 +16,11 @@
   width: 25%;
 }
 
+.mat-cart {
+  padding: 1rem;
+}
+
+mat-list-item {
+  cursor: pointer;
+}
 
