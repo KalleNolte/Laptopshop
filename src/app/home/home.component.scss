@@ -1,26 +1,53 @@
 .headSection {
-  width: 100%;
-}
-
-#logo {
-  height: 100px;
-  width: 100px;
-  margin-right: 4rem;
+  h3 {
+    width: 20%;
   }
-
-.mainArea {
-  width: 100%;
-}
-
-.widgetArea {
-  width: 25%;
-}
-
-.mat-cart {
+  #searchInput {
+    width: 75%;
+  }
   padding: 1rem;
 }
 
-mat-list-item {
-  cursor: pointer;
+.mainArea {
+  .widgetArea {
+    width: 20%;
+  }
+
+  .listArea {
+    width: 75%;
+  }
+
+  mat-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mat-cart {
+    padding: 1rem;
+  }
+
+  mat-list-item {
+    cursor: pointer;
+  }
 }
+
+// .stepBarClass {
+//   width:90%;
+//   height:10px;
+//   background:lightgray;
+//   border-radius:5px;
+//   }
+
+// .stepSliderClass
+// {
+//   width:20px;
+//   height:20px;
+//   background:lightgray;
+//   border-radius:50%;    
+//   border:1px solid royalblue;
+//   bottom:-50% !important;
+//   }
+// .stephighlightClass{
+//   background:royalblue;
+//   }
 

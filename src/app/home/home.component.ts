@@ -14,15 +14,23 @@ import data from "../../assets/dummyData.json";
   host: { "[@moveIn]": "" }
 })
 export class HomeComponent implements OnInit {
+  dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
+  // min=0;
+  // max=5000;
+  // twoWayRange=[10,30];
+  // //oninput change you need to do
+  // changed(){
+  //   this.twoWayRange=[...this.twoWayRange];
+  //   }
 
-  dummyData = (<any>data);
+
 
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.laptops= this.dummyData;
+    this.laptops = this.dummyData;
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
   }

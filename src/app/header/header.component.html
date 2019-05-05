@@ -1,0 +1,14 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="start center" color="primary">
+  <div class="logoContainer">
+    <img
+      id="logo"
+      alt="Laptopshop Logo"
+      src="../assets/images/laptop-icon.jpg"
+      routerLink="/"
+    />
+  </div>
+  <h1 style="font-weight:bold">{{ pageTitle }}</h1>
+  <button class="cartButton" mat-mini-fab routerLink="/cart" color="accent">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+</mat-toolbar>

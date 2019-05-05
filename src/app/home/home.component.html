@@ -1,5 +1,6 @@
+<app-header pageTitle="Laptopshop"></app-header>
 <section class="headSection" fxLayout="row" fxLayoutAlign="start end">
-  <img id="logo" alt="Laptopshop Logo" src="../assets/images/laptop-icon.jpg" />
+  <h3>Choose criteria <br />to filter results:</h3>
   <div class="searchInput">
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <mat-form-field>
@@ -15,30 +16,99 @@
   </div>
 </section>
 
-<div class="mainArea" fxLayout="row" fxLayoutAlign="start">
-  <section class="widgetArea" fxLayout="column" fxLayoutAlign="start">
-    <mat-card class="manufacturerWidget">
+<section class="mainArea" fxLayout="row" fxLayoutAlign="start">
+  <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
+    <mat-card fxLayout="column" class="brandWidget">
       <mat-card-title>Brand</mat-card-title>
-      <div *ngFor="let laptop of laptops">
-        <mat-checkbox>
-          {{ laptop.brandName }}
-        </mat-checkbox>
-      </div>
+      <mat-checkbox>
+        Apple
+      </mat-checkbox>
+      <mat-checkbox>
+        Dell
+      </mat-checkbox>
+      <mat-checkbox>
+        XAMMBOX
+      </mat-checkbox>
     </mat-card>
-    <mat-card class="pricerWidget">
-      <mat-card-title>Price</mat-card-title>
-      <mat-slider min="100" max="5000" step="100" value="500"></mat-slider>
-    </mat-card>
-  </section>
 
-  <section class="listArea" fxLayout="column" fxLayoutAlign="start">
+    <mat-card class="priceWidget">
+      <mat-card-title>Price</mat-card-title>
+      <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
+                    
+                            
+    </mat-card>
+    <mat-card fxLayout="column" class="displaySizeWidget">
+      <mat-card-title>Displaysize</mat-card-title>
+      <mat-checkbox>
+        25 cm (10") and less
+      </mat-checkbox>
+      <mat-checkbox>
+        28 - 30 cm (11" - 12")
+      </mat-checkbox>
+      <mat-checkbox>
+        33 - 36 cm (13" - 14")
+      </mat-checkbox>
+      <mat-checkbox>
+        38 - 41 cm (15" - 16")
+      </mat-checkbox>
+      <mat-checkbox>
+        43 cm (17") and above
+      </mat-checkbox>
+    </mat-card>
+
+    <mat-card fxLayout="column" class="hardDriveWidget">
+      <mat-card-title>Hard Drive Capacity</mat-card-title>
+      <mat-checkbox>
+        Up to 159 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        160 - 249 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        250 - 499 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        500 GB and more
+      </mat-checkbox>
+    </mat-card>
+
+    <mat-card fxLayout="column" class="hardDriveWidget">
+      <mat-card-title>Operating System</mat-card-title>
+      <mat-checkbox>
+        Windows 7
+      </mat-checkbox>
+      <mat-checkbox>
+        Windows 8
+      </mat-checkbox>
+      <mat-checkbox>
+        Windows 10
+      </mat-checkbox>
+      <mat-checkbox>
+        DOS
+      </mat-checkbox>
+      <mat-checkbox>
+        Mac OS
+      </mat-checkbox>
+      <mat-checkbox>
+        No Operating System
+      </mat-checkbox>
+    </mat-card>
+  </div>
+
+  <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
       <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
         <h3 matLine>{{ laptop.productTitle }}</h3>
-        <p matLine>Price {{ laptop.price }} €</p>
-        <p matLine>Processor Type: {{ laptop.processorType }} @ {{ laptop.processorCount}} x {{ laptop.processorSpeed }} Ghz</p>
+        <p matLine>
+          Processor Type: {{ laptop.processorType }} @
+          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz
+        </p>
+        <p matLine>
+          OS: {{ laptop.operatingSystem }}
+        </p>
+        <strong matLine>Price: {{ laptop.price }} €</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>
-  </section>
-</div>
+  </div>
+</section>

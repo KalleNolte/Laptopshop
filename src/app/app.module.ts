@@ -7,10 +7,13 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { DetailsComponent } from "./details/details.component";
+import { HeaderComponent } from './header/header.component';
+import { CartComponent } from './cart/cart.component';
 
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
 
+import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -19,9 +22,10 @@ import { MatListModule } from "@angular/material/list";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
+import { RangeSliderModule  } from 'ngx-rangeslider-component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DetailsComponent],
+  declarations: [AppComponent, HomeComponent, DetailsComponent, HeaderComponent, CartComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -29,6 +33,7 @@ import { MatSliderModule } from "@angular/material/slider";
     BrowserAnimationsModule,
     FlexLayoutModule,
     FormsModule,
+    MatToolbarModule,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
@@ -36,7 +41,8 @@ import { MatSliderModule } from "@angular/material/slider";
     MatListModule,
     MatCheckboxModule,
     MatCardModule,
-    MatSliderModule
+    MatSliderModule,
+    RangeSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
