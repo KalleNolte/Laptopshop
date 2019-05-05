@@ -9,10 +9,12 @@
     <div class="col-xs-12">
       <h2>The Post</h2>
       <ul class="list-group">
-        <app-blog *ngFor="let posts of mypost "
-        [titre]="posts.tel"
-        [cont]="posts.content"
-        [dat]="posts.created_at"></app-blog>
+          <app-blog *ngFor="let posts of mypost "
+            [titre]="posts.tel"
+            [cont]="posts.content"
+            [dat]="posts.created_at"
+            [love]="posts.loveIts">
+        </app-blog>
       </ul>
     </div>
   </div>

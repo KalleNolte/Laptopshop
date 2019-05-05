@@ -10,7 +10,7 @@ import { nbind } from 'q';
 export class BlogComponent implements OnInit {
   @Input() titre: string;
   @Input() cont: string;
-  @Input() loveIt:number;
+  @Input() love:number;
   @Input() dat: string;
   /*
   @Input() tit: string;
@@ -27,10 +27,15 @@ export class BlogComponent implements OnInit {
 
   ngOnInit() {
   }
+ compteur_plus(){
+    if(this.love> 0){
+      return 'green';
+    }else{
+      return 'red';
+    }
+  }
+  compteur_minus(){
 
- compteur(){
-  this.loveIt= this.loveIt-1;
-  return this.loveIt;
- }
+  }
 
 }
