@@ -8,7 +8,7 @@ import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { DetailsComponent } from "./details/details.component";
 
-import { FlexLayoutModule } from "@angular/flex-layout";
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from "@angular/forms";
 
 import { MatButtonModule } from "@angular/material/button";
