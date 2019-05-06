@@ -10,9 +10,10 @@ import { HomeComponent } from './home/home.component';
 import { AppareilComponent} from './appareil/appareil.component';
 import { from } from 'rxjs';
 import { BlogComponent } from './blog/blog.component';
+import { GoalShopComponent } from './goal-shop/goal-shop.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, AppareilComponent, BlogComponent],
+  declarations: [AppComponent, HomeComponent, AppareilComponent, BlogComponent, GoalShopComponent],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule,FormsModule],
   providers: [],
   bootstrap: [AppComponent]
