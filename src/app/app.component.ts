@@ -10,16 +10,19 @@ export class AppComponent {
     manufacturer_1='Lenovo'
      details_1='(14,0 Zoll Full HD IPS Touch) Slim Convertible Notebook (Intel Core i5-8250U, 8 GB RAM, 256 GB SSD, Intel UHD Grafik 620, Windows 10 Home) schwarz'
     price_1='699'
+    foto_1='assets/yoga.jpeg'
 
     title_2='Apple MacBook Air '
     manufacturer_2='Apple'
      details_2='(13 Zoll, 1.8GHz dual-core Intel Core i5 Prozessor, 128 GB) - Silber'
     price_2='855'
+    foto_2='assets/air.jpeg'
 
     title_3='Microsoft Surface Book 2 34,29 cm'
     manufacturer_3='Mcirsoft'
      details_3= '(13,5 Zoll) Laptop (Intel Core i5, 8GB RAM, 256GB SSD, Intel HD Graphics 620, Win 10) silber'
     price_3='1749'
+    foto_3='assets/surface.jpeg'
 
 
   machines=[
