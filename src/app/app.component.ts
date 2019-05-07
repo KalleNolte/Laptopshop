@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  enter=""
+  sendEnter( from:NgModel){
+    console.log( this.enter);
+    
+  }
     title_1='Lenovo Yoga 530'
     manufacturer_1='Lenovo'
      details_1='(14,0 Zoll Full HD IPS Touch) Slim Convertible Notebook (Intel Core i5-8250U, 8 GB RAM, 256 GB SSD, Intel UHD Grafik 620, Windows 10 Home) schwarz'

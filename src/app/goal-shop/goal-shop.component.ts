@@ -10,6 +10,7 @@ export class GoalShopComponent implements OnInit {
   @Input() det: string;
   @Input() pri: number;
   @Input() foto: string;
+
   constructor() { }
 
   ngOnInit() {

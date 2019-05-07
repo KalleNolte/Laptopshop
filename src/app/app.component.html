@@ -4,34 +4,46 @@
     </h1>
   </div>
 
- <div class="container">
-   
-   <div class="card-group">
-     <div class="row">
-        
-            <app-goal-shop 
+<nav class="navbar navbar-light bg-light" style="margin-top:50px " style="margin-bottom: 50px">
+  <a class="navbar-brand">find your machine </a>
+  <form class="form-inline">
+    <input class="form-control mr-sm-2" type="search" 
+           placeholder="Enter search keyword" aria-label="Search"
+           ([ngModel])= "enter">
+    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit"
+            (click)="sendEnter()">Search</button>
+  </form>
+</nav>
+
+
+<div class="haupt">
+ <div class="card-columns">
+  <app-goal-shop   
                       [tit]="title_1"
                       [det]="details_1"
                       [pri]="price_1"
                       [foto]="foto_1">
                       
                     </app-goal-shop>
-            <app-goal-shop 
+  
+  <app-goal-shop 
                       [tit]="title_2"
                       [det]="details_2"
                       [pri]="price_2"
                       [foto]="foto_2">
                     </app-goal-shop>
-            <app-goal-shop 
+  <app-goal-shop 
                       [tit]="title_3"
                       [det]="details_3"
                       [pri]="price_3"
                       [foto]="foto_3">
                     </app-goal-shop>
-       
+     
+  
 </div>
- </div>
- </div>
+</div>
+   
+   
 
   
 <!--This is a comment. Comments are not displayed in the browser
