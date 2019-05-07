@@ -1,7 +1,9 @@
-<section class="headSection" fxLayout="row" fxLayoutAlign="start">
-  <button class="detailsButton" mat-raised-button color="primary" routerLink="/details">
-    Routerlink to Detailspage
-  </button>
+<app-header
+  pageTitle="Laptopshop"
+  helpTitle="Help text for home page"
+></app-header>
+<section class="headSection" fxLayout="row" fxLayoutAlign="start end">
+  <h3>Choose criteria <br />to filter results:</h3>
   <div class="searchInput">
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <mat-form-field>
@@ -17,18 +19,120 @@
   </div>
 </section>
 
-<div class="mainArea" fxLayout="row" fxLayoutAlign="start">
-  <section class="widgetArea" fxLayout="column" fxLayoutAlign="start">
-    Widgets will go here
-  </section>
+<section class="mainArea" fxLayout="row" fxLayoutAlign="start">
+  <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
+    <mat-card fxLayout="column" class="brandWidget">
+      <mat-card-title>Brand</mat-card-title>
+      <mat-checkbox>
+        Apple
+      </mat-checkbox>
+      <mat-checkbox>
+        Dell
+      </mat-checkbox>
+      <mat-checkbox>
+        XAMMBOX
+      </mat-checkbox>
+    </mat-card>
 
-  <section class="listArea" fxLayout="column" fxLayoutAlign="start">
-    Product list will go here
+    <mat-card class="priceWidget">
+      <mat-card-title>Price</mat-card-title>
+      <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
+    </mat-card>
+    <mat-card fxLayout="column" class="displaySizeWidget">
+      <mat-card-title>Displaysize</mat-card-title>
+      <mat-checkbox>
+        25 cm (10") and less
+      </mat-checkbox>
+      <mat-checkbox>
+        28 - 30 cm (11" - 12")
+      </mat-checkbox>
+      <mat-checkbox>
+        33 - 36 cm (13" - 14")
+      </mat-checkbox>
+      <mat-checkbox>
+        38 - 41 cm (15" - 16")
+      </mat-checkbox>
+      <mat-checkbox>
+        43 cm (17") and above
+      </mat-checkbox>
+    </mat-card>
+
+    <mat-card fxLayout="column" class="hardDriveWidget">
+      <mat-card-title>Hard Drive Capacity</mat-card-title>
+      <mat-checkbox>
+        Up to 159 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        160 - 249 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        250 - 499 GB
+      </mat-checkbox>
+      <mat-checkbox>
+        500 GB and more
+      </mat-checkbox>
+    </mat-card>
+
+    <mat-card fxLayout="column" class="hardDriveWidget">
+      <mat-card-title>Operating System</mat-card-title>
+      <mat-checkbox>
+        Windows 7
+      </mat-checkbox>
+      <mat-checkbox>
+        Windows 8
+      </mat-checkbox>
+      <mat-checkbox>
+        Windows 10
+      </mat-checkbox>
+      <mat-checkbox>
+        DOS
+      </mat-checkbox>
+      <mat-checkbox>
+        Mac OS
+      </mat-checkbox>
+      <mat-checkbox>
+        No Operating System
+      </mat-checkbox>
+    </mat-card>
+  </div>
+
+  <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops">
+      <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
         <h3 matLine>{{ laptop.productTitle }}</h3>
-        <p matLine>{{ laptop.price }} €</p>
+        <p matLine>
+          Processor Type: {{ laptop.processorType }} @
+          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz
+        </p>
+        <p matLine>OS: {{ laptop.operatingSystem }}</p>
+        <strong matLine>Price: {{ laptop.price }} €</strong>
+        <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>
-  </section>
-</div>
+
+    <mat-form-field>
+      <input
+        matInput
+        (keyup)="applyFilter($event.target.value)"
+        placeholder="Filter"
+      />
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.productTitle }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</section>
