@@ -1,4 +1,7 @@
-<app-header pageTitle="Laptopshop"></app-header>
+<app-header
+  pageTitle="Laptopshop"
+  helpTitle="Help text for home page"
+></app-header>
 <section class="headSection" fxLayout="row" fxLayoutAlign="start end">
   <h3>Choose criteria <br />to filter results:</h3>
   <div class="searchInput">
@@ -34,8 +37,6 @@
     <mat-card class="priceWidget">
       <mat-card-title>Price</mat-card-title>
       <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
-                    
-                            
     </mat-card>
     <mat-card fxLayout="column" class="displaySizeWidget">
       <mat-card-title>Displaysize</mat-card-title>
@@ -103,12 +104,35 @@
           Processor Type: {{ laptop.processorType }} @
           {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz
         </p>
-        <p matLine>
-          OS: {{ laptop.operatingSystem }}
-        </p>
+        <p matLine>OS: {{ laptop.operatingSystem }}</p>
         <strong matLine>Price: {{ laptop.price }} €</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>
+
+    <mat-form-field>
+      <input
+        matInput
+        (keyup)="applyFilter($event.target.value)"
+        placeholder="Filter"
+      />
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.productTitle }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
   </div>
 </section>

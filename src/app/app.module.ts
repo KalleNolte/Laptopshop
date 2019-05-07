@@ -7,8 +7,8 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
 import { DetailsComponent } from "./details/details.component";
-import { HeaderComponent } from './header/header.component';
-import { CartComponent } from './cart/cart.component';
+import { HeaderComponent } from "./header/header.component";
+import { CartComponent } from "./cart/cart.component";
 
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule } from "@angular/forms";
@@ -22,10 +22,17 @@ import { MatListModule } from "@angular/material/list";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
-import { RangeSliderModule  } from 'ngx-rangeslider-component';
+import { MatMenuModule } from "@angular/material/menu";
+import { MatTableModule, MatSortModule } from "@angular/material";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, DetailsComponent, HeaderComponent, CartComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    DetailsComponent,
+    HeaderComponent,
+    CartComponent
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -42,7 +49,9 @@ import { RangeSliderModule  } from 'ngx-rangeslider-component';
     MatCheckboxModule,
     MatCardModule,
     MatSliderModule,
-    RangeSliderModule
+    MatMenuModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
