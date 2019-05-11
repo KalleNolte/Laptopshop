@@ -13,8 +13,12 @@ export class DataService {
 
   constructor(private http: HttpClient) {}
 
-  getSample(){
-    return this.http.get(this.sampleUrl)
-    .pipe(map((resp: Response) => resp.json()));
+  getSample(): Observable<Laptop[]>{
+    return this.http.get<Laptop[]>('/search/sample')
   }
+
+  // getSample(){
+  //   return this.http.get(this.sampleUrl)
+  //   .pipe(map((resp: Response) => resp.json()));
+  // }
 }

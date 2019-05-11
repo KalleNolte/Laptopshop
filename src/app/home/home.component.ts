@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.laptops = this.dummyData;
+    //this.laptops = this.dummyData;
+    this.getSample();
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
@@ -43,5 +44,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onSubmit(form: NgForm) {
     console.log(form);
+  }
+  
+  getSample(){
+    this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
   }
 }

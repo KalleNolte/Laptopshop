@@ -1,0 +1,11 @@
+{
+    "/search/*": {
+        "target": "http://localhost:5000/search",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/search": ""
+        }
+    }
+}
