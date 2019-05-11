@@ -8,13 +8,13 @@ import { map } from "rxjs/operators";
   providedIn: "root"
 })
 export class DataService {
-  sampleUrl = "../assets/amazonDataSample.json";
+  //sampleUrl = "../assets/amazonDataSample.json";
  
 
   constructor(private http: HttpClient) {}
 
   getSample(): Observable<Laptop[]>{
-    return this.http.get<Laptop[]>('/search/sample')
+    return this.http.get<Laptop[]>('/api/sample')
   }
 
   // getSample(){

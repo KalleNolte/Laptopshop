@@ -107,7 +107,7 @@ def computeVagueHardDrive(allDocs, hardDriveSize, hardDriveType):
     print(result)
     return result
 
-@app.route('/search', methods=['POST'])
+@app.route('/api/search', methods=['POST'])
 def search():
     minPrice = request.form.get('minPrice')
     maxPrice = request.form.get('maxPrice')
@@ -181,7 +181,7 @@ def search():
 
         #print(n['ASIN'])
     #return render_template('show_results.html', results = outputProducts)#this works too if you use    {{results | tojson| safe}} in html
-@app.route('/search/sample', methods=['GET'])
+@app.route('/api/sample', methods=['GET'])
 def getSample():
     allDocs = es.search(index="amazon", body ={
                                                   "query": {

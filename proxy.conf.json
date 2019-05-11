@@ -1,11 +1,11 @@
 {
-    "/search/*": {
-        "target": "http://localhost:5000/search",
+    "/api/*": {
+        "target": "http://localhost:5000/api",
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true,
         "pathRewrite": {
-            "^/search": ""
+            "^/api": ""
         }
     }
 }
