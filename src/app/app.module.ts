@@ -23,7 +23,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatTableModule, MatSortModule } from "@angular/material";
+import { MatTableModule, MatSortModule, MatRadioModule} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -51,7 +51,8 @@ import { MatTableModule, MatSortModule } from "@angular/material";
     MatSliderModule,
     MatMenuModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]
