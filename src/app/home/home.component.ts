@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, HostListener, ElementRef } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
@@ -20,9 +20,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   state: string = "";
   laptops: Laptop[] = [];
   displayedColumns: string[] = ["name", "price"];
-  dataSource = new MatTableDataSource(this.dummyData);;
+  dataSource = new MatTableDataSource(this.dummyData);
+
+  //laptop = new Laptop();
 
   @ViewChild(MatSort) sort: MatSort;
+
+  sticky: boolean = false;
+  elementPosition: any;
 
   constructor(private dataService: DataService) {}
 
@@ -48,5 +53,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   
   getSample(){
     this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
+  }
+  search(form: NgForm){
+    //this.brand = form['brand'];
+    this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+
   }
 }
