@@ -1,0 +1,41 @@
+.headSection {
+  h3 {
+    width: 20%;
+  }
+  #searchInput {
+    width: 75%;
+  }
+  padding: 0 1rem;
+}
+
+.mainArea {
+  .widgetArea {
+    width: 20%;
+  }
+
+  .listArea {
+    width: 75%;
+  }
+
+  mat-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mat-cart {
+    padding: 1rem;
+  }
+
+  mat-list-item {
+    cursor: pointer;
+  }
+}
+.sticky{
+  position: fixed;
+  top: 0;
+  overflow: hidden;
+  z-index: 10;
+  width: 100%;
+}
+
+
