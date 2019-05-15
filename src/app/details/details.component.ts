@@ -22,7 +22,7 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit() {
     this.one_detail.getLaptop_details()
-      .subscribe(data => this.laptop= 1data);
+      .subscribe(data => this.laptop= data);
       error=> this.error=error;
   }
   
