@@ -9,6 +9,7 @@ import { map } from "rxjs/operators";
 })
 export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
+  private for_detailsExample="../assets/jsonExample.json";
  
   httpOptions = {
     headers: new HttpHeaders({
@@ -30,4 +31,9 @@ export class DataService {
   //   return this.http.get(this.sampleUrl)
   //   .pipe(map((resp: Response) => resp.json()));
   // }
+
+  // here i only use one Laptop info for the view page
+  getLaptop_details():Observable<Laptop>{
+    return this.http.get<Laptop>(this.for_detailsExample);
+  }
 }

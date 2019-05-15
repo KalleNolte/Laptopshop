@@ -2,7 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
 import { moveIn, fallIn } from "../routing.animations";
-
+import { HttpClient } from 'selenium-webdriver/http';
+import { HttpResponse } from '@angular/common/http';
 @Component({
   selector: "app-details",
   templateUrl: "./details.component.html",
@@ -11,7 +12,18 @@ import { moveIn, fallIn } from "../routing.animations";
   host: { "[@moveIn]": "" }
 })
 export class DetailsComponent implements OnInit {
-  constructor() {}
+  constructor(private one_detail: DataService) {}
 
-  ngOnInit() {}
+  //artikel: string[];
+    public laptop= {};
+   // productTitle= this.laptop.productTitle;
+  //arttikel: any;
+  error;
+
+  ngOnInit() {
+    this.one_detail.getLaptop_details()
+      .subscribe(data => this.laptop= 1data);
+      error=> this.error=error;
+  }
+  
 }

@@ -10,18 +10,19 @@
 <mat-card  fxLayout="row"  fxLayoutGap="20px" style="padding:20px">
   
    <mat-card-content >
-      <img    style="width: 200px;height:200px"mat-card-lg-image src="assets\yoga.jpeg" alt="surf" >
+      <img    style="width: 200px;height:200px"mat-card-lg-image src="{{laptop.imagePath}}" alt="surf" >
    </mat-card-content>
 
    <mat-card-content  >
-   <p><strong> Lenovo 320 Business 15.6\" HD Touchscreen Laptop, Intel Quad-Core i7-8550U 1.8GHz 12GB DDR4 256GB SSD DVDRW Dolby Audio 802.11ac Bluetooth USB Type-C Windows 10 (Certified Refurbished)</strong> </p> 
+  <!--  <p><strong> Lenovo 320 Business 15.6\" HD Touchscreen Laptop, Intel Quad-Core i7-8550U 1.8GHz 12GB DDR4 256GB SSD DVDRW Dolby Audio 802.11ac Bluetooth USB Type-C Windows 10 (Certified Refurbished)</strong> </p> -->
+  <p><strong>{{laptop.productTitle}} </strong> </p> 
     <div>
-        <strong>Brand: </strong> Intel<br>
-        <strong>RAM: </strong> 8 GB<br>
-        <strong>Hard drive capacity: </strong>256 GB<br>
-        <strong>Display size: </strong>13 Zoll<br>
-        <strong>Operatin System: </strong>Linux OS<br>
-        <strong>Display Resolution: </strong> FHD
+        <strong>Brand: </strong> {{laptop.processorType}}<br>
+        <strong>RAM: </strong> {{laptop.ram}} GB<br>
+        <strong>Hard drive capacity: </strong>{{hardDriveSize}} GB<br>
+        <strong>Display size: </strong>{{displaySize}} Zoll<br>
+        <strong>Operatin System: </strong>{{operatingSystem}}<br>
+        <strong>Display Resolution: </strong> {{laptop.screenResoultionSize}}
         
         <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
           <div><button mat-raised-button color="primary" routerLink="/home" > Back</button></div>
