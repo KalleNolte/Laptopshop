@@ -8,6 +8,7 @@ from collections import Counter
 #from flask_cors import CORS
 import json
 from backend.vagueFunctions import vague_search_price
+from backend.vagueFunctions import vague_search_harddrive
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -62,7 +63,7 @@ def search():
 
     resVagueListPrice = vague_search_price.VagueSearchPrice.computeVaguePrice(es, allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
 
-    resVagueListHardDrive = computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
+    resVagueListHardDrive = vague_search_harddrive.VagueHardDrive.computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
