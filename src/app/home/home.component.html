@@ -23,12 +23,27 @@
   <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
     <form #form="ngForm" (ngSubmit)="search(form)">
       <mat-card fxLayout="column" class="brandWidget">
-          <mat-card-title>Brand</mat-card-title>
+          <mat-card-title>Brand Name</mat-card-title>
           <mat-radio-group ngModel name="brandName" fxLayout="column">
+              <mat-radio-button value="acer">Acer</mat-radio-button>
               <mat-radio-button value="apple">Apple</mat-radio-button>
+              <mat-radio-button value="asus">Asus</mat-radio-button>
               <mat-radio-button value="dell">Dell</mat-radio-button>
+              <mat-radio-button value="hp">HP</mat-radio-button>
+              <mat-radio-button value="lenovo">Lenovo</mat-radio-button>
+              <mat-radio-button value="microsft">Microsoft</mat-radio-button>
+              
+              
           </mat-radio-group>
       </mat-card>
+
+      <mat-card fxLayout="column" class="brandWidget">
+        <mat-card-title>Processor Brand</mat-card-title>
+        <mat-radio-group ngModel name="brandName" fxLayout="column">
+            <mat-radio-button value="apple">Intel</mat-radio-button>
+            <mat-radio-button value="dell">AMD</mat-radio-button>
+        </mat-radio-group>
+    </mat-card>
 
       <mat-card class="priceWidget">
         <mat-card-title fxLayout="column">Price</mat-card-title>
