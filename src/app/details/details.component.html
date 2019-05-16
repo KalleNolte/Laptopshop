@@ -19,9 +19,9 @@
     <div>
         <strong>Brand: </strong> {{laptop.processorType}}<br>
         <strong>RAM: </strong> {{laptop.ram}} GB<br>
-        <strong>Hard drive capacity: </strong>{{hardDriveSize}} GB<br>
-        <strong>Display size: </strong>{{displaySize}} Zoll<br>
-        <strong>Operatin System: </strong>{{operatingSystem}}<br>
+        <strong>Hard drive capacity: </strong>{{laptop.hardDriveSize}} GB<br>
+        <strong>Display size: </strong>{{laptop.displaySize}} Zoll<br>
+        <strong>Operatin System: </strong>{{laptop.operatingSystem}}<br>
         <strong>Display Resolution: </strong> {{laptop.screenResoultionSize}}
         
         <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
@@ -44,6 +44,56 @@
     </div>
     
  </mat-card>
+
+ <mat-card style="margin:50px">
+  <form (ngSubmit)="onSubmit()" #laptopForm="ngForm">
+   <div>
+    <label > title
+      <input type="text" [(ngModel)]= "laptop.productTitle">
+    </label> 
+   </div>
+
+   <div>
+    <label > brand
+      <input type="text" [(ngModel)]= "laptop.brand">
+    </label> 
+   </div>
+   <div>
+    <label > ram num
+      <input type="text" [(ngModel)]= "laptop.ram">
+    </label> 
+   </div>
+   <div>
+    <label > hardDriveSize num
+      <input type="text" [(ngModel)]= "laptop.hardDriveSize">
+    </label> 
+   </div>
+   <div>
+    <label > displaySize num
+      <input type="text" [(ngModel)]= "laptop.displaySize">
+    </label> 
+   </div>
+   <div>
+    <label > operatingSystem
+      <input type="text" [(ngModel)]= "laptop.operatingSystem">
+    </label> 
+   </div>
+   <div>
+    <label > screenResoultionSize num
+      <input type="text" [(ngModel)]= "laptop.screenResoultionSize">
+    </label> 
+   </div>
+   <div>
+    <label > imagePath
+      <input type="text" [(ngModel)]= "laptop.imagePath">
+    </label> 
+   </div>
+   <button mat-button  (click)="sendData()" >send</button>
+  </form>
+
+</mat-card>
+ 
+
 <!--configuration add cart button-->
  <!--
    <div >
