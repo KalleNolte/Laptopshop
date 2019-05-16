@@ -63,7 +63,7 @@ def search():
 
     resVagueListPrice = vague_search_price.VagueSearchPrice.computeVaguePrice(es, allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
 
-    resVagueListHardDrive = vague_search_harddrive.computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
+    resVagueListHardDrive = vague_search_harddrive.VagueHardDrive.computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
