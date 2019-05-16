@@ -7,6 +7,7 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
+from backend.vagueFunctions import vague_search_price
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -21,131 +22,6 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 # @app.route('/')
 # def index():
 #     return render_template('main.html')
-
-def computeVaguePrice(allDocs, minPrice, maxPrice):
-
-    allPrices = []
-    for doc in allDocs['hits']['hits']:
-        allPrices.append(float(doc['_source']['price']))
-
-    allPrices = np.sort((np.array(allPrices)))
-    #print("allPrices: ", allPrices)
-    lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
-    upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
-    #print("lowerSupport: ", lowerSupport)
-    #print("upperSupport: ", upperSupport)
-
-    trapmf = fuzz.trapmf(allPrices, [lowerSupport, float(minPrice), float(maxPrice), upperSupport])
-
-
-
-    body = {
-        "query": {
-            "range": {
-                "price": {
-                    "gte": lowerSupport, #elastic search gte operator = greater than or equals
-                    "lte": upperSupport #elastic search lte operator = less than or equals
-                }
-            }
-        },
-        "size": 10,
-    }
-
-    res = es.search(index="amazon", body=body)
-
-    result = []
-    for hit in res['hits']['hits']:
-        result.append([hit['_source']['asin'],# hit['_source']['price'],
-                       fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price']))])
-
-    #print(result)
-    result = np.array(result, dtype=object)
-    result = result[np.argsort(-result[:, 1])]
-    result = list(map(tuple, result))
-    #print(result)
-    return result
-
-def computeVagueHardDrive(allDocs, hardDriveSize):
-
-    allHardDrives = []
-    for doc in allDocs['hits']['hits']:
-          if doc['_source']['hddSize'] and doc['_source']['hddSize'] != 0:
-              allHardDrives.append(int(doc['_source']['hddSize']))
-          if doc['_source']['ssdSize'] and doc['_source']['ssdSize'] != 0:
-              allHardDrives.append(int(doc['_source']['ssdSize']))
-
-
-    # print(allHardDrives)
-
-    allHardDrives = np.sort((np.array(allHardDrives)))
-    #("allHardDrives: ", allHardDrives)
-    lowerSupport = float(hardDriveSize) - ((float(hardDriveSize) - allHardDrives[0]) / 2)
-    upperSupport = float(hardDriveSize) + ((allHardDrives[-1] - float(hardDriveSize)) / 2)
-    #print("lowerSupport: ", lowerSupport)
-    #print("upperSupport: ", upperSupport)
-
-    trimf = fuzz.trimf(allHardDrives, [lowerSupport, float(hardDriveSize), upperSupport])
-
-    # body = {
-    #     "query": {
-    #         "bool": {
-    #             "must": {
-    #                 "match": {
-    #                     "hardDriveType": hardDriveType
-    #                     }
-    #             },
-    #             "filter": {
-    #                 "range": {
-    #                     hardDriveType + "Size": {
-    #                         "gte": lowerSupport,
-    #                         "lte":upperSupport
-    #                     }
-    #                 }
-    #             }
-    #         }
-    #     },
-    #     "size":10,
-    # }
-
-    body = {
-        "query": {
-            "bool": {
-                "should": [
-                    {"range": {
-                        "hddSize": {
-                          "gte": lowerSupport,
-                          "lte": upperSupport
-                        }
-                    }},
-                    {"range": {
-                        "ssdSize": {
-                          "gte": lowerSupport,
-                          "lte": upperSupport
-                        }
-                    }}
-                ]
-            }
-        },
-        "size": 10,
-    }
-    res = es.search(index="amazon", body=body)
-
-    result = []
-    for hit in res['hits']['hits']:
-        if hit['_source']['hddSize'] and hit['_source']['hddSize'] != 0:
-            result.append([hit['_source']['asin'],# hit['_source']['hardDrive'],
-                       fuzz.interp_membership(allHardDrives, trimf, float(hit['_source']['hddSize']))])
-        # if hit['_source']['ssdSize'] and hit['_source']['ssdSize'] != 0:
-        #     result.append([hit['_source']['asin'],# hit['_source']['hardDrive'],
-        #                fuzz.interp_membership(allHardDrives, trimf, float(hit['_source']['ssdSize']))])
-
-    print(result)
-    result = np.array(result, dtype=object)
-    result = result[np.argsort(-result[:, 1])]
-    result = list(map(tuple, result)) # turn list of list pairs into list of tuple pairs containting (ASIN, score) pairs
-    # print("print result of computeVagueHardDriveFunction")
-    # print(result)
-    return result
 
 @app.route('/api/search', methods=['POST'])
 def search():
@@ -184,9 +60,9 @@ def search():
     # print(hdSizeDict)
     #both variables below are lists containing pairs (ASIN, score)
 
-    resVagueListPrice = computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
+    resVagueListPrice = vague_search_price.VagueSearchPrice.computeVaguePrice(es, allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
 
-    resVagueListHardDrive = computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
+    resVagueListHardDrive = computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
@@ -204,9 +80,13 @@ def search():
 
     #convert counter to dictionary
     result = dict(count_dict)
+    print("result")
+    print(result)
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
+    print("asinKeys")
+    print(asinKeys)
 
     #call the search function
     outputProducts = getElementsByAsin(asinKeys)
@@ -237,15 +117,7 @@ def search():
     outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
 
-    return jsonify(outputProducts) #original from alfred
-    #print (json.dumps(outputProducts))
-    #get a list of lists, because it works better with jinja (goal is to get json)
-    #o = list(map(list, outputProducts))
-    # print("o ...")
-    # print(o)
-
-        #print(n['ASIN'])
-    #return render_template('show_results.html', results = outputProducts)#this works too if you use    {{results | tojson| safe}} in html
+    return jsonify(outputProducts)
 
 
 @app.route('/api/sample', methods=['GET'])
