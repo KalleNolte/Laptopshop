@@ -3,7 +3,11 @@ import numpy as np
 
 class VagueSearchPrice():
 
-  def computeVaguePrice(es, allDocs, minPrice, maxPrice):
+  def __init__(self, es):
+        self.es = es
+
+
+  def computeVaguePrice(self, allDocs, minPrice, maxPrice):
 
     allPrices = []
     for doc in allDocs['hits']['hits']:
@@ -30,7 +34,7 @@ class VagueSearchPrice():
       "size": 10,
     }
 
-    res = es.search(index="amazon", body=body)
+    res = self.es.search(index="amazon", body=body)
 
     result = []
     for hit in res['hits']['hits']:

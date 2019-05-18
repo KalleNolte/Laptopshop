@@ -8,6 +8,7 @@ from collections import Counter
 #from flask_cors import CORS
 import json
 from backend.vagueFunctions import vague_search_price
+from backend.vagueFunctions import vague_search_harddrive
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -39,50 +40,30 @@ def search():
     hardDriveType = data['hardDriveType']
     hardDriveSize = data['hardDriveSize']
 
-    # hardDriveType = 'hdd'
-    # hardDriveSize = 1000
-
-
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
                                                 "query": {
                                                     "match_all": {}
                                                     }
                                                 })
-    # for hit in allDocs['hits']['hits']:
-    #     #print(hit)
-    #     priceDict[hit['_source']['asin']] = float(hit['_source']['price'])
-    #     hdTypeDict[hit['_source']['asin']] = hit['_source']['hardDriveType']
-    #     #ignore hybrid and emmc for now
-    #     if hit['_source']['hardDriveType']:
-    #         if hit['_source']['hardDriveType'].lower() == 'ssd':
-    #             hdSizeDict[hit['_source']['asin']] = float(hit['_source']['ssdSize']) if hit['_source']['ssdSize'] else 0
-    #         else:
-    #             hdSizeDict[hit['_source']['asin']] = float(hit['_source']['hddSize']) if hit['_source']['hddSize'] else 0
-    #     productTitleDict[hit['_source']['asin']] = hit['_source']['productTitle']
 
-    # print("hdSize")
-    # print(hdSizeDict)
-    #both variables below are lists containing pairs (ASIN, score)
-
-    resVagueListPrice = vague_search_price.VagueSearchPrice.computeVaguePrice(es, allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
-
-    resVagueListHardDrive = computeVagueHardDrive(es, allDocs, hardDriveSize) if hardDriveSize else {}
+    pr = vague_search_price.VagueSearchPrice(es)
+    resVagueListPrice = pr.computeVaguePrice( allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
+    hd = vague_search_harddrive.VagueHardDrive(es)
+    resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
 
-    # print("printing resList")
-    # print(resList)
+    print("printing resList")
+    print(resList)
 
     #Counter objects count the occurrences of objects in the list...
     count_dict = Counter()
     for tmp in resList:
         count_dict += Counter(tmp)
 
-    # print("count_dict")
-    # print(count_dict)
-
+    ####new from beshoy
     #convert counter to dictionary
     result = dict(count_dict)
     print("result")
@@ -100,11 +81,7 @@ def search():
     for item in outputProducts:
       item['vaguenessScore'] = result[item['asin']]
 
-
-    #count_dict is a dictionary of key/value pairs. Below is a list comprehension (for dictionaries?) to get key k and value v for each item
-    # outputProducts = [("ASIN: {}".format(k), "Product Title: {}".format(productTitleDict[k]), "Vagueness Score: {}".format(v/2),
-    #                    "Price: {}".format(priceDict[k]), "Hard Drive Size: {}".format(hdDict[k])) for k, v in dict(count_dict).items()]
-
+    #####end beshoy's part
     #to make sure that the items sorted based on the vagueness score just uncomment the next block
     #outputProducts = []
     # for (k, v) in result.items():
@@ -119,8 +96,9 @@ def search():
     #     outputProducts.append(item)
 
     #sort abon the vagueness score
+    print("output is: ")
+    print(outputProducts)
     outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
-
 
     return jsonify(outputProducts)
 
@@ -148,12 +126,12 @@ def refineResult(docs):
           "asin": hit['_source']['asin'],
           "productTitle": hit['_source']['productTitle'],
           "price": hit['_source']['price'],
-          "displaySize" : hit['_source']['displaySize'],
-          "screenResoultionSize" : [hit['_source']['screenResoultionSize'][0], hit['_source']['screenResoultionSize'][1]],
+          "screenSize" : hit['_source']['screenSize'],
+          "displayResolutionSize" : [hit['_source']['displayResolutionSize'][0], hit['_source']['displayResolutionSize'][1]],
           "processorSpeed" : hit['_source']['processorSpeed'],
           "processorType" : hit['_source']['processorType'],
           "processorCount" : hit['_source']['processorCount'],
-          "processorBrand" : hit['_source']['processorBrand'],
+          "processorManufacturer" : hit['_source']['processorManufacturer'],
           "ram" : hit['_source']['ram'],
           "brandName" : hit['_source']['brandName'],
           "hardDriveType" : hit['_source']['hardDriveType'],
@@ -199,6 +177,9 @@ def refineResult(docs):
 #     avgRatingDict[hit['_source']['asin']] = hit['_source']['avgRating']
 
 def getElementsByAsin(asinKeys):
+  print("What is asinKeys")
+  print(asinKeys)
+
   result = es.search(index="amazon", body={
                                               "query": {
                                                   "terms": {
@@ -206,6 +187,8 @@ def getElementsByAsin(asinKeys):
                                                   }
                                               }
                                             })
+  print("elastic search result")
+  print(result)
   return refineResult(result)
 
 

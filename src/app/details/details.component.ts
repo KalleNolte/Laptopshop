@@ -4,6 +4,9 @@ import { Laptop } from "../laptop";
 import { moveIn, fallIn } from "../routing.animations";
 import { HttpClient } from 'selenium-webdriver/http';
 import { HttpResponse } from '@angular/common/http';
+import { FormsModule }   from '@angular/forms';
+import { NgModule }      from '@angular/core';
+
 @Component({
   selector: "app-details",
   templateUrl: "./details.component.html",
@@ -18,6 +21,7 @@ export class DetailsComponent implements OnInit {
     public laptop= {};
    // productTitle= this.laptop.productTitle;
   //arttikel: any;
+  public lap: Laptop;
   error;
 
   ngOnInit() {
@@ -26,4 +30,9 @@ export class DetailsComponent implements OnInit {
       error=> this.error=error;
   }
   
+ // sendData(){
+  //  this.one_detail.setLaptop_details(this.lap)
+  //  .subscribe(data =>put(this.lap) );
+   // error=> this.error=error;
+ // } 
 }
