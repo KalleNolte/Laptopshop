@@ -21,9 +21,16 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 
 # @app.route('/')
 # def index():
-#     return render_template('main.html')
+#     return render_template('main.html')\
 
-@app.route('/api/search', methods=['POST'])
+def callAttributeMethod(attributeName,attributeValue,attributeWeight,allDocs) :
+    methodName = "computeVague"+attributeName[0].upper()+attributeName[1:]
+    className = "vague_search_"+attributeName
+
+    eval(className+"."+methodName)
+
+
+@app.route('/api/search', methods=['GET'])
 def search():
     data = request.get_json()
     minPrice = data['minPrice']
@@ -42,8 +49,6 @@ def search():
                                                     "match_all": {}
                                                     }
                                                 })
-
-
     # for hit in allDocs['hits']['hits']:
     #     #print(hit)
     #     priceDict[hit['_source']['asin']] = float(hit['_source']['price'])
@@ -130,7 +135,7 @@ def getSample():
                                                     },
                                                 "size" : 10
                                               })
-    
+
     outputProducts = refineResult(allDocs)
     return jsonify(outputProducts) #original from alfred
 
