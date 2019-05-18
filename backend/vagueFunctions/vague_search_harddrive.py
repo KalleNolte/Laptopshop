@@ -2,7 +2,10 @@ import skfuzzy as fuzz
 import numpy as np
 
 class VagueHardDrive():
-  def computeVagueHardDrive(es, allDocs, hardDriveSize):
+  def __init__(self, es):
+        self.es = es
+
+  def computeVagueHardDrive(self, allDocs, hardDriveSize):
 
       allHardDrives = []
       for doc in allDocs['hits']['hits']:
@@ -65,7 +68,7 @@ class VagueHardDrive():
           },
           "size": 10,
       }
-      res = es.search(index="amazon", body=body)
+      res = self.es.search(index="amazon", body=body)
 
       result = []
       for hit in res['hits']['hits']:
