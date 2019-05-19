@@ -146,6 +146,8 @@
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
       <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
+        <img matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
+        <img matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
         <h3 matLine>{{ laptop.productTitle }}</h3>
         <p matLine>
           Processor Type: {{ laptop.processorType }} @

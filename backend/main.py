@@ -7,8 +7,7 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
-from backend.vagueFunctions import vague_search_price
-from backend.vagueFunctions import vague_search_harddrive
+from vagueFunctions import vague_search_price, vague_search_harddrive
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -27,11 +26,21 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 @app.route('/api/search', methods=['POST'])
 def search():
     data = request.get_json()
-    minPrice = data['minPrice']
-    maxPrice = data['maxPrice']
+    if 'minPrice' in data:
+        minPrice = data['minPrice']
+    else:
+        minPrice = None
 
-    hardDriveType = data['hardDriveType']
-    hardDriveSize = data['hardDriveSize']
+    if 'maxPrice' in data:
+        maxPrice = data['maxPrice']
+    else:
+        maxPrice = None
+
+    # hardDriveType = data['hardDriveType']
+    if 'hardDriceSize' in data:
+       hardDriveSize = data['hardDriveSize']
+    else:
+      hardDriveSize = None
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -41,15 +50,17 @@ def search():
                                                 })
 
     pr = vague_search_price.VagueSearchPrice(es)
-    resVagueListPrice = pr.computeVaguePrice( allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
+    resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
+
+
 
     #resList is a list containing a dictionary of ASIN: score values
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
 
-    print("printing resList")
-    print(resList)
+    # print("printing resList")
+    # print(resList)
 
     #Counter objects count the occurrences of objects in the list...
     count_dict = Counter()
@@ -59,20 +70,22 @@ def search():
     ####new from beshoy
     #convert counter to dictionary
     result = dict(count_dict)
-    print("result")
-    print(result)
+    # print("result")
+    # print(result)
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
-    print("asinKeys")
-    print(asinKeys)
+    # print("asinKeys")
+    # print(asinKeys)
 
     #call the search function
     outputProducts = getElementsByAsin(asinKeys)
 
+
     #add a vagueness score to the returned objects
     for item in outputProducts:
       item['vaguenessScore'] = result[item['asin']]
+
 
     #####end beshoy's part
     #to make sure that the items sorted based on the vagueness score just uncomment the next block
@@ -89,8 +102,8 @@ def search():
     #     outputProducts.append(item)
 
     #sort abon the vagueness score
-    print("output is: ")
-    print(outputProducts)
+    # print("output is: ")
+    # print(outputProducts)
     outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
     return jsonify(outputProducts)
@@ -170,18 +183,18 @@ def refineResult(docs):
 #     avgRatingDict[hit['_source']['asin']] = hit['_source']['avgRating']
 
 def getElementsByAsin(asinKeys):
-  print("What is asinKeys")
-  print(asinKeys)
-
+  # print(asinKeys)
+  # print(len(asinKeys))
   result = es.search(index="amazon", body={
                                               "query": {
                                                   "terms": {
                                                         "asin.keyword": asinKeys
                                                   }
-                                              }
+                                              },
+                                              "size" : 1000
                                             })
-  print("elastic search result")
-  print(result)
+  # print("elastic search result")
+  # print(result)
   return refineResult(result)
 
 
