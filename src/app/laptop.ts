@@ -4,7 +4,6 @@ interface screenResolutionSize {
 interface productDimension {
   [index: number]: number;
 }
-
 export interface Laptop {
   asin: string;
   productTitle: string; 
@@ -31,7 +30,19 @@ export interface Laptop {
   avgRating: number;
 
 }
+/*
+*
+  productTitle: string;
+  brandName: string;
+  ram: string;
+  hardDriveSize: string;
+  displaySize: string;
+  operatingSystem: string;
+  screenResoultionSize: string;
+  imagePath: string;
 
+
+} */
 // export class Laptop {
 //   constructor(
 //     asin ?: string,

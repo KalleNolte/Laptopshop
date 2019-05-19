@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
 import { moveIn, fallIn } from "../routing.animations";
+
 import { HttpClient } from 'selenium-webdriver/http';
 import { HttpResponse } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
 import { NgModule }      from '@angular/core';
 
 @Component({
@@ -15,24 +16,36 @@ import { NgModule }      from '@angular/core';
   host: { "[@moveIn]": "" }
 })
 export class DetailsComponent implements OnInit {
-  constructor(private one_detail: DataService) {}
 
-  //artikel: string[];
-    public laptop= {};
-   // productTitle= this.laptop.productTitle;
-  //arttikel: any;
-  public lap: Laptop;
+
+  laptop: Laptop[]=[];
   error;
 
+  constructor(private one_detail:DataService) {}
   ngOnInit() {
+    this.showDetails();
+  }
+
+   showDetails(){
     this.one_detail.getLaptop_details()
       .subscribe(data => this.laptop= data);
       error=> this.error=error;
   }
-  
- // sendData(){
-  //  this.one_detail.setLaptop_details(this.lap)
-  //  .subscribe(data =>put(this.lap) );
-   // error=> this.error=error;
- // } 
 }
+
+
+ /*
+ laptop :Laptop[]= [];
+
+  public lap={};
+
+  showDetails(){
+    this.one_detail.getLaptop_details()
+      .subscribe(data => this.laptop= data);
+      error=> this.error=error;
+  }
+  searchD(formDetails: NgForm){
+    this.one_detail.setLaptop_details(JSON.stringify(formDetails.value))
+      .subscribe(data => (this.lap = data));
+  }
+ * */

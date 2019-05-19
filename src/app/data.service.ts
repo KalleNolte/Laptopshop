@@ -11,7 +11,8 @@ import { map } from "rxjs/operators";
 export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
   private for_detailsExample="../assets/jsonExample.json";
-  private for_sendD="https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W"
+  private for_sendD='https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W';
+
  
   httpOptions = {
     headers: new HttpHeaders({
@@ -34,11 +35,19 @@ export class DataService {
   //   .pipe(map((resp: Response) => resp.json()));
   // }
 
-  // here i only use one Laptop info for the view page
-  getLaptop_details():Observable<Laptop>{
-    return this.http.get<Laptop>(this.for_detailsExample);
+  getLaptop_details():Observable<Laptop[]>{
+    return this.http.get<Laptop[]>(this.for_detailsExample);
   }
-  setLaptop_details(lap: Laptop):Observable<Laptop>{
+
+}
+
+
+
+  // here i only use one Laptop info for the view page
+ /* getLaptop_details():Observable<Laptop[]>{
+    return this.http.get<Laptop[]>(this.for_detailsExample);
+  }
+  setLaptop_details(lap: any):Observable<Laptop>{
     return this.http.post<Laptop>(this.for_sendD,lap,this.httpOptions);
   }
-}
+  */
