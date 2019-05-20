@@ -9,6 +9,7 @@ from collections import Counter
 import json
 from backend.vagueFunctions import vague_search_price
 from backend.vagueFunctions import vague_search_harddrive
+from backend.binaryFunctions import binary_search_text
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -26,12 +27,15 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 
 @app.route('/api/search', methods=['POST'])
 def search():
+
     data = request.get_json()
     minPrice = data['minPrice']
     maxPrice = data['maxPrice']
 
     hardDriveType = data['hardDriveType']
     hardDriveSize = data['hardDriveSize']
+
+    brandName = data['brandName']
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -40,13 +44,22 @@ def search():
                                                     }
                                                 })
 
+
+    resVagueListHardDrive =[]
+    resVagueListPrice =[]
+    binaryListBrand =[]
     pr = vague_search_price.VagueSearchPrice(es)
     resVagueListPrice = pr.computeVaguePrice( allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
+    data = {'brandName': brandName}
+    br = binary_search_text.BinarySearchText(es)
+    binaryListBrand = br.compute_binary_text(data) if brandName else {}
 
     #resList is a list containing a dictionary of ASIN: score values
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+    #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand)]
+
 
     print("printing resList")
     print(resList)
