@@ -26,15 +26,20 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 @app.route('/api/search', methods=['POST'])
 def search():
     data = request.get_json()
-    if 'minPrice' in data:
-        minPrice = data['minPrice']
-    else:
-        minPrice = None
+    print (data)
+    if 'price':
+        if 'minValue' in data['price']:
+            minPrice = data['price']['minValue']
+        else:
+            minPrice = None
 
-    if 'maxPrice' in data:
-        maxPrice = data['maxPrice']
-    else:
-        maxPrice = None
+        if 'maxValue' in data['price']:
+            maxPrice = data['price']['maxValue']
+        else:
+            maxPrice = None
+
+    print(minPrice)
+    print(maxPrice)
 
     # hardDriveType = data['hardDriveType']
     if 'hardDriceSize' in data:
