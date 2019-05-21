@@ -86,7 +86,7 @@ def search():
 
   return jsonify(outputProducts) #original from alfred
 
-  print(json.dumps(body))
+    print(json.dumps(body))
 
 @app.route('/api/sample', methods=['GET'])
 def getSample():
