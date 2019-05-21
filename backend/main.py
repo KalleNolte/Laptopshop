@@ -7,7 +7,8 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
-from vagueFunctions import vague_search_price, vague_search_harddrive
+from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
+
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -26,26 +27,23 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 @app.route('/api/search', methods=['POST'])
 def search():
     data = request.get_json()
-    print (data)
-    if 'price':
-        if 'minValue' in data['price']:
+    minPrice = None
+    maxPrice = None
+    hardDriveType = None
+    if 'price' in data:
+        if 'minValue' in data['price'] and data['price']['minValue']:
             minPrice = data['price']['minValue']
-        else:
-            minPrice = None
 
-        if 'maxValue' in data['price']:
+        if 'maxValue' in data['price'] and data['price']['maxValue']:
             maxPrice = data['price']['maxValue']
-        else:
-            maxPrice = None
 
-    print(minPrice)
-    print(maxPrice)
-
-    # hardDriveType = data['hardDriveType']
-    if 'hardDriceSize' in data:
+    if 'hardDriveSize' in data:
        hardDriveSize = data['hardDriveSize']
     else:
       hardDriveSize = None
+
+    if 'hardDriveType' in data:
+      hardDriveType = data['hardDriveType']
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -58,11 +56,12 @@ def search():
     resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
-
+    hdType = vague_search_hdType.VagueHardDriveType(es)
+    resVagueListHardDriveType = hdType.computeVagueHardDriveType(allDocs, hardDriveType) if hardDriveType else {}
 
 
     #resList is a list containing a dictionary of ASIN: score values
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, resVagueListHardDriveType)]
 
     # print("printing resList")
     # print(resList)
