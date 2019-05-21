@@ -35,7 +35,7 @@ class VagueSearchPrice():
 
     # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
     # (whose price actually between the minPrice and maxPrice) because we just want to get the first 100 element
-    res = self.es.search(index="amazon", body=body, size=1000)
+    res = self.es.search(index="amazon", body=body, size=10000)
 
     result = []
     for hit in res['hits']['hits']:

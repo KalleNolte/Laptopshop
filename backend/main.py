@@ -39,7 +39,7 @@ def callAttributeMethod(attributeName,attributeValue,attributeWeight,allDocs) :
     eval(className+"."+methodName)
 
 
-@app.route('/api/search', methods=['GET'])
+@app.route('/api/search', methods=['POST'])
 def search():
 
     data = request.get_json()
