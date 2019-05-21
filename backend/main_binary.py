@@ -20,9 +20,11 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 #     return render_template('main.html')
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/api/search', methods=['POST'])
 def search():
+
   data = request.get_json()
+  print(data)
   minPrice = request.form['minPrice']
   maxPrice = request.form['maxPrice']
   #hardDrive = request.form['hardDrive']

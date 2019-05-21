@@ -7,8 +7,7 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
-from backend.vagueFunctions import vague_search_price
-from backend.vagueFunctions import vague_search_harddrive
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive
 from backend.binaryFunctions import binary_search_text
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -29,6 +28,7 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 def search():
 
     data = request.get_json()
+    print(data)
     minPrice = data['minPrice']
     maxPrice = data['maxPrice']
 
@@ -36,6 +36,7 @@ def search():
     hardDriveSize = data['hardDriveSize']
 
     brandName = data['brandName']
+
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -52,13 +53,15 @@ def search():
     resVagueListPrice = pr.computeVaguePrice( allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
-    data = {'brandName': brandName}
+    data1 = {'brandName': brandName}
     br = binary_search_text.BinarySearchText(es)
-    binaryListBrand = br.compute_binary_text(data) if brandName else {}
+    binaryListBrand = br.compute_binary_text(data1) if brandName else {}
+    data1= {'hardDriveType': hardDriveType}
+    binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand)]
+    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand, binaryListHardDriveType)]
 
 
     print("printing resList")
@@ -102,9 +105,12 @@ def search():
     #     outputProducts.append(item)
 
     #sort abon the vagueness score
-    print("output is: ")
+    print("unsorted output is: ")
     print(outputProducts)
     outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+    print("sorted output is: ")
+    print(outputProducts)
+
 
     return jsonify(outputProducts)
 
