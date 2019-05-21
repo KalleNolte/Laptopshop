@@ -29,6 +29,12 @@
   mat-list-item {
     cursor: pointer;
   }
+
+  .mat-list-avatar{
+    width: 25% ;
+    height: auto;
+    border-radius: 0px;
+  }
 }
 .sticky{
   position: fixed;

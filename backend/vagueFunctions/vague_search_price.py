@@ -30,20 +30,23 @@ class VagueSearchPrice():
             "lte": upperSupport  # elastic search lte operator = less than or equals
           }
         }
-      },
-      "size": 10,
+      }
     }
 
-    res = self.es.search(index="amazon", body=body)
+    # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
+    # (whose price actually between the minPrice and maxPrice) because we just want to get the first 100 element
+    res = self.es.search(index="amazon", body=body, size=1000)
 
     result = []
     for hit in res['hits']['hits']:
       result.append([hit['_source']['asin'],  # hit['_source']['price'],
                      fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price']))])
 
-    # print(result)
+
     result = np.array(result, dtype=object)
     result = result[np.argsort(-result[:, 1])]
+    # just return the first 100 element(i think 1000 is just too many, but we can change it later)
+    result = result[:100]
     result = list(map(tuple, result))
     # print(result)
     return result
