@@ -101,10 +101,13 @@ class BinarySearch():
                           }
                       }
                       ]
-                  }
-                },
-                      "sort": {"price":{"order":"desc"}}
-              }
+
+                    }
+                  },
+                  "sort": {"price": {"order": "asc"}}
+                }
+
+
       #Get a result of laptops that have price >= minPrice and price<=maxPrice
       res = es.search(index="amazon", body=body)
       ###

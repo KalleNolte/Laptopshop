@@ -7,7 +7,12 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
-from vagueFunctions import vague_search_price, vague_search_harddrive
+
+#from vagueFunctions import vague_search_price, vague_search_harddrive
+
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive
+from backend.binaryFunctions import binary_search_text
+
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -32,7 +37,9 @@ def callAttributeMethod(attributeName,attributeValue,attributeWeight,allDocs) :
 
 @app.route('/api/search', methods=['GET'])
 def search():
+
     data = request.get_json()
+
     if 'minPrice' in data:
         minPrice = data['minPrice']
     else:
@@ -49,6 +56,17 @@ def search():
     else:
       hardDriveSize = None
 
+  #CLEANUP later...
+   # print(data)
+   # minPrice = data['minPrice']
+   # maxPrice = data['maxPrice']
+    hardDriveType = data['hardDriveType']
+   # hardDriveSize = data['hardDriveSize']
+
+
+    brandName = data['brandName']
+
+
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
                                                 "query": {
@@ -56,15 +74,35 @@ def search():
                                                     }
                                                 })
 
+
+    resVagueListHardDrive =[]
+    resVagueListPrice =[]
+    binaryListBrand =[]
     pr = vague_search_price.VagueSearchPrice(es)
     resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
+    data1 = {'brandName': brandName}
+    br = binary_search_text.BinarySearchText(es)
+    binaryListBrand = br.compute_binary_text(data1) if brandName else {}
+    data1= {'hardDriveType': hardDriveType}
+    binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
+
+
+
+
+    for b in binaryListBrand:
+      print(b)
+
+    for h in binaryListHardDriveType:
+      print(h)
 
 
 
     #resList is a list containing a dictionary of ASIN: score values
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+    #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand, binaryListHardDriveType)]
+
 
     # print("printing resList")
     # print(resList)
@@ -79,6 +117,11 @@ def search():
     result = dict(count_dict)
     # print("result")
     # print(result)
+
+
+    sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
+    print("sort result dict")
+    print(sortedDict)
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
@@ -109,9 +152,14 @@ def search():
     #     outputProducts.append(item)
 
     #sort abon the vagueness score
-    # print("output is: ")
-    # print(outputProducts)
-    outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+
+    print("unsorted output is: ")
+    print(outputProducts)
+    outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+    print("sorted output is: ")
+    print(outputProducts)
+
+
 
     return jsonify(outputProducts)
 
@@ -197,8 +245,9 @@ def getElementsByAsin(asinKeys):
                                                   "terms": {
                                                         "asin.keyword": asinKeys
                                                   }
-                                              },
-                                              "size" : 1000
+
+                                              }, "size":7000
+
                                             })
   # print("elastic search result")
   # print(result)
