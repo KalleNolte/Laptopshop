@@ -8,10 +8,14 @@ from collections import Counter
 #from flask_cors import CORS
 import json
 
+
 #from vagueFunctions import vague_search_price, vague_search_harddrive
 
 from backend.vagueFunctions import vague_search_price, vague_search_harddrive
 from backend.binaryFunctions import binary_search_text
+
+# from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
+
 
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -39,32 +43,35 @@ def callAttributeMethod(attributeName,attributeValue,attributeWeight,allDocs) :
 def search():
 
     data = request.get_json()
+    minPrice = None
+    maxPrice = None
+    hardDriveType = None
+    if 'price' in data:
+        if 'minValue' in data['price'] and data['price']['minValue']:
+            minPrice = data['price']['minValue']
 
-    if 'minPrice' in data:
-        minPrice = data['minPrice']
-    else:
-        minPrice = None
+        if 'maxValue' in data['price'] and data['price']['maxValue']:
+            maxPrice = data['price']['maxValue']
 
-    if 'maxPrice' in data:
-        maxPrice = data['maxPrice']
-    else:
-        maxPrice = None
-
-    # hardDriveType = data['hardDriveType']
-    if 'hardDriceSize' in data:
+    if 'hardDriveSize' in data:
        hardDriveSize = data['hardDriveSize']
     else:
       hardDriveSize = None
+
 
   #CLEANUP later...
    # print(data)
    # minPrice = data['minPrice']
    # maxPrice = data['maxPrice']
-    hardDriveType = data['hardDriveType']
+    # hardDriveType = data['hardDriveType']
    # hardDriveSize = data['hardDriveSize']
 
 
     brandName = data['brandName']
+
+
+    if 'hardDriveType' in data:
+      hardDriveType = data['hardDriveType']
 
 
     allDocs = es.search(index="amazon", body={

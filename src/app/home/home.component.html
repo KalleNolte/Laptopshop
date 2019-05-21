@@ -61,9 +61,9 @@
 
       <mat-card class="priceWidget">
         <mat-card-title fxLayout="column">Price</mat-card-title>
-        <div fxLayout="row" fxLayoutGap="5%">
-          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="min" name="minPrice" >
-          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="max"  name="maxPrice" >
+        <div fxLayout="row" fxLayoutGap="5%" ngModelGroup="price">
+          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="min" name="minValue" >
+          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="max"  name="maxValue" >
           $
         </div>
         <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
@@ -149,12 +149,17 @@
         <img matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
         <img matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
         <h3 matLine>{{ laptop.productTitle }}</h3>
+<!--        <p matLine>-->
+<!--          Processor Type: {{ laptop.processorType }} @-->
+<!--          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz-->
+<!--        </p>-->
+<!--        <p matLine>OS: {{ laptop.operatingSystem }}</p>-->
         <p matLine>
-          Processor Type: {{ laptop.processorType }} @
-          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz
+          Hard Drive Type: {{ laptop.hardDriveType }}
         </p>
-        <p matLine>OS: {{ laptop.operatingSystem }}</p>
-        <strong matLine>Price: {{ laptop.price }} €</strong>
+        <p matLine *ngIf="laptop.hddSize"> Hard Drive Size: {{ laptop.hddSize }}</p>
+        <p matLine *ngIf="laptop.ssdSize"> Hard Drive Size: {{ laptop.ssdSize }}</p>
+        <strong matLine>Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>
