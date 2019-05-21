@@ -59,6 +59,15 @@ def search():
     data1= {'hardDriveType': hardDriveType}
     binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
+
+
+
+    for b in binaryListBrand:
+      print(b)
+
+    for h in binaryListHardDriveType:
+      print(h)
+
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
     resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand, binaryListHardDriveType)]
@@ -77,6 +86,11 @@ def search():
     result = dict(count_dict)
     print("result")
     print(result)
+
+
+    sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
+    print("sort result dict")
+    print(sortedDict)
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
@@ -107,7 +121,7 @@ def search():
     #sort abon the vagueness score
     print("unsorted output is: ")
     print(outputProducts)
-    outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+    outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
     print("sorted output is: ")
     print(outputProducts)
 
@@ -197,7 +211,7 @@ def getElementsByAsin(asinKeys):
                                                   "terms": {
                                                         "asin.keyword": asinKeys
                                                   }
-                                              }
+                                              }, "size":7000
                                             })
   print("elastic search result")
   print(result)

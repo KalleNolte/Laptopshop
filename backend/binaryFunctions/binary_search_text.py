@@ -66,7 +66,7 @@ class BinarySearchText:
                     }
 
 
-            res = self.es.search(index="amazon", body=body)
+            res = self.es.search(index="amazon", body=body, size=10000)
 
 
             result = []
