@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   search(form: NgForm){
     //this.brand = form['brand'];
+    console.log(form.value);
     this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
 
   }

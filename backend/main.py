@@ -83,9 +83,6 @@ def search():
                                                 })
 
 
-    resVagueListHardDrive =[]
-    resVagueListPrice =[]
-    binaryListBrand =[]
     pr = vague_search_price.VagueSearchPrice(es)
     resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
@@ -97,19 +94,13 @@ def search():
     binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
 
-
-
-    for b in binaryListBrand:
-      print(b)
-
-    for h in binaryListHardDriveType:
-      print(h)
-
-
-
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand, binaryListHardDriveType)]
+    resList = [dict(x) for x in (resVagueListPrice,
+                                 resVagueListHardDrive,
+                                 binaryListBrand,
+                                 binaryListHardDriveType)
+               ]
 
 
     # print("printing resList")

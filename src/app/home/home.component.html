@@ -46,16 +46,25 @@
               <mat-radio-button value="samsung">Samsung</mat-radio-button>
               <mat-radio-button value="xps">XPS</mat-radio-button>
               <mat-radio-button value="jumper">Jumper</mat-radio-button>
-              
-              
           </mat-radio-group>
+          <mat-slider ngModel min="1" max="5" step="1" name="periority"></mat-slider>
       </mat-card>
 
       <mat-card fxLayout="column" class="brandWidget">
         <mat-card-title>Processor Brand</mat-card-title>
-        <mat-radio-group ngModel name="brandName" fxLayout="column">
+        <mat-radio-group ngModel name="chipsetBrand" fxLayout="column">
             <mat-radio-button value="intel">Intel</mat-radio-button>
+            <mat-radio-button value="nvidia">Nvidia</mat-radio-button>
             <mat-radio-button value="amd">AMD</mat-radio-button>
+        </mat-radio-group>
+      </mat-card>
+
+      <mat-card fxLayout="column" class="ramWidget">
+        <mat-card-title>RAM</mat-card-title>
+        <mat-radio-group fxLayout="column" ngModelGroup="ram">
+            <mat-radio-button value="2">2</mat-radio-button>
+            <mat-radio-button value="4">4</mat-radio-button>
+            <mat-radio-button value="8">8</mat-radio-button>
         </mat-radio-group>
     </mat-card>
 
@@ -157,8 +166,8 @@
         <p matLine>
           Hard Drive Type: {{ laptop.hardDriveType }}
         </p>
-        <p matLine *ngIf="laptop.hddSize"> Hard Drive Size: {{ laptop.hddSize }}</p>
-        <p matLine *ngIf="laptop.ssdSize"> Hard Drive Size: {{ laptop.ssdSize }}</p>
+        <p matLine *ngIf="laptop.hddSize"> HDD Size: {{ laptop.hddSize }}</p>
+        <p matLine *ngIf="laptop.ssdSize"> SSD Size: {{ laptop.ssdSize }}</p>
         <strong matLine>Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
