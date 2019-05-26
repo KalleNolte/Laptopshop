@@ -9,6 +9,8 @@ class Backend_Helper:
             for sub_key in json_dict[key] :
                 if json_dict[key][sub_key] :
                     result[key].update({sub_key:json_dict[key][sub_key]})
+                elif sub_key == "weight" and not json_dict[key][sub_key] :
+                    result[key].update({sub_key:1})
         return result
     @staticmethod
     def refineResult(docs):

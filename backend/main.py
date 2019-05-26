@@ -136,6 +136,7 @@ def search():
     clean_data = Backend_Helper.clean_frontend_json(data)
 
     res_search = list()
+    print(clean_data)
 
     field_value_dict =  extract_fields_and_values(clean_data)
     #--------------------------------------------------------------------#
@@ -150,7 +151,6 @@ def search():
 
     price_searcher = vague_search_price.VagueSearchPrice(es)
 
-    print(field_value_dict)
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
