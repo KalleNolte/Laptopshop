@@ -78,7 +78,6 @@ class VagueHardDrive():
       result = result[np.argsort(-result[:, 1])]
       result = list(map(tuple, result)) # turn list of list pairs into list of tuple pairs containting (ASIN, score) pairs
       # just return the first 100 element(i think 1000 is just too many, but we can change it later)
-      result = result[:100]
+      #result = result[:100]
       # print("print result of computeVagueHardDriveFunction")
-      # print(result)
       return result
