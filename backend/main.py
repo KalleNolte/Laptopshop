@@ -90,7 +90,7 @@ def extract_fields_and_values(fieldNameToValueDict) :
 
     return body
 
-def call_responsible_methods(field_value_dict) :
+def call_responsible_methods(field_value_dict,range_searcher,binary_searcher,value_searcher) :
     res_search = list()
     #--------------------------------------------------------------------#
      #Extracts each field and its value and weight to the dict
@@ -179,7 +179,7 @@ def search():
            res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
-    res_search.append(call_responsible_methods(field_value_dict))
+    res_search += call_responsible_methods(field_value_dict,range_searcher,binary_searcher,value_searcher)
 
     #--------------------------------------------------------------------#
     #resList is a list containing a dictionary of ASIN: score values
