@@ -57,17 +57,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onSubmit(form: NgForm) {
-    console.log(form);
-  }
+  // onSubmit(form: NgForm) {
+  // }
   
   getSample(){
     this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
   }
-  search(form: NgForm){
-    //this.brand = form['brand'];
-    console.log(form.value);
-    this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
 
-  }
+  search(form: NgForm){
+    console.log(form.value);
+    for(let n in form.value) {
+      if (form.value[n]["value"] == '') {
+        form.form.removeControl(n);
+      }
+      else if (form.value[n]["minValue"] == '' && form.value[n]["maxValue"] == '') {
+        form.form.removeControl(n);
+      }
+
+    }
+      console.log(form.value);
+      this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+
+    }
 }
