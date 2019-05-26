@@ -96,15 +96,20 @@ def search():
 
     data = request.get_json()
 
+    res_search = list()
+
+    field_value_dict =  extract_fields_and_values(data)
+    #--------------------------------------------------------------------#
+
     range_searcher = vague_search_range.VagueSearchRange(es)
 
     binary_searcher = binary_search_text.BinarySearchText(es)
 
     harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
 
-    res_search = list()
-
     value_searcher = vague_search_value.VagueSearchValue(es)
+
+    price_searcher = vague_search_price.VagueSearchPrice(es)
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -112,64 +117,60 @@ def search():
                                                     "match_all": {}
                                                     }
                                                 })
-
-    hardDriveType = None
-
+    #--------------------------------------------------------------------#
+    # Special case to handle hardDriveSize
     if 'hardDriveSize' in data:
-       hardDriveSize = data['hardDriveSize']
-    else:
-      hardDriveSize = None
+       hd_size_min = data['hardDriveSize']["minValue"]
+       hd_size_max = data['hardDriveSize']["maxValue"]
+       hd_size_weight = data['hardDriveSize']["weight"]
+       res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
 
-    resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
-
+    #--------------------------------------------------------------------#
+    #Special case to handle price
+    # Special case to handle hardDriveSize
+    if 'price' in data:
+       price_min = data['price']["minValue"]
+       price_max = data['price']["maxValue"]
+       price_weight = data['price']["weight"]
+       res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
+    #--------------------------------------------------------------------#
      #Extracts each field and its value and weight to the dict
-    field_value_dict =  extract_fields_and_values(data)
+
 
     for field_type in field_value_dict.keys() :
 
      for field_name in field_value_dict[field_type] :
-         field_weight = field_value_dict[field_type][field_name]["weight"]
+         if field_name != "price" and field_name != "hardDriveSize" :
+             field_weight = field_value_dict[field_type][field_name]["weight"]
+             print(field_name)
 
-         if field_type is "binary" :
-             field_value = field_value_dict[field_type][field_name]["value"]
-             res_search.append(binary_searcher.compute_binary_text(field_name,field_weight,field_value))
-             pass
-         elif field_type is "range" :
-             if "minValue" in field_value_dict[field_type][field_name] and  "maxValue" in field_value_dict[field_type][field_name] :
-                 min_value =field_value_dict[field_type][field_name]["minValue"]
-                 max_value =field_value_dict[field_type][field_name]["maxValue"]
-                 res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,max_value))
+             if field_type is "binary" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 res_search.append(binary_searcher.compute_binary_text(field_name,field_weight,field_value))
+                 pass
+             elif field_type is "range" :
+                 if "minValue" in field_value_dict[field_type][field_name] and  "maxValue" in field_value_dict[field_type][field_name] :
+                     min_value =field_value_dict[field_type][field_name]["minValue"]
+                     max_value =field_value_dict[field_type][field_name]["maxValue"]
+                     res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,max_value))
 
-             elif "minValue" in field_value_dict[field_type][field_name] :
-                  min_value =field_value_dict[field_type][field_name]["minValue"]
-                  res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,None))
+                 elif "minValue" in field_value_dict[field_type][field_name] :
+                      min_value =field_value_dict[field_type][field_name]["minValue"]
+                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,None))
 
-             elif "maxValue" in field_value_dict[field_type][field_name] :
-                  max_value =field_value_dict[field_type][field_name]["maxValue"]
-                  res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,None,max_value))
+                 elif "maxValue" in field_value_dict[field_type][field_name] :
+                      max_value =field_value_dict[field_type][field_name]["maxValue"]
+                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,None,max_value))
 
-         elif field_type is "vague" :
-             field_value = field_value_dict[field_type][field_name]["value"]
-             res_search.append(value_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value))
-             pass
-
-
-  #CLEANUP later...
-   # print(data)
-   # minPrice = data['minPrice']
-   # maxPrice = data['maxPrice']
-    # hardDriveType = data['hardDriveType']
-   # hardDriveSize = data['hardDriveSize']
-
-
+             elif field_type is "vague" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 res_search.append(value_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value))
+                 pass
 
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
     resList = [dict(x) for x in res_search]
 
-
-    # print("printing resList")
-    # print(resList)
 
     #Counter objects count the occurrences of objects in the list...
     count_dict = Counter()
@@ -179,13 +180,13 @@ def search():
     ####new from beshoy
     #convert counter to dictionary
     result = dict(count_dict)
+
     # print("result")
     # print(result)
 
 
     sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-    print("sort result dict")
-    print(sortedDict)
+
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
@@ -217,11 +218,9 @@ def search():
 
     #sort abon the vagueness score
 
-    print("unsorted output is: ")
-    print(outputProducts)
+
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
-    print("sorted output is: ")
-    print(outputProducts)
+
 
 
 
