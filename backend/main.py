@@ -120,10 +120,14 @@ def search():
     #--------------------------------------------------------------------#
     # Special case to handle hardDriveSize
     if 'hardDriveSize' in data:
-       hd_size_min = data['hardDriveSize']["minValue"]
-       hd_size_max = data['hardDriveSize']["maxValue"]
-       hd_size_weight = data['hardDriveSize']["weight"]
-       res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
+        hd_size_weight = data['hardDriveSize']["weight"]
+        if "value" in data["hardDriveSize"] :
+           hd_size_min = data['hardDriveSize']["value"]
+           res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,None ))
+       else :
+           hd_size_min = data['hardDriveSize']["minValue"]
+           hd_size_max = data['hardDriveSize']["maxValue"]
+           res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
 
     #--------------------------------------------------------------------#
     #Special case to handle price
