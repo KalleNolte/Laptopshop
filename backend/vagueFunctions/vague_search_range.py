@@ -9,7 +9,6 @@ class VagueSearchRange():
 
   def compute_vague_range(self, allDocs, fieldName,weight, minValue, maxValue):
 
-    print("oooooooo",maxValue)
     allValues = []
     for doc in allDocs['hits']['hits']:
       if (doc['_source'][fieldName]) :
@@ -19,11 +18,6 @@ class VagueSearchRange():
     # print("allPrices: ", allPrices)
     lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
     upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
-    print("lowerSupport: ", lowerSupport)
-    print("upperSupport: ", upperSupport)
-    print("maxValue: ", maxValue)
-    print("minValue: ", minValue)
-    print(allValues[-1])
 
     trapmf = fuzz.trapmf(allValues, [lowerSupport, float(minValue), float(maxValue), upperSupport])
 

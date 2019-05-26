@@ -55,9 +55,6 @@ def extract_fields_and_values(fieldNameToValueDict) :
         #If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
         if type(fieldNameToValueDict[fieldName]) is dict and ("minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]) :
             #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
-            #minValueName = "min"+fieldName[0].upper()+fieldName[1:]
-            #maxValueName = "max"+fieldName[0].upper()+fieldName[1:]
-
 
             #Extract the values of minField and maxField from the JSON coming from the front end
             if "minValue" in fieldNameToValueDict[fieldName] and  "maxValue" in fieldNameToValueDict[fieldName] :
@@ -78,13 +75,13 @@ def extract_fields_and_values(fieldNameToValueDict) :
                 if type(fieldNameToValueDict[fieldName][0]) is str :
                     fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
         #--------------------------------------------------------------------------------------------------------------------------------#
-        #A normal numerical match, example : ram : 8, ram is 8
+                #Example : match "{ ram :{"value": 8}}"
             elif type(fieldNameToValueDict[fieldName]["value"]) is int or type(fieldNameToValueDict[fieldName]["value"]) is float :
                 result["vague"].update({fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
             #A normal string match as brandName or hardDriveType
             else :
-                #Example : match "{ ram : 8}"
+                #Example : match "{ hardDriveType :{"value": "ssd"}}"
                 result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
 
@@ -103,6 +100,10 @@ def search():
 
     binary_searcher = binary_search_text.BinarySearchText(es)
 
+    harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
+
+    resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
+
     res_search = list()
 
     #value_searcher = vague_search_value.VagueSearchValue(es)
@@ -114,15 +115,7 @@ def search():
                                                     }
                                                 })
 
-    minPrice = None
-    maxPrice = None
     hardDriveType = None
-    if 'price' in data:
-        if 'minValue' in data['price'] and data['price']['minValue']:
-            minPrice = data['price']['minValue']
-
-        if 'maxValue' in data['price'] and data['price']['maxValue']:
-            maxPrice = data['price']['maxValue']
 
     if 'hardDriveSize' in data:
        hardDriveSize = data['hardDriveSize']
@@ -168,15 +161,11 @@ def search():
     # hardDriveType = data['hardDriveType']
    # hardDriveSize = data['hardDriveSize']
 
-    pr = vague_search_price.VagueSearchPrice(es)
-    resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
 
-    hd = vague_search_harddrive.VagueHardDrive(es)
-    resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
 
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (
+    resList = [dict(x) for x in (resVagueListHardDrive,
                                  # binaryListBrand,
                                  res_search)
                ]
