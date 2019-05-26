@@ -20,6 +20,7 @@ export class DetailsComponent implements OnInit {
 
   laptop: Laptop[]=[];
   error;
+  var;
 
   constructor(private one_detail:DataService) {}
   ngOnInit() {
