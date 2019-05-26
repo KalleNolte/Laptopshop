@@ -7,6 +7,8 @@ import data from "../../assets/dummyData.json";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 
+import {NgxPaginationModule} from 'ngx-pagination';
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",

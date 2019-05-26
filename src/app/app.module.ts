@@ -24,6 +24,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
+import {NgxPaginationModule} from "ngx-pagination";
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@a
     MatTableModule,
     MatSortModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
