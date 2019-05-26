@@ -71,4 +71,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
 
   }
+
+  getBrandNameResponse(resp: string){
+      if(resp==="True"){
+          return 'green';
+      }else if (resp=="False"){
+        return 'red';
+      }
+  }
+
+  getHardDriveTypeResponse(resp: string){
+        if (resp === "True") {
+          return 'green';
+        } else if (resp == "False") {
+          return 'red';
+        }
+  }
+
+
 }
