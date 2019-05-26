@@ -39,6 +39,57 @@ def callAttributeMethod(attributeName,attributeValue,attributeWeight,allDocs) :
 
     eval(className+"."+methodName)
 
+def extract_fields_and_values(fieldNameToValueDict) :
+
+    result = dict(dict())
+
+    for fieldName in fieldNameToValueDict :
+
+        if not fieldNameToValueDict[fieldName]:
+            continue
+        #normal match
+        #Ranged terms, example : ram : { minRam : 2,maxRam : 4}
+        #If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
+        if type(fieldNameToValueDict[fieldName]) is dict and ("minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]) :
+            #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
+            #minValueName = "min"+fieldName[0].upper()+fieldName[1:]
+            #maxValueName = "max"+fieldName[0].upper()+fieldName[1:]
+
+
+            #Extract the values of minField and maxField from the JSON coming from the front end
+            if "minValue" in fieldNameToValueDict[fieldName] and  "maxValue" in fieldNameToValueDict[fieldName] :
+                result["range"].append(fieldName :{"minValue" :fieldNameToValueDict[fieldName]["minValue"]
+                ,"maxValue" : fieldNameToValueDict[fieldName]["minValue"]
+                ,"weight" :fieldNameToValueDict[fieldName]["weight"] } )
+
+            elif "minValue" in fieldNameToValueDict[fieldName] :
+                result["range"].append(fieldName :{"minValue" :fieldNameToValueDict[fieldName]["minValue"] ,"weight" :fieldNameToValueDict[fieldName]["weight"]} )
+
+            elif"maxValue" in fieldNameToValueDict[fieldName] :
+                result["range"].append(fieldName :{"maxValue" :fieldNameToValueDict[fieldName]["maxValue"],"weight" :fieldNameToValueDict[fieldName]["weight"] } )
+
+        #--------------------------------------------------------------------------------------------------------------------------------#
+        #In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
+        elif "value" in fieldNameToValueDict[fieldName] :
+            if type(fieldNameToValueDict[fieldName]["value"]) is list :
+                if type(fieldNameToValueDict[fieldName][0]) is str :
+                    fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
+        #--------------------------------------------------------------------------------------------------------------------------------#
+        #A normal numerical match, example : ram : 8, ram is 8
+            elif type(fieldNameToValueDict[fieldName]["value"]) is int or type(fieldNameToValueDict[fieldName]["value"]) is float :
+                result["vague"].append(fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] } )
+            #--------------------------------------------------------------------------------------------------------------------------------#
+            #A normal string match as brandName or hardDriveType
+            else :
+                #Example : match "{ ram : 8}"
+                result["binary"].append(fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] } )
+            #--------------------------------------------------------------------------------------------------------------------------------#
+
+    return result
+
+
+    return body
+
 
 @app.route('/api/search', methods=['POST'])
 def search():
@@ -59,6 +110,35 @@ def search():
     else:
       hardDriveSize = None
 
+     #Extracts each field and its value and weight to the dict
+     field_value_dict =  extract_fields_and_values(data)
+
+     for field_type in field_value_dict.keys() :
+         for field_name in field_value_dict[field_type].keys() :
+             field_name = field_value_dict[field_type][field_name]
+             field_weight = field_value_dict[field_type]["weight"]
+             if field_type is "binary" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 compute_vague_value(field_name,field_weight,field_value)
+                 pass
+             elif field_type is "range" :
+                 if "minValue" in field_value_dict[field_type][field_name].keys() and  "maxValue" in field_value_dict[field_type][field_name].keys() :
+                     min_value =field_value_dict[field_type][field_name]["minValue"]
+                     max_value =field_value_dict[field_type][field_name]["maxValue"]
+                     compute_vague_range(field_name,field_weight,min_value,max_value)
+                elif "minValue" in field_value_dict[field_type][field_name].keys() :
+                     min_value =field_value_dict[field_type][field_name]["minValue"]
+                     compute_vague_range(field_name,field_weight,min_value,None)
+
+                elif "maxValue" in field_value_dict[field_type][field_name].keys() :
+                     max_value =field_value_dict[field_type][field_name]["maxValue"]
+                     compute_vague_range(field_name,field_weight,None,max_value)
+
+             elif field_type is "vague" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 compute_vague_value(field_name,field_weight,field_value)
+                 pass
+
 
   #CLEANUP later...
    # print(data)
@@ -66,9 +146,6 @@ def search():
    # maxPrice = data['maxPrice']
     # hardDriveType = data['hardDriveType']
    # hardDriveSize = data['hardDriveSize']
-
-
-    brandName = data['brandName']
 
 
     if 'hardDriveType' in data:
@@ -82,17 +159,17 @@ def search():
                                                     }
                                                 })
 
-
-    resVagueListHardDrive =[]
-    resVagueListPrice =[]
-    binaryListBrand =[]
     pr = vague_search_price.VagueSearchPrice(es)
     resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
+
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
+
     data1 = {'brandName': brandName}
     br = binary_search_text.BinarySearchText(es)
+
     binaryListBrand = br.compute_binary_text(data1) if brandName else {}
+
     data1= {'hardDriveType': hardDriveType}
     binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
