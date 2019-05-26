@@ -90,17 +90,51 @@ def extract_fields_and_values(fieldNameToValueDict) :
 
     return body
 
+def call_responsible_methods(field_value_dict) :
+    res_search = list()
+    #--------------------------------------------------------------------#
+     #Extracts each field and its value and weight to the dict
+    for field_type in field_value_dict.keys() :
+
+     for field_name in field_value_dict[field_type] :
+         if field_name != "price" and field_name != "hardDriveSize" :
+             field_weight = field_value_dict[field_type][field_name]["weight"]
+             print(field_name)
+             #Values for binary key in the dict, these will be searched in the binary_searcher
+             if field_type is "binary" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 res_search.append(binary_searcher.compute_binary_text(field_name,field_weight,field_value))
+    #--------------------------------------------------------------------#
+             #Values for range key in the dict, these will be searched in the range_searcher
+             elif field_type is "range" :
+                 if "minValue" in field_value_dict[field_type][field_name] and  "maxValue" in field_value_dict[field_type][field_name] :
+                     min_value =field_value_dict[field_type][field_name]["minValue"]
+                     max_value =field_value_dict[field_type][field_name]["maxValue"]
+                     res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,max_value))
+
+                 elif "minValue" in field_value_dict[field_type][field_name] :
+                      min_value =field_value_dict[field_type][field_name]["minValue"]
+                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,None))
+
+                 elif "maxValue" in field_value_dict[field_type][field_name] :
+                      max_value =field_value_dict[field_type][field_name]["maxValue"]
+                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,None,max_value))
+    #--------------------------------------------------------------------#
+             #Values for binary key in the dict, these will be searched in the value_searcher
+             elif field_type is "vague" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 res_search.append(value_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value))
+    #--------------------------------------------------------------------#
+    return res_search
 
 @app.route('/api/search', methods=['POST'])
 def search():
 
     data = request.get_json()
 
-    res_search = list()
-
     field_value_dict =  extract_fields_and_values(data)
     #--------------------------------------------------------------------#
-
+    #Objects for each class to use the vague searching functions
     range_searcher = vague_search_range.VagueSearchRange(es)
 
     binary_searcher = binary_search_text.BinarySearchText(es)
@@ -142,39 +176,10 @@ def search():
            price_weight = data['price']["weight"]
            res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
-     #Extracts each field and its value and weight to the dict
+    #Gets scores for all other attributes
+    res_search = call_responsible_methods(field_value_dict)
 
-
-    for field_type in field_value_dict.keys() :
-
-     for field_name in field_value_dict[field_type] :
-         if field_name != "price" and field_name != "hardDriveSize" :
-             field_weight = field_value_dict[field_type][field_name]["weight"]
-             print(field_name)
-
-             if field_type is "binary" :
-                 field_value = field_value_dict[field_type][field_name]["value"]
-                 res_search.append(binary_searcher.compute_binary_text(field_name,field_weight,field_value))
-                 pass
-             elif field_type is "range" :
-                 if "minValue" in field_value_dict[field_type][field_name] and  "maxValue" in field_value_dict[field_type][field_name] :
-                     min_value =field_value_dict[field_type][field_name]["minValue"]
-                     max_value =field_value_dict[field_type][field_name]["maxValue"]
-                     res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,max_value))
-
-                 elif "minValue" in field_value_dict[field_type][field_name] :
-                      min_value =field_value_dict[field_type][field_name]["minValue"]
-                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,min_value,None))
-
-                 elif "maxValue" in field_value_dict[field_type][field_name] :
-                      max_value =field_value_dict[field_type][field_name]["maxValue"]
-                      res_search.append(range_searcher.compute_vague_range(allDocs,field_name,field_weight,None,max_value))
-
-             elif field_type is "vague" :
-                 field_value = field_value_dict[field_type][field_name]["value"]
-                 res_search.append(value_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value))
-                 pass
-
+    #--------------------------------------------------------------------#
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
     resList = [dict(x) for x in res_search]
@@ -189,12 +194,7 @@ def search():
     #convert counter to dictionary
     result = dict(count_dict)
 
-    # print("result")
-    # print(result)
-
-
     sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
@@ -209,28 +209,7 @@ def search():
     for item in outputProducts:
       item['vaguenessScore'] = result[item['asin']]
 
-
-    #####end beshoy's part
-    #to make sure that the items sorted based on the vagueness score just uncomment the next block
-    #outputProducts = []
-    # for (k, v) in result.items():
-    #     item = {
-    #         "ASIN": k,
-    #         "ProductTitle": productTitleDict[k],
-    #         "Vagueness Score": v/2,
-    #         "price": priceDict[k],
-    #         "Hard Drive Size": hdSizeDict[k],
-    #         "Hard Drive type": hdTypeDict[k]
-    #     }
-    #     outputProducts.append(item)
-
-    #sort abon the vagueness score
-
-
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
-
-
-
 
     return jsonify(outputProducts)
 
@@ -282,31 +261,6 @@ def refineResult(docs):
         }
         outputProducts.append(item)
     return outputProducts
-
-# def dicts(docs):
-#
-#   for hit in docs['hits']['hits']:
-#     productTitleDict[hit['_source']['asin']] = hit['_source']['productTitle']
-#     priceDict[hit['_source']['asin']] = float(hit['_source']['price'])
-#     displaySizeDict[hit['_source']['asin']] = hit['_source']['displaySize']
-#     screenResoultionSizeDict[hit['_source']['asin']] = [hit['_source']['screenResoultionSize'][0], hit['_source']['screenResoultionSize'][1]]
-#     processorSpeedDict[hit['_source']['asin']] = hit['_source']['processorSpeed']
-#     processorTypeDict[hit['_source']['asin']] = hit['_source']['processorType']
-#     processorCountDict[hit['_source']['asin']] = hit['_source']['processorCount']
-#     processorBrandDict[hit['_source']['asin']] = hit['_source']['processorBrand']
-#     ramDict[hit['_source']['asin']] = hit['_source']['ram']
-#     brandNameDict[hit['_source']['asin']] = hit['_source']['hardDriveType']
-#     hdTypeDict[hit['_source']['asin']] = hit['_source']['hardDriveType']
-#     ssdSizeDict[hit['_source']['asin']] = float(hit['_source']['ssdSize']) if hit['_source']['ssdSize'] else 0
-#     hddSizeDict[hit['_source']['asin']] = float(hit['_source']['hddSize']) if hit['_source']['hddSize'] else 0
-#     graphicsCoprocessorDict[hit['_source']['asin']] = hit['_source']['graphicsCoprocessor']
-#     chipsetBrandDict[hit['_source']['asin']] = hit['_source']['chipsetBrand']
-#     operatingSystemDict[hit['_source']['asin']] = hit['_source']['operatingSystem']
-#     itemWeightDict[hit['_source']['asin']] = hit['_source']['itemWeight']
-#     productDimensionDict[hit['_source']['asin']] = [hit['_source']['productDimension'][0],hit['_source']['productDimension'][0],hit['_source']['productDimension'][0]]
-#     colorDict[hit['_source']['asin']] = hit['_source']['color']
-#     imagePathDict[hit['_source']['asin']] = hit['_source']['imagePath']
-#     avgRatingDict[hit['_source']['asin']] = hit['_source']['avgRating']
 
 def getElementsByAsin(asinKeys):
   # print(asinKeys)
