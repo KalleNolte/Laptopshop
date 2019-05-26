@@ -9,7 +9,7 @@ from collections import Counter
 import json
 
 
-from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range
+from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
 from binaryFunctions import binary_search_text
 
 #from backend.vagueFunctions import vague_search_price, vague_search_harddrive
@@ -102,11 +102,11 @@ def search():
 
     harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
 
-    resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
+    #resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
 
     res_search = list()
 
-    #value_searcher = vague_search_value.VagueSearchValue(es)
+    value_searcher = vague_search_value.VagueSearchValue(es)
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
@@ -165,7 +165,7 @@ def search():
 
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (resVagueListHardDrive,
+    resList = [dict(x) for x in (
                                  # binaryListBrand,
                                  res_search)
                ]
