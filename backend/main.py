@@ -9,7 +9,7 @@ from collections import Counter
 import json
 
 
-from vagueFunctions import vague_search_price, vague_search_harddrive
+from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range
 from binaryFunctions import binary_search_text
 
 #from backend.vagueFunctions import vague_search_price, vague_search_harddrive
@@ -68,7 +68,7 @@ def search():
    # hardDriveSize = data['hardDriveSize']
 
 
-    brandName = data['brandName']
+    # brandName = data['brandName']
 
 
     if 'hardDriveType' in data:
@@ -83,13 +83,13 @@ def search():
                                                 })
 
 
-    pr = vague_search_price.VagueSearchPrice(es)
-    resVagueListPrice = pr.computeVaguePrice(allDocs, minPrice, maxPrice) if minPrice and maxPrice else {}
+    pr = vague_search_range.VagueSearchRange(es)
+    resVagueListPrice = pr.compute_vague_range(allDocs, "price", minPrice, maxPrice, 1) if minPrice and maxPrice else {}
     hd = vague_search_harddrive.VagueHardDrive(es)
     resVagueListHardDrive = hd.computeVagueHardDrive(allDocs, hardDriveSize) if hardDriveSize else {}
-    data1 = {'brandName': brandName}
-    br = binary_search_text.BinarySearchText(es)
-    binaryListBrand = br.compute_binary_text(data1) if brandName else {}
+    # data1 = {'brandName': brandName}
+    # br = binary_search_text.BinarySearchText(es)
+    # binaryListBrand = br.compute_binary_text(data1) if brandName else {}
     data1= {'hardDriveType': hardDriveType}
     binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
@@ -98,7 +98,7 @@ def search():
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
     resList = [dict(x) for x in (resVagueListPrice,
                                  resVagueListHardDrive,
-                                 binaryListBrand,
+                                 # binaryListBrand,
                                  binaryListHardDriveType)
                ]
 
