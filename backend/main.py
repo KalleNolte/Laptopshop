@@ -150,6 +150,8 @@ def search():
 
     price_searcher = vague_search_price.VagueSearchPrice(es)
 
+    print(field_value_dict)
+
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
                                                 "query": {
@@ -157,28 +159,28 @@ def search():
                                                     }
                                                 })
     #--------------------------------------------------------------------#
-    # Special case to handle hardDriveSize
-    if 'hardDriveSize' in data:
-        hd_size_weight = data['hardDriveSize']["weight"]
-        if "value" in data["hardDriveSize"]: # Discrete value needed not a range
-            hd_size_min = data['hardDriveSize']["value"]
+    # Special case to handle hardDriveSize, length is >1 if it has values other than weight
+    if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
+        hd_size_weight = clean_data['hardDriveSize']["weight"]
+        if "value" in clean_data["hardDriveSize"]: # Discrete value needed not a range
+            hd_size_min = clean_data['hardDriveSize']["value"]
             res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,None ))
         else :
-           hd_size_min = data['hardDriveSize']["minValue"]
-           hd_size_max = data['hardDriveSize']["maxValue"]
+           hd_size_min = clean_data['hardDriveSize']["minValue"]
+           hd_size_max = clean_data['hardDriveSize']["maxValue"]
            res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
 
     #--------------------------------------------------------------------#
     #Special case to handle price
     # Special case to handle hardDriveSize
-    if 'price' in data:
-        if "value" in data["price"]: # Discrete value needed not a range
-            price_min = data['price']["value"]
+    if 'price' in clean_data and len(clean_data["price"]) > 1:
+        if "value" in clean_data["price"]: # Discrete value needed not a range
+            price_min = clean_data['price']["value"]
             res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
         else :
-           price_min = data['price']["minValue"]
-           price_max = data['price']["maxValue"]
-           price_weight = data['price']["weight"]
+           price_min = clean_data['price']["minValue"]
+           price_max = clean_data['price']["maxValue"]
+           price_weight = clean_data['price']["weight"]
            res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
