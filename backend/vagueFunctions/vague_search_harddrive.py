@@ -9,7 +9,7 @@ class VagueHardDrive():
 
       allHardDrives = []
       for doc in allDocs['hits']['hits']:
-            if doc['_source'][field_name]and doc['_source']['hddSize'] != 0:
+            if doc['_source']["hddSize"]and doc['_source']['hddSize'] != 0:
                 allHardDrives.append(int(doc['_source']['hddSize']))
             if doc['_source']['ssdSize'] and doc['_source']['ssdSize'] != 0:
                 allHardDrives.append(int(doc['_source']['ssdSize']))
@@ -60,7 +60,7 @@ class VagueHardDrive():
           if hit['_source']['hddSize'] and hit['_source']['ssdSize']:
               if hit['_source']['hddSize'] != 0 and hit['_source']['ssdSize'] != 0:
                   result.append([hit['_source']['asin'],  # hit['_source']['hardDrive'],
-                                 weight * max(fuzz.interp_membership(allHardDrives, vagueFunction, float(hit['_source']['hddSize'])),fuzz.interp_membership(allHardDrives, trimf, float(hit['_source']['ssdSize'])))])
+                                 weight * max(fuzz.interp_membership(allHardDrives, vagueFunction, float(hit['_source']['hddSize'])),fuzz.interp_membership(allHardDrives, vagueFunction, float(hit['_source']['ssdSize'])))])
                   continue
 
           # laptop has only hdd Drive

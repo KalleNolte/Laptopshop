@@ -48,16 +48,16 @@ def createBinarySearchQuery(fieldNameToValueDict) :
                 continue
 
             #Extract the values of minField and maxField from the JSON coming from the front end
-            if "minValue" in fieldNameToValueDict[fieldName] &&  "maxValue" in fieldNameToValueDict[fieldName] :
+            if "minValue" in fieldNameToValueDict[fieldName] and  "maxValue" in fieldNameToValueDict[fieldName] :
                 minValue = fieldNameToValueDict[fieldName]["minValue"]
                 maxValue = fieldNameToValueDict[fieldName]["maxValue"]
                 ranges.append({"range" : {fieldName : {"lte" : maxValue,"gte" : minValue }}})
 
-            elif "minValue" in fieldNameToValueDict[fieldName]) :
+            elif "minValue" in fieldNameToValueDict[fieldName] :
                 minValue = fieldNameToValueDict[fieldName]["minValue"]
                 ranges.append({"range" : {fieldName : {"gte" : minValue }}})
 
-            else "maxValue" in fieldNameToValueDict[fieldName] :
+            elif "maxValue" in fieldNameToValueDict[fieldName] :
                 maxValue = fieldNameToValueDict[fieldName]["maxValue"]
                 ranges.append({"range" : {fieldName : {"lte" : maxValue}}})
 
