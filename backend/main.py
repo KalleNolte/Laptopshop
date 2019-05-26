@@ -120,19 +120,27 @@ def search():
     #--------------------------------------------------------------------#
     # Special case to handle hardDriveSize
     if 'hardDriveSize' in data:
-       hd_size_min = data['hardDriveSize']["minValue"]
-       hd_size_max = data['hardDriveSize']["maxValue"]
-       hd_size_weight = data['hardDriveSize']["weight"]
-       res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
+        hd_size_weight = data['hardDriveSize']["weight"]
+        if "value" in data["hardDriveSize"]: # Discrete value needed not a range
+            hd_size_min = data['hardDriveSize']["value"]
+            res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,None ))
+        else :
+           hd_size_min = data['hardDriveSize']["minValue"]
+           hd_size_max = data['hardDriveSize']["maxValue"]
+           res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
 
     #--------------------------------------------------------------------#
     #Special case to handle price
     # Special case to handle hardDriveSize
     if 'price' in data:
-       price_min = data['price']["minValue"]
-       price_max = data['price']["maxValue"]
-       price_weight = data['price']["weight"]
-       res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
+        if "value" in data["price"]: # Discrete value needed not a range
+            price_min = data['price']["value"]
+            res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
+        else :
+           price_min = data['price']["minValue"]
+           price_max = data['price']["maxValue"]
+           price_weight = data['price']["weight"]
+           res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
      #Extracts each field and its value and weight to the dict
 
