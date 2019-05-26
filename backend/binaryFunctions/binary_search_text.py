@@ -47,8 +47,8 @@ class BinarySearchText:
     #     print(result)
     #     return result
 
-    def compute_binary_text(self, data):
-        for k, v in data.items():
+    def compute_binary_text(self, field_name,field_weight,field_value):
+
 
             #The following is a case insensitive search
             body = {
@@ -57,7 +57,7 @@ class BinarySearchText:
                           "must":[
                             {
                               "match":{
-                                k: v
+                                field_name: field_value
                               }
                             }]
 
@@ -74,7 +74,7 @@ class BinarySearchText:
             for hit in res['hits']['hits']:
                 # print("print hits")
                 # print(hit)
-                result.append([hit['_source']['asin'], float(1.0)])
+                result.append([hit['_source']['asin'], field_weight*float(1.0)])
 
             # print("what is in \"result\"")
             # print(result)
@@ -90,4 +90,3 @@ class BinarySearchText:
             # print("result after mapping")
             # print(result)
             return result
-

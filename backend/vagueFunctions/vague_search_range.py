@@ -39,7 +39,7 @@ class VagueSearchRange():
     result = []
     for hit in res['hits']['hits']:
       result.append([hit['_source']['asin'],  # hit['_source']['price'],
-                     fuzz.interp_membership(allValues, trapmf, weight * float(hit['_source'][fieldName]))])
+                    weight *  fuzz.interp_membership(allValues, trapmf, float(hit['_source'][fieldName]))])
 
 
     result = np.array(result, dtype=object)

@@ -102,8 +102,6 @@ def search():
 
     harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
 
-    #resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
-
     res_search = list()
 
     value_searcher = vague_search_value.VagueSearchValue(es)
@@ -122,6 +120,8 @@ def search():
     else:
       hardDriveSize = None
 
+    resVagueListHardDrive = res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hardDriveSize)) if hardDriveSize else {}
+
      #Extracts each field and its value and weight to the dict
     field_value_dict =  extract_fields_and_values(data)
 
@@ -132,7 +132,7 @@ def search():
 
          if field_type is "binary" :
              field_value = field_value_dict[field_type][field_name]["value"]
-             binary_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value)
+             res_search.append(binary_searcher.compute_binary_text(field_name,field_weight,field_value))
              pass
          elif field_type is "range" :
              if "minValue" in field_value_dict[field_type][field_name] and  "maxValue" in field_value_dict[field_type][field_name] :
@@ -165,10 +165,7 @@ def search():
 
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (
-                                 # binaryListBrand,
-                                 res_search)
-               ]
+    resList = [dict(x) for x in res_search]
 
 
     # print("printing resList")
