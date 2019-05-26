@@ -5,6 +5,7 @@ import numpy as np
 from collections import Counter
 import json
 from collections import defaultdict
+from helper import Backend_Helper
 
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -19,10 +20,11 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 @app.route('/api/search', methods=['POST'])
 def searchBinary():
     data = request.get_json()
-    query = createBinarySearchQuery(data)
+    clean_data = Backend_Helper.clean_frontend_json(data)
+    query = createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
     #print(res)
-    return jsonify(refineResult(res))
+    return jsonify(Backend_Helper.refineResult(res))
 
 
 
@@ -106,44 +108,8 @@ def getSample():
     "size": 10
   })
 
-  outputProducts = refineResult(allDocs)
+  outputProducts = Backend_Helper.refineResult(allDocs)
   return jsonify(outputProducts)  # original from alfred
-
-
-def refineResult(docs):
-  outputProducts = []
-
-  for hit in docs['hits']['hits']:
-    item = {
-      "asin": hit['_source']['asin'],
-      "productTitle": hit['_source']['productTitle'],
-      "price": hit['_source']['price'],
-      "screenSize": hit['_source']['screenSize'],
-      "displayResolutionSize": [hit['_source']['displayResolutionSize'][0], hit['_source']['displayResolutionSize'][1]],
-      "processorSpeed": hit['_source']['processorSpeed'],
-      "processorType": hit['_source']['processorType'],
-      "processorCount": hit['_source']['processorCount'],
-      "processorManufacturer": hit['_source']['processorManufacturer'],
-      "ram": hit['_source']['ram'],
-      "brandName": hit['_source']['brandName'],
-      "hardDriveType": hit['_source']['hardDriveType'],
-      "ssdSize": hit['_source']['ssdSize'],
-      "hddSize": hit['_source']['hddSize'],
-      "graphicsCoprocessor": hit['_source']['graphicsCoprocessor'],
-      "chipsetBrand": hit['_source']['chipsetBrand'],
-      "operatingSystem": hit['_source']['operatingSystem'],
-      "itemWeight": hit['_source']['itemWeight'],
-      # "memoryType": hit['_source']['memoryType'],
-      "productDimension": [hit['_source']['productDimension'][0], hit['_source']['productDimension'][0],
-                           hit['_source']['productDimension'][0]],
-      "color": hit['_source']['color'],
-      "imagePath": hit['_source']['imagePath'],
-      "avgRating": hit['_source']['avgRating'],
-
-    }
-    outputProducts.append(item)
-  return outputProducts
-
 
 if __name__ == "__main__":
     app.run(debug=True)

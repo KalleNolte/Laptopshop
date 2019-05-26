@@ -11,6 +11,7 @@ import json
 
 from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
 from binaryFunctions import binary_search_text
+from helper import Backend_Helper
 
 #from backend.vagueFunctions import vague_search_price, vague_search_harddrive
 #from backend.binaryFunctions import binary_search_text
@@ -132,9 +133,11 @@ def search():
 
     data = request.get_json()
 
+    clean_data = Backend_Helper.clean_frontend_json(data)
+
     res_search = list()
 
-    field_value_dict =  extract_fields_and_values(data)
+    field_value_dict =  extract_fields_and_values(clean_data)
     #--------------------------------------------------------------------#
     #Objects for each class to use the vague searching functions
     range_searcher = vague_search_range.VagueSearchRange(es)
@@ -227,42 +230,10 @@ def getSample():
                                                 "size" : 10
                                               })
 
-    outputProducts = refineResult(allDocs)
+    outputProducts = Backend_Helper.refineResult(allDocs)
     return jsonify(outputProducts) #original from alfred
 
 
-def refineResult(docs):
-    outputProducts = []
-
-    for hit in docs['hits']['hits']:
-        item = {
-          "asin": hit['_source']['asin'],
-          "productTitle": hit['_source']['productTitle'],
-          "price": hit['_source']['price'],
-          "screenSize" : hit['_source']['screenSize'],
-          "displayResolutionSize" : [hit['_source']['displayResolutionSize'][0], hit['_source']['displayResolutionSize'][1]],
-          "processorSpeed" : hit['_source']['processorSpeed'],
-          "processorType" : hit['_source']['processorType'],
-          "processorCount" : hit['_source']['processorCount'],
-          "processorManufacturer" : hit['_source']['processorManufacturer'],
-          "ram" : hit['_source']['ram'],
-          "brandName" : hit['_source']['brandName'],
-          "hardDriveType" : hit['_source']['hardDriveType'],
-          "ssdSize" : hit['_source']['ssdSize'],
-          "hddSize": hit['_source']['hddSize'],
-          "graphicsCoprocessor": hit['_source']['graphicsCoprocessor'],
-          "chipsetBrand": hit['_source']['chipsetBrand'],
-          "operatingSystem": hit['_source']['operatingSystem'],
-          "itemWeight": hit['_source']['itemWeight'],
-          #"memoryType": hit['_source']['memoryType'],
-          "productDimension": [hit['_source']['productDimension'][0],hit['_source']['productDimension'][0],hit['_source']['productDimension'][0]],
-          "color": hit['_source']['color'],
-          "imagePath": hit['_source']['imagePath'],
-          "avgRating": hit['_source']['avgRating'],
-
-        }
-        outputProducts.append(item)
-    return outputProducts
 
 def getElementsByAsin(asinKeys):
   # print(asinKeys)
@@ -278,7 +249,7 @@ def getElementsByAsin(asinKeys):
                                             })
   # print("elastic search result")
   # print(result)
-  return refineResult(result)
+  return Backend_Helper.refineResult(result)
 
 
 if __name__ == "__main__":
