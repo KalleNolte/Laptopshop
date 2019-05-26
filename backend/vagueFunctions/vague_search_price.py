@@ -7,7 +7,7 @@ class VagueSearchPrice():
         self.es = es
 
 
-  def computeVaguePrice(self, allDocs, minPrice, maxPrice):
+  def computeVaguePrice(self, allDocs,weight, minPrice, maxPrice):
 
     allPrices = []
     for doc in allDocs['hits']['hits']:
@@ -40,7 +40,7 @@ class VagueSearchPrice():
     result = []
     for hit in res['hits']['hits']:
       result.append([hit['_source']['asin'],  # hit['_source']['price'],
-                     fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price']))])
+                     weight*fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price']))])
 
 
     result = np.array(result, dtype=object)
@@ -48,5 +48,5 @@ class VagueSearchPrice():
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
     result = result[:100]
     result = list(map(tuple, result))
-    # print(result)
+    print(result)
     return result
