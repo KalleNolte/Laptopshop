@@ -51,13 +51,43 @@
           </mat-radio-group>
       </mat-card>
 
-      <mat-card fxLayout="column" class="brandWidget">
-        <mat-card-title>Processor Brand</mat-card-title>
-        <mat-radio-group ngModel name="brandName" fxLayout="column">
+      <mat-card fxLayout="column" class="manufacturer">
+        <mat-card-title>Processor Manufacturer</mat-card-title>
+        <mat-radio-group ngModel name="processorManufacturer" fxLayout="column">
             <mat-radio-button value="intel">Intel</mat-radio-button>
             <mat-radio-button value="amd">AMD</mat-radio-button>
+            <mat-radio-button value="qualcomm ">Qualcomm</mat-radio-button>
+            <mat-radio-button value="via">VIA</mat-radio-button>
+            <mat-radio-button value="mediatek">MediaTek</mat-radio-button>
         </mat-radio-group>
     </mat-card>
+
+      <mat-card fxLayout="column" class="processorType">
+          <mat-card-title>Processor Type</mat-card-title>
+          <mat-select class="processorType" ngModel name="processorType" >
+            <mat-option *ngFor="let processorType of processorTypes"  [value]="processorType ">
+                  {{processorType }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
+
+       <mat-card fxLayout="column" class="processorSpeed">
+          <mat-card-title>Processor Speed</mat-card-title>
+          <mat-select class="processorSpeed" ngModel name="processorSpeed" >
+            <mat-option *ngFor="let processorSpeed of processorSpeeds"  [value]="processorSpeed ">
+                  {{processorSpeed }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
+
+      <mat-card fxLayout="column" class="processorSpeed">
+          <mat-card-title>Processor Count</mat-card-title>
+          <mat-select class="processorCount" ngModel name="processorCount" >
+            <mat-option *ngFor="let processorCount of processorCounts"  [value]="processorCount ">
+                  {{processorCount }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
 
       <mat-card class="priceWidget">
         <mat-card-title fxLayout="column">Price</mat-card-title>

@@ -13,6 +13,7 @@ export interface Laptop {
   processorSpeed: number;
   processorType: string;
   processorCount: number;
+  processorManufacturer: string;
   processorBrand: string;
   ram: number;
   brandName: string;
