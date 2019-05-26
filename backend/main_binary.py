@@ -94,6 +94,7 @@ def createBinarySearchQuery(fieldNameToValueDict) :
 
     return body
 
+
 @app.route('/api/sample', methods=['GET'])
 def getSample():
   allDocs = es.search(index="amazon", body={

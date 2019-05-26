@@ -9,7 +9,7 @@ from collections import Counter
 import json
 
 
-from vagueFunctions import vague_search_price, vague_search_harddrive
+from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range
 from binaryFunctions import binary_search_text
 
 #from backend.vagueFunctions import vague_search_price, vague_search_harddrive
@@ -174,19 +174,13 @@ def search():
     binaryListHardDriveType = br.compute_binary_text(data1) if hardDriveType else {}
 
 
-
-
-    for b in binaryListBrand:
-      print(b)
-
-    for h in binaryListHardDriveType:
-      print(h)
-
-
-
     #resList is a list containing a dictionary of ASIN: score values
     #resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
-    resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive, binaryListBrand, binaryListHardDriveType)]
+    resList = [dict(x) for x in (resVagueListPrice,
+                                 resVagueListHardDrive,
+                                 # binaryListBrand,
+                                 binaryListHardDriveType)
+               ]
 
 
     # print("printing resList")
