@@ -132,6 +132,8 @@ def search():
 
     data = request.get_json()
 
+    res_search = list()
+
     field_value_dict =  extract_fields_and_values(data)
     #--------------------------------------------------------------------#
     #Objects for each class to use the vague searching functions
@@ -177,7 +179,7 @@ def search():
            res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
-    res_search = call_responsible_methods(field_value_dict)
+    res_search.append(call_responsible_methods(field_value_dict))
 
     #--------------------------------------------------------------------#
     #resList is a list containing a dictionary of ASIN: score values
