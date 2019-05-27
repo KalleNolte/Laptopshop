@@ -73,17 +73,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   getBrandNameResponse(resp: string){
-      if(resp==="True"){
+      if(resp==="green"){
           return 'green';
-      }else if (resp=="False"){
+      }else if (resp=="red"){
         return 'red';
       }
   }
+  getPriceResponse(resp: string){
+        if (resp === "green") {
+          return 'green';
+        } else if (resp == "red") {
+          return 'red';
+        }
+  }
 
   getHardDriveTypeResponse(resp: string){
-        if (resp === "True") {
+        if (resp === "green") {
           return 'green';
-        } else if (resp == "False") {
+        } else if (resp == "red") {
           return 'red';
         }
   }

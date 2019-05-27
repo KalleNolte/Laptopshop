@@ -184,12 +184,13 @@
 <!--          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz-->
 <!--        </p>-->
 <!--        <p matLine>OS: {{ laptop.operatingSystem }}</p>-->
+        <p matLine [ngStyle]="{color:getBrandNameResponse(laptop.matched.brandName) }" >Brand: {{ laptop.brandName }}</p>
         <p matLine>
           Hard Drive Type: {{ laptop.hardDriveType }}
         </p>
         <p matLine *ngIf="laptop.hddSize"> Hard Drive Size: {{ laptop.hddSize }}</p>
         <p matLine *ngIf="laptop.ssdSize"> Hard Drive Size: {{ laptop.ssdSize }}</p>
-        <strong matLine>Price: {{ laptop.price }} $</strong>
+        <strong matLine [ngStyle]="{color:getPriceResponse(laptop.matched.price)}">Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
       <pagination-controls (pageChange)="p = $event"></pagination-controls>
