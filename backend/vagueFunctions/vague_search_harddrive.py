@@ -19,7 +19,7 @@ class VagueHardDrive():
 
 
       allHardDrives = np.sort((np.array(allHardDrives)))
-      print("allHardDrives: ", allHardDrives)
+      #print("allHardDrives: ", allHardDrives)
       lowerSupport = float(hardDriveSize) - ((float(hardDriveSize) - allHardDrives[0]) / 2)
       upperSupport = float(hardDriveSize) + ((allHardDrives[-1] - float(hardDriveSize)) / 2)
       # print("lowerSupport: ", lowerSupport)

@@ -5,7 +5,7 @@ import numpy as np
 from collections import Counter
 import json
 from collections import defaultdict
-
+import backend.binaryFunctions.binary_search
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module

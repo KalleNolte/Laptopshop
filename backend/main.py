@@ -7,6 +7,7 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
+from backend.colorInformation.color_information import ColorInformation
 
 
 #from vagueFunctions import vague_search_price, vague_search_harddrive
@@ -98,11 +99,11 @@ def search():
 
 
 
-    for b in binaryListBrand:
-      print(b)
+    #for b in binaryListBrand:
+    #  print(b)
 
-    for h in binaryListHardDriveType:
-      print(h)
+    #for h in binaryListHardDriveType:
+     # print(h)
 
 
 
@@ -127,8 +128,8 @@ def search():
 
 
     sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-    print("sort result dict")
-    print(sortedDict)
+    #print("sort result dict")
+    #print(sortedDict)
 
     #get the keys(asin values)
     asinKeys = list(result.keys())
@@ -160,14 +161,17 @@ def search():
 
     #sort abon the vagueness score
 
-    print("unsorted output is: ")
-    print(outputProducts)
+    #print("unsorted output is: ")
+    #print(outputProducts)
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
-    print("sorted output is: ")
-    print(outputProducts)
+    #print("sorted output is: ")
 
+    print(outputProducts[0])
+    c_i = ColorInformation(data,outputProducts)
+    searchedValues = c_i.extractKeyValuePairs()
+    c_i.prozessDataBinary(searchedValues)
 
-
+    print(outputProducts[8])
     return jsonify(outputProducts)
 
 

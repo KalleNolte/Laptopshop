@@ -1,0 +1,5 @@
+brandName : hp
+minValue:
+maxValue:
+hardDriveType : hdd
+
