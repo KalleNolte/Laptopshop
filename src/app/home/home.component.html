@@ -175,7 +175,7 @@
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops | paginate:{ itemsPerPage: 15, currentPage: p }">
+        <mat-list-item *ngFor="let laptop of laptops | paginate:{ itemsPerPage: 15, currentPage: p }">
         <img style="width: 200px;height:200px" matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
         <img style="width: 200px;height:200px" matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
         <h3 matLine  routerLink="/details">{{ laptop.productTitle }}</h3>
@@ -194,7 +194,9 @@
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
       <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
     </mat-list>
+
 
     <mat-form-field>
       <input
