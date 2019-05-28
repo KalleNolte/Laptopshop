@@ -8,7 +8,12 @@ class Backend_Helper:
             result[key] = dict()
             for sub_key in json_dict[key] :
                 if json_dict[key][sub_key] :
-                    result[key].update({sub_key:json_dict[key][sub_key]})
+                    value = json_dict[key][sub_key]
+                    if Backend_Helper.is_integer(value) :
+                        value = int(value)
+                    elif Backend_Helper.is_float(value) :
+                        value = float(value)
+                    result[key].update({sub_key:value})
                 elif sub_key == "weight" and not json_dict[key][sub_key] :
                     result[key].update({sub_key:1})
         return result
@@ -45,3 +50,19 @@ class Backend_Helper:
             }
             outputProducts.append(item)
         return outputProducts
+
+    @staticmethod
+    def is_integer(var) :
+        try:
+            int(var)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def is_float(var) :
+        try:
+            float(var)
+            return True
+        except ValueError:
+            return False
