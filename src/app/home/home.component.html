@@ -25,7 +25,7 @@
       <mat-card fxLayout="column" class="brandWidget">
           <mat-card-title>Brand Name</mat-card-title>
           <div ngModelGroup="brandName">
-            <mat-radio-group ngModel name="brandNamealue" fxLayout="column">
+            <mat-radio-group ngModel name="brandNameValue" fxLayout="column">
                 <mat-radio-button value="acer">Acer</mat-radio-button>
                 <mat-radio-button value="alienware">Alienware</mat-radio-button>
                 <mat-radio-button value="apple">Apple</mat-radio-button>
@@ -55,7 +55,7 @@
       <mat-card fxLayout="column" class="manufacturer">
         <mat-card-title>Processor Manufacturer</mat-card-title>
         <div ngModelGroup="chipsetBrand">
-          <mat-radio-group ngModel name="value" fxLayout="column">
+          <mat-radio-group ngModel name="chipsetBrandValue" fxLayout="column">
               <mat-radio-button value="intel">Intel</mat-radio-button>
               <mat-radio-button value="nvidia">Nvidia</mat-radio-button>
               <mat-radio-button value="amd">AMD</mat-radio-button>
@@ -68,7 +68,7 @@
       <mat-card fxLayout="column" class="ramWidget">
         <mat-card-title>RAM</mat-card-title>
         <div ngModelGroup="ram">
-          <mat-radio-group fxLayout="column" ngModel name="value">
+          <mat-radio-group fxLayout="column" ngModel name="ramValue">
               <mat-radio-button [value]="2">2</mat-radio-button>
               <mat-radio-button [value]="4">4</mat-radio-button>
               <mat-radio-button [value]="8">8</mat-radio-button>
@@ -80,7 +80,7 @@
       <mat-card fxLayout="column" class="processorType">
           <mat-card-title>Processor Type</mat-card-title>
           <div ngModelGroup="processorType">
-            <mat-select class="processorType" ngModel name="value" >
+            <mat-select class="processorType" ngModel name="processorTypeValue" >
               <mat-option *ngFor="let processorType of processorTypes"  [value]="processorType ">
                     {{processorType }}
               </mat-option>
@@ -92,7 +92,7 @@
        <mat-card fxLayout="column" class="processorSpeed">
           <mat-card-title>Processor Speed</mat-card-title>
          <div ngModelGroup="processorSpeed">
-            <mat-select class="processorSpeed" ngModel name="value" >
+            <mat-select class="processorSpeed" ngModel name="processorSpeedValue" >
               <mat-option *ngFor="let processorSpeed of processorSpeeds"  [value]="processorSpeed">
                     {{processorSpeed }}
               </mat-option>
@@ -104,7 +104,7 @@
       <mat-card fxLayout="column" class="processorCount">
           <mat-card-title>Processor Count</mat-card-title>
           <div ngModelGroup="processorCount">
-            <mat-select class="processorCount" ngModel name="value" >
+            <mat-select class="processorCount" ngModel name="processorCountValue" >
               <mat-option *ngFor="let processorCount of processorCounts"  [value]="processorCount ">
                     {{processorCount }}
               </mat-option>
@@ -151,7 +151,7 @@
       <mat-card fxLayout="column" class="brandWidget">
           <mat-card-title>Hard Drive Type</mat-card-title>
           <div ngModelGroup="hardDriveType"  fxLayout="column">
-            <mat-radio-group ngModel name="value" fxLayout="column">
+            <mat-radio-group ngModel name="hardDriveTypeValue" fxLayout="column">
                 <mat-radio-button value="hdd">HDD</mat-radio-button>
                 <mat-radio-button value="ssd">SSD</mat-radio-button>
                 <mat-radio-button value="hybrid">Hybrid</mat-radio-button>
@@ -165,7 +165,7 @@
         <mat-card-title>Hard Drive Capacity</mat-card-title>
         <div ngModelGroup="hardDriveSize" fxLayout="column">
           <div fxLayout="row">
-            <input matInput ngModel placeholder="Capacity"  name="value"> GB
+            <input matInput ngModel placeholder="Capacity"  name="hardDriveSizeValue"> GB
           </div>
           <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
         </div>
