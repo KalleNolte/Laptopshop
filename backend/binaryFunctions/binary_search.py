@@ -115,23 +115,23 @@ class BinarySearch():
       result = []
       #Add list including [asin, fuzzycalc] to result. Fuzzy Calculation is between 0 and 1
       for hit in res['hits']['hits']:
-          print("print hits")
-          print(hit)
+          #print("print hits")
+          #print(hit)
           result.append([hit['_source']['asin'], float(1.0)])
 
 
-      print("what is in \"result\"")
-      print(result)
+      #print("what is in \"result\"")
+      #print(result)
       result = np.array(result, dtype=object)
-      print("what is in \"result\" with objects") #why?
-      print(result)
+      #print("what is in \"result\" with objects") #why?
+      #print(result)
       # result = result[np.argsort(-result[:, 1])] #sorts resuls with highest matching score first
       # print("what is in \"result\" with objects")  # why?
       # print(result)
 
       ##
       result = list(map(tuple, result))
-      print("result after mapping")
-      print(result)
+      #print("result after mapping")
+      #print(result)
       return result
 

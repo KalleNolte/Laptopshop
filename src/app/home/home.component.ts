@@ -85,6 +85,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         } else if (resp == "red") {
           return 'red';
         }
+        else if (resp == "yellow") {
+          return 'yellow';
+        }
   }
 
   getHardDriveTypeResponse(resp: string){
