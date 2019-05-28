@@ -34,11 +34,54 @@ def createBinarySearchQuery(fieldNameToValueDict) :
     terms = []
     ranges = []
     sameFieldMultpleValues = []
+    hardDriveSizeValues = []
+
+    boolean_ssd_and_hdd = False
+
+    if "hardDriveSize" in fieldNameToValueDict :
+        if "hardDriveType" not in fieldNameToValueDict or fieldNameToValueDict["hardDriveType"].lower() == "hybrid":
+            hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
+            del fieldNameToValueDict["hardDriveSize"]
+            fieldNameToValueDict.update({"ssdSize":hardDriveSize_value,"hddSize" :hardDriveSize_value})
+            boolean_ssd_and_hdd = True
+        elif fieldNameToValueDict["hardDriveType"].lower() == "ssd" :
+            hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
+            del fieldNameToValueDict["hardDriveSize"]
+            fieldNameToValueDict.update({"ssdSize":hardDriveSize_value})
+        else :
+            hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
+            del fieldNameToValueDict["hardDriveSize"]
+            fieldNameToValueDict.update({"hddSize" :hardDriveSize_value})
+
+    if boolean_ssd_and_hdd :
+        #Discrete value with ssd and hdd
+        if "hardDriveSizeValue" in fieldNameToValueDict["hddSize"] :
+            hardDriveSizeValues.append({"term" : {"ssdSize" : fieldNameToValueDict["ssdSize"]["hardDriveSizeValue"]}})
+            hardDriveSizeValues.append({"term" : {"hddSize" : fieldNameToValueDict["hddSize"]["hardDriveSizeValue"]}})
+            #ranged value with ssd and hdd
+        else :
+            if "minValue" in fieldNameToValueDict["hddSize"] and  "maxValue" in fieldNameToValueDict["hddSize"] :
+                minValue = fieldNameToValueDict["hddSize"]["minValue"]
+                maxValue = fieldNameToValueDict["hddSize"]["maxValue"]
+                hardDriveSizeValues.append({"range" : {"hddSize" : {"lte" : maxValue,"gte" : minValue }}})
+                hardDriveSizeValues.append({"range" : {"ssdSize" : {"lte" : maxValue,"gte" : minValue }}})
+
+            elif "minValue" in fieldNameToValueDict["hddSize"] :
+                minValue = fieldNameToValueDict["hddSize"]["minValue"]
+                hardDriveSizeValues.append({"range" : {"hddSize" : {"gte" : minValue }}})
+                hardDriveSizeValues.append({"range" : {"ssdSize" : {"gte" : minValue }}})
+
+
+            elif "maxValue" in fieldNameToValueDict[fieldName] :
+                maxValue = fieldNameToValueDict["hddSize"]["maxValue"]
+                hardDriveSizeValues.append({"range" : {"hddSize" : {"lte" : maxValue}}})
+                hardDriveSizeValues.append({"range" : {"hddSize" : {"lte" : maxValue}}})
 
     for fieldName in fieldNameToValueDict :
 
-        if not fieldNameToValueDict[fieldName]:
+        if not fieldNameToValueDict[fieldName] or fieldName =="ssdSize" or fieldName == "hddSize" :
             continue
+
         #normal match
         #Ranged terms, example : ram : { minRam : 2,maxRam : 4}
         #If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
@@ -83,6 +126,8 @@ def createBinarySearchQuery(fieldNameToValueDict) :
             #--------------------------------------------------------------------------------------------------------------------------------#
 
     body["query"]["bool"]["must"] = []
+    body["query"]["bool"]["should"] = []
+    body["query"]["bool"]["should"].append(hardDriveSizeValues)
     if len(terms) > 0 :
         body["query"]["bool"]["must"].append(terms)
     if len(ranges) > 0 :
