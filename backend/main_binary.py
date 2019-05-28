@@ -38,7 +38,7 @@ def createBinarySearchQuery(fieldNameToValueDict) :
 
     boolean_ssd_and_hdd = False
 
-    if "hardDriveSize" in fieldNameToValueDict and fieldNameToValueDict["hardDriveSize"]["hardDriveSizeValue"] != "":
+    if "hardDriveSize" in fieldNameToValueDict and len(fieldNameToValueDict["hardDriveSize"].keys()) > 1:
         if "hardDriveType" not in fieldNameToValueDict or fieldNameToValueDict["hardDriveType"].lower() == "hybrid":
             hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
             del fieldNameToValueDict["hardDriveSize"]
@@ -127,7 +127,8 @@ def createBinarySearchQuery(fieldNameToValueDict) :
 
     body["query"]["bool"]["must"] = []
     body["query"]["bool"]["should"] = []
-    body["query"]["bool"]["should"].append(hardDriveSizeValues)
+    if len(hardDriveSizeValues) > 0 :
+        body["query"]["bool"]["should"].append(hardDriveSizeValues)
     if len(terms) > 0 :
         body["query"]["bool"]["must"].append(terms)
     if len(ranges) > 0 :
