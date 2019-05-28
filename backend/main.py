@@ -10,10 +10,11 @@ import json
 from backend.colorInformation.color_information import ColorInformation
 
 
-#from vagueFunctions import vague_search_price, vague_search_harddrive
+from vagueFunctions import vague_search_price, vague_search_harddrive
+from binaryFunctions import binary_search_text
 
-from backend.vagueFunctions import vague_search_price, vague_search_harddrive
-from backend.binaryFunctions import binary_search_text
+#from backend.vagueFunctions import vague_search_price, vague_search_harddrive
+#from backend.binaryFunctions import binary_search_text
 
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
 

@@ -4,6 +4,10 @@ interface screenResolutionSize {
 interface productDimension {
   [index: number]: number;
 }
+interface matched {
+  brandName: string;
+  price: string;
+}
 export interface Laptop {
   asin: string;
   productTitle: string; 
@@ -13,6 +17,7 @@ export interface Laptop {
   processorSpeed: number;
   processorType: string;
   processorCount: number;
+  processorManufacturer: string;
   processorBrand: string;
   ram: number;
   brandName: string;
@@ -28,7 +33,8 @@ export interface Laptop {
   color: string;
   imagePath: string;
   avgRating: number;
-
+  
+  matched: matched;
 }
 /*
 *

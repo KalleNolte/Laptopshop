@@ -51,13 +51,43 @@
           </mat-radio-group>
       </mat-card>
 
-      <mat-card fxLayout="column" class="brandWidget">
-        <mat-card-title>Processor Brand</mat-card-title>
-        <mat-radio-group ngModel name="brandName" fxLayout="column">
+      <mat-card fxLayout="column" class="manufacturer">
+        <mat-card-title>Processor Manufacturer</mat-card-title>
+        <mat-radio-group ngModel name="processorManufacturer" fxLayout="column">
             <mat-radio-button value="intel">Intel</mat-radio-button>
             <mat-radio-button value="amd">AMD</mat-radio-button>
+            <mat-radio-button value="qualcomm ">Qualcomm</mat-radio-button>
+            <mat-radio-button value="via">VIA</mat-radio-button>
+            <mat-radio-button value="mediatek">MediaTek</mat-radio-button>
         </mat-radio-group>
     </mat-card>
+
+      <mat-card fxLayout="column" class="processorType">
+          <mat-card-title>Processor Type</mat-card-title>
+          <mat-select class="processorType" ngModel name="processorType" >
+            <mat-option *ngFor="let processorType of processorTypes"  [value]="processorType ">
+                  {{processorType }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
+
+       <mat-card fxLayout="column" class="processorSpeed">
+          <mat-card-title>Processor Speed</mat-card-title>
+          <mat-select class="processorSpeed" ngModel name="processorSpeed" >
+            <mat-option *ngFor="let processorSpeed of processorSpeeds"  [value]="processorSpeed ">
+                  {{processorSpeed }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
+
+      <mat-card fxLayout="column" class="processorCount">
+          <mat-card-title>Processor Count</mat-card-title>
+          <mat-select class="processorCount" ngModel name="processorCount" >
+            <mat-option *ngFor="let processorCount of processorCounts"  [value]="processorCount ">
+                  {{processorCount }}
+            </mat-option>
+          </mat-select>
+      </mat-card>
 
       <mat-card class="priceWidget">
         <mat-card-title fxLayout="column">Price</mat-card-title>
@@ -145,23 +175,25 @@
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
-        <img matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
-        <img matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
-        <h3 matLine>{{ laptop.productTitle }}</h3>
+      <mat-list-item *ngFor="let laptop of laptops | paginate:{ itemsPerPage: 15, currentPage: p }">
+        <img style="width: 200px;height:200px" matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
+        <img style="width: 200px;height:200px" matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
+        <h3 matLine  routerLink="/details">{{ laptop.productTitle }}</h3>
 <!--        <p matLine>-->
 <!--          Processor Type: {{ laptop.processorType }} @-->
 <!--          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz-->
 <!--        </p>-->
 <!--        <p matLine>OS: {{ laptop.operatingSystem }}</p>-->
+        <p matLine [ngStyle]="{color:getBrandNameResponse(laptop.matched.brandName) }" >Brand: {{ laptop.brandName }}</p>
         <p matLine>
           Hard Drive Type: {{ laptop.hardDriveType }}
         </p>
         <p matLine *ngIf="laptop.hddSize"> Hard Drive Size: {{ laptop.hddSize }}</p>
         <p matLine *ngIf="laptop.ssdSize"> Hard Drive Size: {{ laptop.ssdSize }}</p>
-        <strong matLine>Price: {{ laptop.price }} $</strong>
+        <strong matLine [ngStyle]="{color:getPriceResponse(laptop.matched.price)}">Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </mat-list>
 
     <mat-form-field>
