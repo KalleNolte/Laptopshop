@@ -42,6 +42,7 @@ def createBinarySearchQuery(fieldNameToValueDict) :
         #normal match
         #Ranged terms, example : ram : { minRam : 2,maxRam : 4}
         #If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
+        value_field_name = fieldName+"Value"
         if type(fieldNameToValueDict[fieldName]) is dict and ("minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]) :
             #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
             #minValueName = "min"+fieldName[0].upper()+fieldName[1:]
@@ -65,20 +66,20 @@ def createBinarySearchQuery(fieldNameToValueDict) :
 
         #--------------------------------------------------------------------------------------------------------------------------------#
         #In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
-        elif "value" in fieldNameToValueDict[fieldName] :
-            if type(fieldNameToValueDict[fieldName]["value"]) is list :
+        elif value_field_name in fieldNameToValueDict[fieldName] :
+            if type(fieldNameToValueDict[fieldName][value_field_name]) is list :
                 if type(fieldNameToValueDict[fieldName][0]) is str :
                     fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
                 sameFieldMultpleValues.append({"terms" : {fieldName :fieldNameToValueDict[fieldName] }})
         #--------------------------------------------------------------------------------------------------------------------------------#
         #A normal numerical match, example : ram : 8, ram is 8
-            elif type(fieldNameToValueDict[fieldName]["value"]) is int or type(fieldNameToValueDict[fieldName]["value"]) is float :
-                terms.append({"term" : {fieldName : fieldNameToValueDict[fieldName]["value"]}})
+            elif type(fieldNameToValueDict[fieldName][value_field_name]) is int or type(fieldNameToValueDict[fieldName][value_field_name]) is float :
+                terms.append({"term" : {fieldName : fieldNameToValueDict[fieldName][value_field_name]}})
             #--------------------------------------------------------------------------------------------------------------------------------#
             #A normal string match as brandName or hardDriveType
             else :
                 #Example : match "{ ram : 8}"
-                terms.append({"term" : {fieldName : fieldNameToValueDict[fieldName]["value"].lower()}})
+                terms.append({"term" : {fieldName : fieldNameToValueDict[fieldName][value_field_name].lower()}})
             #--------------------------------------------------------------------------------------------------------------------------------#
 
     body["query"]["bool"]["must"] = []

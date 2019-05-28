@@ -54,6 +54,7 @@ def extract_fields_and_values(fieldNameToValueDict) :
         #normal match
         #Ranged terms, example : ram : { minRam : 2,maxRam : 4}
         #If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
+        value_field_name = fieldName+"Value"
         if type(fieldNameToValueDict[fieldName]) is dict and ("minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]) :
             #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
 
@@ -71,19 +72,19 @@ def extract_fields_and_values(fieldNameToValueDict) :
 
         #--------------------------------------------------------------------------------------------------------------------------------#
         #In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
-        elif "value" in fieldNameToValueDict[fieldName] :
-            if type(fieldNameToValueDict[fieldName]["value"]) is list :
+        elif value_field_name in fieldNameToValueDict[fieldName] :
+            if type(fieldNameToValueDict[fieldName][value_field_name]) is list :
                 if type(fieldNameToValueDict[fieldName][0]) is str :
                     fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
         #--------------------------------------------------------------------------------------------------------------------------------#
                 #Example : match "{ ram :{"value": 8}}"
-            elif type(fieldNameToValueDict[fieldName]["value"]) is int or type(fieldNameToValueDict[fieldName]["value"]) is float :
-                result["vague"].update({fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
+            elif type(fieldNameToValueDict[fieldName][value_field_name]) is int or type(fieldNameToValueDict[fieldName][value_field_name]) is float :
+                result["vague"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
             #A normal string match as brandName or hardDriveType
             else :
                 #Example : match "{ hardDriveType :{"value": "ssd"}}"
-                result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName]["value"],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
+                result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
 
     return result
