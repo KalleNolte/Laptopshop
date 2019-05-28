@@ -185,24 +185,33 @@
 
       <mat-card fxLayout="column" class="hardDriveWidget">
         <mat-card-title>Operating System</mat-card-title>
-        <mat-checkbox>
-          Windows 7
-        </mat-checkbox>
-        <mat-checkbox>
-          Windows 8
-        </mat-checkbox>
-        <mat-checkbox>
-          Windows 10
-        </mat-checkbox>
-        <mat-checkbox>
-          DOS
-        </mat-checkbox>
-        <mat-checkbox>
-          Mac OS
-        </mat-checkbox>
-        <mat-checkbox>
-          No Operating System
-        </mat-checkbox>
+        <div ngModelGroup="operatingSystem"  fxLayout="column">
+            <mat-radio-group ngModel name="operatingSystemValue" fxLayout="column">
+                <mat-radio-button value="Windows 7">Windows 7</mat-radio-button>
+                <mat-radio-button value="Windows 8">Windows 8</mat-radio-button>
+                <mat-radio-button value="Windows 10">Windows 10</mat-radio-button>
+                <mat-radio-button value="Mac OS">Mac OS</mat-radio-button>
+            </mat-radio-group>
+            <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
+        </div>
+<!--        <mat-checkbox>-->
+<!--          Windows 7-->
+<!--        </mat-checkbox>-->
+<!--        <mat-checkbox>-->
+<!--          Windows 8-->
+<!--        </mat-checkbox>-->
+<!--        <mat-checkbox>-->
+<!--          Windows 10-->
+<!--        </mat-checkbox>-->
+<!--        <mat-checkbox>-->
+<!--          DOS-->
+<!--        </mat-checkbox>-->
+<!--        <mat-checkbox>-->
+<!--          Mac OS-->
+<!--        </mat-checkbox>-->
+<!--        <mat-checkbox>-->
+<!--          No Operating System-->
+<!--        </mat-checkbox>-->
       </mat-card>
       <mat-card-actions>
           <button  mat-raised-button type="submit"  color="primary">Search</button>
