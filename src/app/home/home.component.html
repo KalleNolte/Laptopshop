@@ -25,7 +25,7 @@
       <mat-card fxLayout="column" class="brandWidget">
           <mat-card-title>Brand Name</mat-card-title>
           <div ngModelGroup="brandName">
-            <mat-radio-group ngModel name="value" fxLayout="column">
+            <mat-radio-group ngModel name="brandNamealue" fxLayout="column">
                 <mat-radio-button value="acer">Acer</mat-radio-button>
                 <mat-radio-button value="alienware">Alienware</mat-radio-button>
                 <mat-radio-button value="apple">Apple</mat-radio-button>
@@ -48,22 +48,20 @@
                 <mat-radio-button value="xps">XPS</mat-radio-button>
                 <mat-radio-button value="jumper">Jumper</mat-radio-button>
             </mat-radio-group>
-            <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+            <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight" ></mat-slider>
           </div>
       </mat-card>
 
       <mat-card fxLayout="column" class="manufacturer">
         <mat-card-title>Processor Manufacturer</mat-card-title>
-        <div ngModelGroup="processorManufacturer">
+        <div ngModelGroup="chipsetBrand">
           <mat-radio-group ngModel name="value" fxLayout="column">
               <mat-radio-button value="intel">Intel</mat-radio-button>
               <mat-radio-button value="nvidia">Nvidia</mat-radio-button>
               <mat-radio-button value="amd">AMD</mat-radio-button>
-              <mat-radio-button value="qualcomm ">Qualcomm</mat-radio-button>
-              <mat-radio-button value="via">VIA</mat-radio-button>
               <mat-radio-button value="mediatek">MediaTek</mat-radio-button>
           </mat-radio-group>
-          <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+          <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
         </div>
       </mat-card>
 
@@ -71,11 +69,11 @@
         <mat-card-title>RAM</mat-card-title>
         <div ngModelGroup="ram">
           <mat-radio-group fxLayout="column" ngModel name="value">
-              <mat-radio-button value="2">2</mat-radio-button>
-              <mat-radio-button value="4">4</mat-radio-button>
-              <mat-radio-button value="8">8</mat-radio-button>
+              <mat-radio-button [value]="2">2</mat-radio-button>
+              <mat-radio-button [value]="4">4</mat-radio-button>
+              <mat-radio-button [value]="8">8</mat-radio-button>
           </mat-radio-group>
-          <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+          <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
         </div>
     </mat-card>
 
@@ -87,7 +85,7 @@
                     {{processorType }}
               </mat-option>
             </mat-select>
-            <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+            <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
           </div>
       </mat-card>
 
@@ -95,11 +93,11 @@
           <mat-card-title>Processor Speed</mat-card-title>
          <div ngModelGroup="processorSpeed">
             <mat-select class="processorSpeed" ngModel name="value" >
-              <mat-option *ngFor="let processorSpeed of processorSpeeds"  [value]="processorSpeed ">
+              <mat-option *ngFor="let processorSpeed of processorSpeeds"  [value]="processorSpeed">
                     {{processorSpeed }}
               </mat-option>
             </mat-select>
-           <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+           <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
          </div>
       </mat-card>
 
@@ -111,17 +109,21 @@
                     {{processorCount }}
               </mat-option>
             </mat-select>
-            <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+            <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
           </div>
       </mat-card>
 
       <mat-card class="priceWidget">
         <mat-card-title fxLayout="column">Price</mat-card-title>
-        <div fxLayout="row" fxLayoutGap="5%" ngModelGroup="price">
-          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="min" name="minValue" >
-          <input fxLayout="column" fxFlex="40%" matInput ngModel placeholder="max"  name="maxValue" >
-          $
-          <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+        <div ngModelGroup="price">
+          <div fxLayout="row" fxLayoutGap="5%" >
+            <input matInput ngModel placeholder="min" name="minValue" >
+            <input matInput ngModel placeholder="max"  name="maxValue" >
+            $
+          </div>
+          <div fxLayout="row">
+              <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight" ></mat-slider>
+          </div>
         </div>
         <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
       </mat-card>
@@ -148,22 +150,24 @@
 
       <mat-card fxLayout="column" class="brandWidget">
           <mat-card-title>Hard Drive Type</mat-card-title>
-          <div ngModelGroup="hardDriveType">
+          <div ngModelGroup="hardDriveType"  fxLayout="column">
             <mat-radio-group ngModel name="value" fxLayout="column">
                 <mat-radio-button value="hdd">HDD</mat-radio-button>
                 <mat-radio-button value="ssd">SSD</mat-radio-button>
                 <mat-radio-button value="hybrid">Hybrid</mat-radio-button>
                 <mat-radio-button value="emmc">EMMC</mat-radio-button>
             </mat-radio-group>
-            <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+            <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
           </div>
       </mat-card>
 
       <mat-card fxLayout="column" class="hardDriveWidget">
         <mat-card-title>Hard Drive Capacity</mat-card-title>
-        <div ngModelGroup="hardDriveSize">
-          <input fxLayout="column" fxFlex="60%" matInput ngModel placeholder="Capacity"  name="value" > GB
-          <mat-slider ngModel min="1" max="5" step="1" name="weight"></mat-slider>
+        <div ngModelGroup="hardDriveSize" fxLayout="column">
+          <div fxLayout="row">
+            <input matInput ngModel placeholder="Capacity"  name="value"> GB
+          </div>
+          <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider>
         </div>
         <!--<mat-checkbox>
           Up to 159 GB
@@ -222,6 +226,7 @@
         </p>
         <p matLine *ngIf="laptop.hddSize"> HDD Size: {{ laptop.hddSize }}</p>
         <p matLine *ngIf="laptop.ssdSize"> SSD Size: {{ laptop.ssdSize }}</p>
+        <p matLine > processor : {{ laptop.processorManufacturer }}</p>
         <strong matLine>Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
@@ -247,6 +252,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
         <td mat-cell *matCellDef="let element">{{ element.price }}</td>
       </ng-container>
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
