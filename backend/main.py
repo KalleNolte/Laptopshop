@@ -101,7 +101,6 @@ def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_sear
      for field_name in field_value_dict[field_type] :
          if field_name != "price" and field_name != "hardDriveSize" :
              field_weight = field_value_dict[field_type][field_name]["weight"]
-             print(field_name)
              #Values for binary key in the dict, these will be searched in the binary_searcher
              if field_type is "binary" :
                  field_value = field_value_dict[field_type][field_name]["value"]
@@ -140,6 +139,7 @@ def search():
     print(clean_data)
 
     field_value_dict =  extract_fields_and_values(clean_data)
+
     #--------------------------------------------------------------------#
     #Objects for each class to use the vague searching functions
     range_searcher = vague_search_range.VagueSearchRange(es)
