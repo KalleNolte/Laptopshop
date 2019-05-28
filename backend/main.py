@@ -166,11 +166,10 @@ def search():
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
     #print("sorted output is: ")
 
-    print(outputProducts[0])
     c_i = ColorInformation(data,outputProducts)
     searchedValues = c_i.extractKeyValuePairs()
     c_i.prozessDataBinary(searchedValues)
-
+    print(outputProducts[0])
     print(outputProducts[8])
     return jsonify(outputProducts)
 

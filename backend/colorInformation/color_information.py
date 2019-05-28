@@ -19,7 +19,9 @@ class ColorInformation:
             searchedValues[nestedKey] = self.data[key][nestedKey]
       else:
         if self.data[key] != "":
-          searchedValues[key] = self.data[key]
+          searchedValues[key]= self.data[key]
+          #updated Version
+          #searchedValues[key][key+"Value"]
     return searchedValues
 
   #add for each laptop in products the matched key with nested key - value pairs
