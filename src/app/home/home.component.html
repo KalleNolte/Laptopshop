@@ -6,6 +6,7 @@
   <h3>Choose criteria <br />to filter results:</h3>
   <div class="searchInput">
     <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div fxLayout="row">
       <mat-form-field>
         <input
           type="text"
@@ -14,7 +15,11 @@
           ngModel
           name="searchValue"
         />
+        <mat-card-actions>
+          <button  mat-raised-button type="submit"  color="primary">Search</button>
+      </mat-card-actions>
       </mat-form-field>
+        </div>
     </form>
   </div>
 </section>

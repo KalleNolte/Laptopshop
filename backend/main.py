@@ -8,15 +8,15 @@ from collections import Counter
 #from flask_cors import CORS
 import json
 
-
-from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
-from binaryFunctions import binary_search_text
-from helper import Backend_Helper
-
-#from backend.vagueFunctions import vague_search_price, vague_search_harddrive
-#from backend.binaryFunctions import binary_search_text
-
+#
+# from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
+# from binaryFunctions import binary_search_text
+# from helper import Backend_Helper
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
+
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
+from backend.binaryFunctions import binary_search_text
+from backend.helper import Backend_Helper
 
 
 
@@ -220,6 +220,13 @@ def search():
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
     return jsonify(outputProducts)
+
+@app.route('/api/searchText', methods=['POST'])
+def searchText():
+  data = request.get_json()
+  print(data['searchValue'])
+  outputProducts =[]
+  return jsonify(outputProducts)
 
 
 @app.route('/api/sample', methods=['GET'])
