@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
+
   displayedColumns: string[] = ["name", "price"];
   dataSource = new MatTableDataSource(this.dummyData);
 
@@ -59,4 +60,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
 
   }
-}
+
+  getBrandNameResponse(resp: string){
+      if(resp==="green"){
+          return 'green';
+      }else if (resp=="red"){
+        return 'red';
+      }
+  }
+  getPriceResponse(resp:string){
+        if (resp === "green") {
+          return 'green';
+        } else if (resp == "red") {
+          return 'red';
+        }else if (resp == "yellow") {
+          return 'orange';
+        }else {
+          return 'black';
+        }
+  }
+
+  getHardDriveTypeResponse(resp: string){
+        if (resp === "green") {
+          return 'green';
+        } else if (resp == "red") {
+          return 'red';
+        }
+  }}
+
+
