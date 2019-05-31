@@ -57,8 +57,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  // onSubmit(form: NgForm) {
-  // }
+  onSubmit(form: NgForm) {
+    console.log(form.value);
+    this.dataService.searchText(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+
+  }
 
   getSample(){
     this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
@@ -68,6 +71,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+
 
     }
 }

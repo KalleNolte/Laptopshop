@@ -30,6 +30,11 @@ export class DataService {
   search(file:any): Observable<Laptop[]>{
     return this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
   }
+
+  searchText(file:any): Observable<Laptop[]>{
+    return this.http.post<Laptop[]>('/api/searchText', file, this.httpOptions);
+  }
+
   // getSample(){
   //   return this.http.get(this.sampleUrl)
   //   .pipe(map((resp: Response) => resp.json()));
