@@ -13,6 +13,8 @@ from vagueFunctions import vague_search_price, vague_search_harddrive,vague_sear
 from binaryFunctions import binary_search_text
 from helper import Backend_Helper
 
+from backend.matchedAttributesColorAdding.matched_attributes_color_adding import ColorInformation
+
 #from backend.vagueFunctions import vague_search_price, vague_search_harddrive
 #from backend.binaryFunctions import binary_search_text
 
@@ -218,6 +220,12 @@ def search():
       item['vaguenessScore'] = result[item['asin']]
 
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+
+    c_i = ColorInformation(data,outputProducts)
+    searchedValues = c_i.extractKeyValuePairs()
+    c_i.prozessDataBinary(searchedValues)
+    print(outputProducts[0])
+    print(outputProducts[8])
 
     return jsonify(outputProducts)
 
