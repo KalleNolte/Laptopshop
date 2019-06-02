@@ -8,7 +8,6 @@ class VagueSearchValue():
 
 
   def compute_vague_value(self, allDocs, fieldName,weight,values):
-
     allValues = []
     for doc in allDocs['hits']['hits']:
       if (doc['_source'][fieldName]) :
@@ -41,7 +40,6 @@ class VagueSearchValue():
         for hit in res['hits']['hits']:
           result.append([hit['_source']['asin'],  # hit['_source']['price'],
                         weight * fuzz.interp_membership(allValues, trimf, float(hit['_source'][fieldName]))])
-
 
     result = np.array(result, dtype=object)
     result = result[np.argsort(-result[:, 1])]

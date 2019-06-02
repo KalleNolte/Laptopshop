@@ -75,7 +75,7 @@ def extract_fields_and_values(fieldNameToValueDict) :
         #In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
         elif value_field_name in fieldNameToValueDict[fieldName] :
             if type(fieldNameToValueDict[fieldName][value_field_name]) is list :
-                if type(fieldNameToValueDict[fieldName][0]) is str :
+                if type(fieldNameToValueDict[fieldName][value_field_name][0]) is str :
                     fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
                     result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
         #--------------------------------------------------------------------------------------------------------------------------------#
@@ -138,7 +138,6 @@ def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_sear
                  field_value = field_value_dict[field_type][field_name]["value"]
                  field_intent = field_value_dict[field_type][field_name]["intent"]
                  res_search.append(alexa_searcher.compute_boolean_value(field_name,field_weight,field_value,field_intent))
-
     return res_search
 
 @app.route('/api/search/alexa', methods=['POST'])
@@ -185,8 +184,6 @@ def search():
                                                 })
 
     outputProducts = do_query(data,allDocs)
-
-    return(outputProducts)
 
     return jsonify(outputProducts)
 
