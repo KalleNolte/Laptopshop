@@ -49,6 +49,7 @@ class Backend_Helper:
 
             }
             outputProducts.append(item)
+        
         return outputProducts
 
     @staticmethod

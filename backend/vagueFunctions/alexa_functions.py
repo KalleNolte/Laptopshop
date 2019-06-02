@@ -10,19 +10,19 @@ class AlexaSearch :
 
 
         body = {
-          "query": {
+          "query":{
             "bool":{
                 "must":{
-            "range": {
-              field_name: {
-              es_intent : field_value
+                    "range": {
+                        field_name: {
+                            es_intent : field_value
                  # elastic search lte operator = less than or equals
               }
             }
           }
-          }
         }
-        }
+       }
+      }
 
         # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
         # (whose price actually between the minPrice and maxPrice) because we just want to get the first 100 element
@@ -40,3 +40,4 @@ class AlexaSearch :
         result = result[:100]
         result = list(map(tuple, result))
         return result
+    

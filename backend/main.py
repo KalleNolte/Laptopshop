@@ -133,8 +133,6 @@ def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_sear
              elif field_type is "alexa" :
                  field_value = field_value_dict[field_type][field_name]["value"]
                  field_intent = field_value_dict[field_type][field_name]["intent"]
-                 print( field_value_dict[field_type][field_name]["value"])
-                 print( field_value_dict[field_type][field_name]["intent"])
                  res_search.append(alexa_searcher.compute_boolean_value(field_name,field_weight,field_value,field_intent))
 
     return res_search
@@ -183,6 +181,8 @@ def search():
                                                 })
 
     outputProducts = do_query(data,allDocs)
+
+    return(outputProducts)
 
     return jsonify(outputProducts)
 
