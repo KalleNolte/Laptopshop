@@ -7,7 +7,7 @@ class Backend_Helper:
         for key in json_dict :
             result[key] = dict()
             for sub_key in json_dict[key] :
-                if json_dict[key][sub_key] :
+                if json_dict[key][sub_key] or Backend_Helper.is_integer(json_dict[key][sub_key]) or Backend_Helper.is_float(json_dict[key][sub_key]):
                     value = json_dict[key][sub_key]
                     if Backend_Helper.is_integer(value) :
                         value = int(value)

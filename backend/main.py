@@ -7,9 +7,10 @@ import numpy as np
 from collections import Counter
 #from flask_cors import CORS
 import json
+import requests
 
 
-from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value
+from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions
 from binaryFunctions import binary_search_text
 from helper import Backend_Helper
 
@@ -46,6 +47,7 @@ def extract_fields_and_values(fieldNameToValueDict) :
     result["binary"] = {}
     result["vague"] = {}
     result["range"] = {}
+    result["alexa"] = {}
 
     for fieldName in fieldNameToValueDict :
 
@@ -57,7 +59,6 @@ def extract_fields_and_values(fieldNameToValueDict) :
         value_field_name = fieldName+"Value"
         if type(fieldNameToValueDict[fieldName]) is dict and ("minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]) :
             #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
-
             #Extract the values of minField and maxField from the JSON coming from the front end
             if "minValue" in fieldNameToValueDict[fieldName] and  "maxValue" in fieldNameToValueDict[fieldName] :
                 result["range"].update({fieldName :{"minValue" :fieldNameToValueDict[fieldName]["minValue"]
@@ -86,13 +87,15 @@ def extract_fields_and_values(fieldNameToValueDict) :
                 #Example : match "{ hardDriveType :{"value": "ssd"}}"
                 result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
+            #A Query coming from alexa, with only more or less
+        elif type(fieldNameToValueDict[fieldName]) is dict and ("intent" in fieldNameToValueDict[fieldName]) :
+            #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
+            #Extract the values of minField and maxField from the JSON coming from the front end
+            result["alexa"].update({fieldName :{"intent" :fieldNameToValueDict[fieldName]["intent"],"value":fieldNameToValueDict[fieldName]["value"] ,"weight" :fieldNameToValueDict[fieldName]["weight"]}} )
 
     return result
 
-
-    return body
-
-def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher) :
+def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher,alexa_searcher) :
     res_search = list()
     #--------------------------------------------------------------------#
      #Extracts each field and its value and weight to the dict
@@ -126,17 +129,67 @@ def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_sear
                  field_value = field_value_dict[field_type][field_name]["value"]
                  res_search.append(value_searcher.compute_vague_value(allDocs,field_name,field_weight,field_value))
     #--------------------------------------------------------------------#
+            #Values for alexa
+             elif field_type is "alexa" :
+                 field_value = field_value_dict[field_type][field_name]["value"]
+                 field_intent = field_value_dict[field_type][field_name]["intent"]
+                 print( field_value_dict[field_type][field_name]["value"])
+                 print( field_value_dict[field_type][field_name]["intent"])
+                 res_search.append(alexa_searcher.compute_boolean_value(field_name,field_weight,field_value,field_intent))
+
     return res_search
+
+@app.route('/api/search/alexa', methods=['POST'])
+def alexa_search():
+
+    data = request.get_json()
+    intent = data["intent"]
+    intent_variable = data["intentVariable"]
+    intent_variable_value = data[data["intentVariable"]][data["intentVariable"]+"Value"]
+    #TODO: boolean method for intentVariable
+    #TODO: delete intentVariable with its Value
+    del data[intent_variable][intent_variable+"Value"]
+
+    data[intent_variable].update({"intent":intent,"value":intent_variable_value})
+
+    data[intent_variable]["weight"] = 100
+
+    del data["intent"]
+    del data["intentVariable"]
+
+    allDocs = es.search(index="amazon", body={
+                                                "size": 10000,
+                                                "query": {
+                                                    "match_all": {}
+                                                    }
+                                                })
+
+    outputProducts = do_query(data,allDocs)
+
+    return jsonify(outputProducts)
+
 
 @app.route('/api/search', methods=['POST'])
 def search():
 
+
     data = request.get_json()
 
+    allDocs = es.search(index="amazon", body={
+                                                "size": 10000,
+                                                "query": {
+                                                    "match_all": {}
+                                                    }
+                                                })
+
+    outputProducts = do_query(data,allDocs)
+
+    return jsonify(outputProducts)
+
+def do_query(data,allDocs):
     clean_data = Backend_Helper.clean_frontend_json(data)
 
     res_search = list()
-    print(clean_data)
 
     field_value_dict =  extract_fields_and_values(clean_data)
 
@@ -152,13 +205,8 @@ def search():
 
     price_searcher = vague_search_price.VagueSearchPrice(es)
 
+    alexa_searcher = alexa_functions.AlexaSearch(es)
 
-    allDocs = es.search(index="amazon", body={
-                                                "size": 10000,
-                                                "query": {
-                                                    "match_all": {}
-                                                    }
-                                                })
     #--------------------------------------------------------------------#
     # Special case to handle hardDriveSize, length is >1 if it has values other than weight
     if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
@@ -185,7 +233,7 @@ def search():
            res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
-    res_search += call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher)
+    res_search += call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher,alexa_searcher)
 
     #--------------------------------------------------------------------#
     #resList is a list containing a dictionary of ASIN: score values
@@ -219,8 +267,7 @@ def search():
 
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
-    return jsonify(outputProducts)
-
+    return outputProducts
 
 @app.route('/api/sample', methods=['GET'])
 def getSample():
@@ -256,4 +303,4 @@ def getElementsByAsin(asinKeys):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,port = 5001)
