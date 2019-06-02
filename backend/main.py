@@ -77,15 +77,19 @@ def extract_fields_and_values(fieldNameToValueDict) :
             if type(fieldNameToValueDict[fieldName][value_field_name]) is list :
                 if type(fieldNameToValueDict[fieldName][0]) is str :
                     fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
+                    result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
         #--------------------------------------------------------------------------------------------------------------------------------#
+                elif type(fieldNameToValueDict[fieldName][value_field_name][0]) is int or type(fieldNameToValueDict[fieldName][value_field_name][0]) is float :
+                    result["vague"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"]}} )
+                #--------------------------------------------------------------------------------------------------------------------------------#
                 #Example : match "{ ram :{"value": 8}}"
             elif type(fieldNameToValueDict[fieldName][value_field_name]) is int or type(fieldNameToValueDict[fieldName][value_field_name]) is float :
-                result["vague"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
+                result["vague"].update({fieldName :{"value" :[fieldNameToValueDict[fieldName][value_field_name]],"weight" :fieldNameToValueDict[fieldName]["weight"]}} )
             #--------------------------------------------------------------------------------------------------------------------------------#
             #A normal string match as brandName or hardDriveType
             else :
                 #Example : match "{ hardDriveType :{"value": "ssd"}}"
-                result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
+                result["binary"].update({fieldName :{"value" :[fieldNameToValueDict[fieldName][value_field_name]],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
             #A Query coming from alexa, with only more or less
         elif type(fieldNameToValueDict[fieldName]) is dict and ("intent" in fieldNameToValueDict[fieldName]) :
