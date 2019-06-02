@@ -7,6 +7,7 @@ import { HttpClient } from 'selenium-webdriver/http';
 import { HttpResponse } from '@angular/common/http';
 import {FormsModule, NgForm} from '@angular/forms';
 import { NgModule }      from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: "app-details",
@@ -22,9 +23,16 @@ export class DetailsComponent implements OnInit {
   error;
   var;
 
-  constructor(private one_detail:DataService) {}
+  title: string ;
+
+
+
+
+  constructor(private one_detail:DataService,
+              private route:ActivatedRoute) { }
   ngOnInit() {
-    this.showDetails();
+    //this.showDetails();
+    const allData=this.route
   }
 
    showDetails(){

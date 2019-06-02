@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, ElementRef } from "@angular/core";
+import {Component, OnInit, ViewChild, AfterViewInit, HostListener, ElementRef, Input} from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   processorCounts=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   //laptop = new Laptop();
+   index_Item: number;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
   }
+
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -69,5 +71,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
 
+    }
+
+    trackByAsin(index:number, laptops : any):string{
+    return  laptops.asin;
     }
 }

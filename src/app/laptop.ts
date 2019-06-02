@@ -30,6 +30,10 @@ export interface Laptop {
   imagePath: string;
   avgRating: number;
 
+  touchscreenTechnology: string;
+  displayLighting: string;
+  ratingCount: number;
+
 }
 /*
 *
