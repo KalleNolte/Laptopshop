@@ -76,7 +76,7 @@ def extract_fields_and_values(fieldNameToValueDict) :
         elif value_field_name in fieldNameToValueDict[fieldName] :
             if type(fieldNameToValueDict[fieldName][value_field_name]) is list :
                 if type(fieldNameToValueDict[fieldName][value_field_name][0]) is str :
-                    fieldNameToValueDict[fieldName] = [x.lower() for x in fieldNameToValueDict[fieldName]]
+                    fieldNameToValueDict[fieldName][value_field_name] = [x.lower() for x in fieldNameToValueDict[fieldName][value_field_name]]
                     result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
         #--------------------------------------------------------------------------------------------------------------------------------#
                 elif type(fieldNameToValueDict[fieldName][value_field_name][0]) is int or type(fieldNameToValueDict[fieldName][value_field_name][0]) is float :
