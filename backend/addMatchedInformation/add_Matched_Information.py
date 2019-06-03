@@ -97,11 +97,10 @@ class ColorInformation:
     threshhold = 0
     try:
       threshhold = (float(searchedValues['maxValue']) - float(searchedValues['minValue']))
+      if threshhold > 100:
+        threshhold = 100
     except:
-      if 'minValue' in searchedValues:
-        threshhold = float(searchedValues['minValue']) / 10
-      else:
-        threshhold = float(searchedValues['maxValue']) / 10
+      threshhold = 50
     print(threshhold)
     return threshhold
 
