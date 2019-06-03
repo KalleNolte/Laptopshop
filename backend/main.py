@@ -18,6 +18,8 @@ from backend.vagueFunctions import vague_search_price, vague_search_harddrive,va
 from backend.binaryFunctions import binary_search_text
 from backend.helper import Backend_Helper
 
+from backend.addMatchedInformation.add_Matched_Information import ColorInformation
+
 
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -218,6 +220,13 @@ def search():
       item['vaguenessScore'] = result[item['asin']]
 
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+
+    c_i = ColorInformation(data,outputProducts)
+    searchedValues = c_i.extractKeyValuePairs()
+    c_i.prozessDataBinary(searchedValues)
+    print(outputProducts[0])
+    print(outputProducts[9])
+
 
     return jsonify(outputProducts)
 
