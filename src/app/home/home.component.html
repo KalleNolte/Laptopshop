@@ -212,6 +212,43 @@
 <!--          No Operating System-->
 <!--        </mat-checkbox>-->
       </mat-card>
+
+       <mat-card fxLayout="column" class="ratingCount">
+          <mat-card-title> Rating Count</mat-card-title>
+           <!--  <div ngModelGroup="ratingCount"> -->
+            <mat-select class="ratingCount" ngModel name="ratingCount" >
+              <mat-option *ngFor="let ratingCount of ratingCounts"  [value]="ratingCount ">
+                    {{ratingCount }}
+              </mat-option>
+            </mat-select>
+           <!-- <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider> -->
+           <!--  </div> -->
+      </mat-card>
+
+      <mat-card fxLayout="column" class="ratingCount">
+          <mat-card-title>Touchscreen Technology</mat-card-title>
+           <!--  <div ngModelGroup="ratingCount"> -->
+            <mat-select class="touchscreenTechnology" ngModel name="touchscreenTechnology" >
+              <mat-option *ngFor="let touchscreenTechnology of touchscreenTechnologys"  [value]="touchscreenTechnology ">
+                    {{touchscreenTechnology }}
+              </mat-option>
+            </mat-select>
+           <!-- <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider> -->
+           <!--  </div> -->
+      </mat-card>
+
+      <mat-card fxLayout="column" class="ratingCount">
+          <mat-card-title>DisplayLighting</mat-card-title>
+           <!--  <div ngModelGroup="ratingCount"> -->
+            <mat-select class="displayLighting" ngModel name="displayLighting" >
+              <mat-option *ngFor="let displayLighting of displayLightings"  [value]="displayLighting ">
+                    {{displayLighting }}
+              </mat-option>
+            </mat-select>
+           <!-- <mat-slider [ngModel]="1" min="1" max="5" step="1" name="weight"></mat-slider> -->
+           <!--  </div> -->
+      </mat-card>
+
       <mat-card-actions>
           <button  mat-raised-button type="submit"  color="primary">Search</button>
       </mat-card-actions>
@@ -220,8 +257,8 @@
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops | paginate :{itemsPerPage:10, currentPage:p }  ; let i= index"  routerLink="/details" >
-        <img matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
+      <mat-list-item *ngFor="let laptop of laptops | paginate :{itemsPerPage:10, currentPage:p }  ; let i= index" [routerLink]="[ '/details',laptop.asin ]"  >
+        <img matListAvatar  src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
         <img matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
         <h3 matLine>{{ laptop.productTitle }}</h3>
 <!--        <p matLine>-->
@@ -236,7 +273,8 @@
         <p matLine *ngIf="laptop.ssdSize"> SSD Size: {{ laptop.ssdSize }}</p>
         <p matLine > processor : {{ laptop.chipsetBrand }}</p>
         <strong matLine>Price: {{ laptop.price }} $</strong>
-        <p mat-line> Index: {{i}}</p>
+       <!-- <p mat-line > Index: {{i}} and  {{laptop.asin}} </p>
+        <p mat-line > <a > more here</a></p> -->
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
       </mat-list-item>
     </mat-list>

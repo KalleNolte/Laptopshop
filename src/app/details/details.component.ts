@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
+import {HomeComponent} from "../home/home.component";
 import { moveIn, fallIn } from "../routing.animations";
 
 import { HttpClient } from 'selenium-webdriver/http';
@@ -23,16 +24,34 @@ export class DetailsComponent implements OnInit {
   error;
   var;
 
-  title: string ;
-
+  productTitle: string ;
+  brandName: string;
+  ram: number;
+  hardDriveType: string;
+  displaySize: number;
+  operatingSystem: string;
+  screenResoultionSize: screenResolutionSize;
+  imagePath: string;
 
 
 
   constructor(private one_detail:DataService,
-              private route:ActivatedRoute) { }
+              private route:ActivatedRoute,
+              private  homeFeatures:HomeComponent) { }
   ngOnInit() {
     //this.showDetails();
-    const allData=this.route
+    //const allData=this.route
+    const asin=this.route.snapshot.params['asin'];
+    this.productTitle= this.homeFeatures.getLaptopByAsin(asin).productTitle;
+    this.brandName=this.homeFeatures.getLaptopByAsin(asin).brandName;
+    this.ram=this.homeFeatures.getLaptopByAsin(asin).ram;
+    this.hardDriveType=this.homeFeatures.getLaptopByAsin(asin).hardDriveType;
+    this.displaySize=this.homeFeatures.getLaptopByAsin(asin).displaySize;
+    this.operatingSystem=this.homeFeatures.getLaptopByAsin(asin).operatingSystem;
+    this.imagePath=this.homeFeatures.getLaptopByAsin(asin).imagePath;
+    this.screenResoultionSize=this.homeFeatures.getLaptopByAsin(asin).screenResoultionSize;
+
+    //console.log( this.homeFeatures.getLaptopByAsin(id).productTitle);
   }
 
    showDetails(){

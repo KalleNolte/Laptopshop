@@ -32,8 +32,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
        3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5. ]
 
   processorCounts=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  ratingCounts=[0,1,2,3,4,5]
+  touchscreenTechnologys=['touchscreen','multi-touch']
+  displayLightings=['blacklit','led']
   //laptop = new Laptop();
    index_Item: number;
+  //@Input() id:string;
+  @Input() asin:string
+  sendSign: string;
+  sendNg;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -70,10 +77,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
     
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
-
+      this.sendSign= "gut";
     }
 
     trackByAsin(index:number, laptops : any):string{
     return  laptops.asin;
+    }
+
+    getLaptopByAsin(asin:string) {
+
+      if ( this.getSample() !== null || this.sendSign =="gut" ) {
+          return this.laptops.find(
+          laptopObject =>
+            laptopObject.asin === asin
+        );
+      }else {
+       // var g= this.search();
+        this.getSample();
+          return this.laptops.find(
+          laptopObject =>
+            laptopObject.asin === asin
+        );
+      }
     }
 }

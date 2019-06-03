@@ -57,7 +57,7 @@ import {NgxPaginationModule} from "ngx-pagination";
     MatSelectModule,
     NgxPaginationModule
   ],
-  providers: [],
+  providers: [HomeComponent,DetailsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
