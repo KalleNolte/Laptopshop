@@ -91,22 +91,19 @@ class ColorInformation:
       self.matched = {}
       #----------------------------------------------------------------------#
 
-
-
   #Calculation of threshhold--------------------#
   #---------------------------------------------#
   def prozessThreshholdPrice(self,searchedValues):
     threshhold = 0
-    if 'minValue' and 'maxValue' in searchedValues:
+    try:
       threshhold = (float(searchedValues['maxValue']) - float(searchedValues['minValue']))
-    elif 'minValue' in searchedValues:
-      threshhold = float(searchedValues['minValue']) / 10
-    elif 'maxValue' in searchedValues:
-      threshhold = float(searchedValues['maxValue']) / 10
+    except:
+      if 'minValue' in searchedValues:
+        threshhold = float(searchedValues['minValue']) / 10
+      else:
+        threshhold = float(searchedValues['maxValue']) / 10
     print(threshhold)
     return threshhold
-
-
 
 
   #Price can be green, yellow or red, depending on the threshhold-----------------#

@@ -181,10 +181,22 @@ def search():
             price_min = clean_data['price']["value"]
             res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
         else :
-           price_min = clean_data['price']["minValue"]
-           price_max = clean_data['price']["maxValue"]
-           price_weight = clean_data['price']["weight"]
-           res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
+          if "minValue" in clean_data['price']:
+            if "maxValue" in clean_data['price']:
+              price_min = clean_data['price']["minValue"]
+              price_max = clean_data['price']["maxValue"]
+              price_weight = clean_data['price']["weight"]
+              res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+            else:
+              price_min = clean_data['price']["minValue"]
+              price_max = clean_data['price']["minValue"]
+              price_weight = clean_data['price']["weight"]
+              res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+          elif "maxValue" in clean_data['price']:
+            price_min = clean_data['price']["maxValue"]
+            price_max = clean_data['price']["maxValue"]
+            price_weight = clean_data['price']["weight"]
+            res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
     res_search += call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher)
