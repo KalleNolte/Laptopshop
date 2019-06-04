@@ -28,8 +28,8 @@ class Backend_Helper:
               "price": hit['_source']['price'],
               "screenSize" : hit['_source']['screenSize'],
               "displayResolutionSize" : [hit['_source']['displayResolutionSize'][0], hit['_source']['displayResolutionSize'][1]],
-              "touchscreenTechnology" : [hit['_source']['touchscreenTechnology']],
-              "displayLighting": [hit['_source']['displayLighting']],
+              #"touchscreenTechnology" : [hit['_source']['touchscreenTechnology']],
+              #"displayLighting": [hit['_source']['displayLighting']],
               "processorSpeed" : hit['_source']['processorSpeed'],
               "processorType" : hit['_source']['processorType'],
               "processorCount" : hit['_source']['processorCount'],
@@ -48,7 +48,7 @@ class Backend_Helper:
               "color": hit['_source']['color'],
               "imagePath": hit['_source']['imagePath'],
               "avgRating": hit['_source']['avgRating'],
-              "ratingCount": [hit['_source']['ratingCount']],
+              #"ratingCount": [hit['_source']['ratingCount']],
             }
             outputProducts.append(item)
 
