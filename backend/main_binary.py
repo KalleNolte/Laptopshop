@@ -5,7 +5,7 @@ import numpy as np
 from collections import Counter
 import json
 from collections import defaultdict
-from helper import Backend_Helper
+from backend.helper import Backend_Helper
 
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])

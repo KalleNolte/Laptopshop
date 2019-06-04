@@ -3,7 +3,7 @@ import numpy as np
 class BinarySearchText:
 
     def __init__(self, es):
-        self.es = es
+      self.es =es
 
     # def compute_binary_brand(self, text):
     #     #The following is a case insensitive search

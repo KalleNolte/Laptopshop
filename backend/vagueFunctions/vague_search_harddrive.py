@@ -49,7 +49,7 @@ class VagueHardDrive():
                       }}
                   ]
               }
-          },
+          },"sort": {"price": {"order": "asc"}},
         "size" : 10000
       }
       res = self.es.search(index="amazon", body=body)

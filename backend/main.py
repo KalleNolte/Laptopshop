@@ -47,8 +47,8 @@ def extract_fields_and_values(fieldNameToValueDict) :
     result["vague"] = {}
     result["range"] = {}
 
-    for fieldName in fieldNameToValueDict :
-
+    for fieldName in fieldNameToValueDict : #iterate through keys
+        print(fieldName)
         if not fieldNameToValueDict[fieldName]:
             continue
         #normal match
@@ -86,7 +86,8 @@ def extract_fields_and_values(fieldNameToValueDict) :
                 #Example : match "{ hardDriveType :{"value": "ssd"}}"
                 result["binary"].update({fieldName :{"value" :fieldNameToValueDict[fieldName][value_field_name],"weight" :fieldNameToValueDict[fieldName]["weight"] }} )
             #--------------------------------------------------------------------------------------------------------------------------------#
-
+    print("what is the result after extract_field_to_value")
+    print(result)
     return result
 
 
@@ -132,11 +133,14 @@ def call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_sear
 def search():
 
     data = request.get_json()
+    print("data")
+    print(data)
 
     clean_data = Backend_Helper.clean_frontend_json(data)
+    print("clean_data")
+    print(clean_data)
 
     res_search = list()
-    print(clean_data)
 
     field_value_dict =  extract_fields_and_values(clean_data)
 
@@ -218,6 +222,8 @@ def search():
       item['vaguenessScore'] = result[item['asin']]
 
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+
+    print(outputProducts)
 
     return jsonify(outputProducts)
 
