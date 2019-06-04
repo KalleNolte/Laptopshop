@@ -47,9 +47,10 @@ class BinarySearchText:
     #     print(result)
     #     return result
 
-    def compute_binary_text(self, field_name,field_weight,field_value):
+    def compute_binary_text(self, field_name,field_weight,field_values):
 
-
+        result = []
+        for value in field_values:
             #The following is a case insensitive search
             body = {
                       "query":{
@@ -57,7 +58,7 @@ class BinarySearchText:
                           "must":[
                             {
                               "match":{
-                                field_name: field_value
+                                field_name: value
                               }
                             }]
 
@@ -68,24 +69,23 @@ class BinarySearchText:
             res = self.es.search(index="amazon", body=body, size=10000)
 
 
-            result = []
             # Add list including [asin, fuzzycalc] to result. Fuzzy Calculation is between 0 and 1
             for hit in res['hits']['hits']:
                 # print("print hits")
                 # print(hit)
                 result.append([hit['_source']['asin'], field_weight*float(1.0)])
 
-            # print("what is in \"result\"")
-            # print(result)
-            result = np.array(result, dtype=object)
-            # print("what is in \"result\" with objects")  # why?
-            # print(result)
-            # result = result[np.argsort(-result[:, 1])] #sorts resuls with highest matching score first
-            # print("what is in \"result\" with objects")  # why?
-            # print(result)
+        # print("what is in \"result\"")
+        # print(result)
+        result = np.array(result, dtype=object)
+        # print("what is in \"result\" with objects")  # why?
+        # print(result)
+        # result = result[np.argsort(-result[:, 1])] #sorts resuls with highest matching score first
+        # print("what is in \"result\" with objects")  # why?
+        # print(result)
 
-            ##
-            result = list(map(tuple, result))
-            # print("result after mapping")
-            # print(result)
-            return result
+        ##
+        result = list(map(tuple, result))
+        # print("result after mapping")
+        # print(result)
+        return result

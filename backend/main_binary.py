@@ -26,6 +26,32 @@ def searchBinary():
     #print(res)
     return jsonify(Backend_Helper.refineResult(res))
 
+@app.route('/api/search/alexa', methods=['POST'])
+def alexa_search():
+
+    data = request.get_json()
+    intent = data["intent"]
+    intent_variable = data["intentVariable"]
+    intent_variable_value = data[data["intentVariable"]][data["intentVariable"]+"Value"]
+    #TODO: boolean method for intentVariable
+    #TODO: delete intentVariable with its Value
+    del data[intent_variable][intent_variable+"Value"]
+
+    data[intent_variable].update({"intent":intent,"value":intent_variable_value})
+
+    data[intent_variable]["weight"] = 100
+
+    del data["intent"]
+    del data["intentVariable"]
+
+    clean_data = Backend_Helper.clean_frontend_json(data)
+    query = createBinarySearchQuery(clean_data)
+    print(query)
+    res = es.search(index="amazon", body=query)
+    print("-----")
+    print(res)
+
+    return jsonify(Backend_Helper.refineResult(res))
 
 
 def createBinarySearchQuery(fieldNameToValueDict) :
@@ -33,8 +59,10 @@ def createBinarySearchQuery(fieldNameToValueDict) :
 
     terms = []
     ranges = []
+    alexa = []
     sameFieldMultpleValues = []
     hardDriveSizeValues = []
+
 
     boolean_ssd_and_hdd = False
 
@@ -124,6 +152,13 @@ def createBinarySearchQuery(fieldNameToValueDict) :
                 #Example : match "{ ram : 8}"
                 terms.append({"term" : {fieldName : fieldNameToValueDict[fieldName][value_field_name].lower()}})
             #--------------------------------------------------------------------------------------------------------------------------------#
+        elif type(fieldNameToValueDict[fieldName]) is dict and ("intent" in fieldNameToValueDict[fieldName]) :
+            #Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
+            #Extract the values of minField and maxField from the JSON coming from the front end
+            field_intent = fieldNameToValueDict[fieldName]["intent"]
+            es_intent = "gt" if field_intent == "more" else "lt"
+            ranges.append({"range" : {fieldName : {es_intent : fieldNameToValueDict[fieldName]["value"]}}})
+
 
     body["query"]["bool"]["must"] = []
     body["query"]["bool"]["should"] = []
@@ -137,9 +172,6 @@ def createBinarySearchQuery(fieldNameToValueDict) :
         body["query"]["bool"]["must"].append(sameFieldMultpleValues)
 
     body.update({"size":100})
-
-    print(json.dumps(body))
-
 
     return body
 
