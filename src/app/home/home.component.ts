@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
+
   }
 
 
@@ -80,24 +81,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sendSign= "gut";
     }
 
-    trackByAsin(index:number, laptops : any):string{
-    return  laptops.asin;
+    trackByAsin(index:number, laptops : any):any{
+    return  laptops;
     }
 
     getLaptopByAsin(asin:string) {
-
-      if ( this.getSample() !== null || this.sendSign =="gut" ) {
+      if ( this.getSample() !== null || this.sendSign =="gut" )
           return this.laptops.find(
           laptopObject =>
             laptopObject.asin === asin
         );
-      }else {
-       // var g= this.search();
-        this.getSample();
-          return this.laptops.find(
-          laptopObject =>
-            laptopObject.asin === asin
-        );
-      }
     }
 }

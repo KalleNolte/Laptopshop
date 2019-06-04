@@ -30,9 +30,10 @@ export class DetailsComponent implements OnInit {
   hardDriveType: string;
   displaySize: number;
   operatingSystem: string;
-  screenResoultionSize: screenResolutionSize;
+  //screenResoultionSize: screenResolutionSize;
   imagePath: string;
 
+  rec:any;
 
 
   constructor(private one_detail:DataService,
@@ -49,9 +50,11 @@ export class DetailsComponent implements OnInit {
     this.displaySize=this.homeFeatures.getLaptopByAsin(asin).displaySize;
     this.operatingSystem=this.homeFeatures.getLaptopByAsin(asin).operatingSystem;
     this.imagePath=this.homeFeatures.getLaptopByAsin(asin).imagePath;
-    this.screenResoultionSize=this.homeFeatures.getLaptopByAsin(asin).screenResoultionSize;
+    //this.screenResoultionSize=this.homeFeatures.getLaptopByAsin(asin).screenResoultionSize;
+
 
     //console.log( this.homeFeatures.getLaptopByAsin(id).productTitle);
+    //this.productTitle=this.homeFeatures.trackByAsin(index)
   }
 
    showDetails(){
