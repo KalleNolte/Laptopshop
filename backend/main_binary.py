@@ -191,4 +191,4 @@ def getSample():
   return jsonify(outputProducts)  # original from alfred
 
 if __name__ == "__main__":
-    app.run(debug=True,port = 5001)
+    app.run(port=5001, debug=True)
