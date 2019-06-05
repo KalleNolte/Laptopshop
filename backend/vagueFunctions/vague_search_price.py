@@ -50,3 +50,16 @@ class VagueSearchPrice():
     result = list(map(tuple, result))
 
     return result
+
+  def computeVaguePrice_alternative(allDocs, clean_data, harddrive_searcher, hd_size_weight, price_searcher,
+                                    res_search):
+    #if 'price' in clean_data and len(clean_data["price"]) > 1:
+      if "value" in clean_data["price"]:  # Discrete value needed not a range
+        price_min = clean_data['price']["value"]
+        res_search.append(harddrive_searcher.computeVaguePrice(allDocs, hd_size_weight, price_min, None))
+      else:
+        price_min = clean_data['price']["minValue"]
+        price_max = clean_data['price']["maxValue"]
+        price_weight = clean_data['price']["weight"]
+        res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+      return res_search
