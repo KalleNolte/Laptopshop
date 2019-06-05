@@ -93,4 +93,4 @@ def computeVagueHardDrive_alternative(allDocs, clean_data, harddrive_searcher, r
     hd_size_min = clean_data['hardDriveSize']["minValue"]
     hd_size_max = clean_data['hardDriveSize']["maxValue"]
     res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hd_size_weight, hd_size_min, hd_size_max))
-  return res_search, hd_size_weight
+  return res_search
