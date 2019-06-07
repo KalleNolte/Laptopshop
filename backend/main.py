@@ -16,7 +16,7 @@ import requests
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
 
 from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions
-from backend.binaryFunctions import binary_search_text
+from backend.binaryFunctions import binary_search_text, binary_search
 from backend.helper import Backend_Helper
 
 
@@ -109,15 +109,51 @@ def getSample():
 
 
 def do_query(data, allDocs):
-  print(data)
-  clean_data = Backend_Helper.clean_frontend_json(data)
-  print(clean_data)
+  #print(data)
+  clean_data1 = Backend_Helper.clean_frontend_json(data)
+  print("clean_data")
+  print(clean_data1)
+
+  #create binary clean data if weighting is equal to 5
+  binary_clean_data = {}
+  clean_data = {}
+  for field in clean_data1.keys():
+    if clean_data1[field]['weight'] == 5:
+      #print(clean_data[field])
+      binary_clean_data[field] = clean_data1[field]
+    else:
+      clean_data[field] = clean_data1[field]
+      binary_clean_data[field] = {'weight':1}
+
+
+  #Compute boolean/binary search for items with weighting = 5
+  bin_obj = binary_search.BinarySearch()
+  query = bin_obj.createBinarySearchQuery(binary_clean_data)
+  res = es.search(index="amazon", body=query)
+  output_binary = Backend_Helper.refineResult(res)
+  print("output Binary")
+  print(output_binary)
+
   res_search = list()
 
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
   print(field_value_dict)
+
+  #Get total cumulative weight cum_weight (for example for all attributes weights were 7) and dividue each score by this cum_weight
+  cum_weight = 0
+  for field_type in field_value_dict.keys():
+    for field_name in field_value_dict[field_type]:
+      field_weight = field_value_dict[field_type][field_name]["weight"]
+      if field_weight != 5: ##Shouldn't happen though because they have already been removed from clean_data
+        cum_weight += field_weight
+
+
+
+
+  #todo: erase attributes from field_value_dict that are boolean/weight =5
+
   # --------------------------------------------------------------------#
   # Objects for each class to use the vague searching functions
   range_searcher = vague_search_range.VagueSearchRange(es)
@@ -148,13 +184,12 @@ def do_query(data, allDocs):
     res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
                                                                                           harddrive_searcher,
                                                                                           res_search)
-  # --------------------------------------------------------------------#
+  #  --------------------------------------------------------------------#
   # Special case to handle price
-  # Special case to handle hardDriveSize
   # if 'price' in clean_data and len(clean_data["price"]) > 1:
   #     if "value" in clean_data["price"]: # Discrete value needed not a range
   #         price_min = clean_data['price']["value"]
-  #         res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
+  #         res_search.append(price_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
   #     else :
   #        price_min = clean_data['price']["minValue"]
   #        price_max = clean_data['price']["maxValue"]
@@ -162,8 +197,7 @@ def do_query(data, allDocs):
   #        res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
 
   if 'price' in clean_data and len(clean_data["price"]) > 1:
-    res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data,
-                                                                                   harddrive_searcher, price_searcher, res_search)
+    res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search)
 
   # --------------------------------------------------------------------#
   # Gets scores for all other attributes
@@ -183,25 +217,33 @@ def do_query(data, allDocs):
   ####new from beshoy
   # convert counter to dictionary
   result = dict(count_dict)
-
+  print("result")
+  print(result)
   sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-
+  print("sortedDict")
+  print(sortedDict)
   # get the keys(asin values)
   asinKeys = list(result.keys())
   # print("asinKeys")
   # print(asinKeys)
 
   # call the search function
-  outputProducts = getElementsByAsin(asinKeys)
+  outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
-    item['vaguenessScore'] = result[item['asin']]
-
+    item['vaguenessScore'] = result[item['asin']]/cum_weight #Normalize the scores
 
   #todo: products with same vagueness score should be listed according to price descending
-  
+
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
+  #print(outputProducts)
+
+  #concatenate with products with weighting 5
+  for item in output_binary:
+    item['vaguenessScore'] =1
+
+  outputProducts = output_binary + outputProducts
 
   return outputProducts
 
@@ -288,6 +330,8 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
   # --------------------------------------------------------------------#
   # Extracts each field and its value and weight to the dict
   for field_type in field_value_dict.keys():
+    print("field_type")
+    print(field_type)
 
     for field_name in field_value_dict[field_type]:
       if field_name != "price" and field_name != "hardDriveSize":
