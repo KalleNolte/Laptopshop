@@ -15,7 +15,7 @@ import requests
 # from helper import Backend_Helper
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
 
-from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions, vague_search_freetext
 from backend.binaryFunctions import binary_search_text, binary_search
 from backend.helper import Backend_Helper
 
@@ -23,17 +23,6 @@ from backend.helper import Backend_Helper
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
-
-# priceDict = {}
-# productTitleDict = {}
-# hdTypeDict = {}
-# hddSizeDict = {}
-# ssdSizeDict= {}
-
-
-# @app.route('/')
-# def index():
-#     return render_template('main.html')\
 
 
 @app.route('/api/search/alexa', methods=['POST'])
@@ -88,7 +77,8 @@ def search():
 @app.route('/api/searchText', methods=['POST'])
 def searchText():
   data = request.get_json()
-  print(data['searchValue'])
+  print(data)
+  query = data['searchValue']
   outputProducts =[]
   allDocs = es.search(index="amazon", body={
     "size": 10000,
@@ -96,8 +86,14 @@ def searchText():
       "match_all": {}
     }
   })
+  free_text_searcher =vague_search_freetext.VagueFreeText(es)
+  res_search= free_text_searcher.compute_vague_freetext(allDocs, query, False) #False => not boolean search
+  #print(res_search)
 
-  #outputProducts = do_query(data, allDocs)
+
+  outputProducts = Backend_Helper.refineResult(res_search)
+  for item in outputProducts: #binary search results all have a vagueness score of 1
+    item['vaguenessScore'] =1 #todo: change vagueness score to reflect score
   return jsonify(outputProducts)
 
 
@@ -240,15 +236,17 @@ def do_query(data, allDocs):
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
-    item['vaguenessScore'] = result[item['asin']]/cum_weight #Normalize the scores
+    # Normalize the scores so that for each score x,  0< x <=1
+    item['vaguenessScore'] = result[item['asin']]/cum_weight
 
   #todo: products with same vagueness score should be listed according to price descending
 
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
   #print(outputProducts)
 
-  #concatenate with products with weighting 5
-  for item in output_binary:
+  #concatenate with products with weighting 5 *******
+
+  for item in output_binary: #binary search results all have a vagueness score of 1
     item['vaguenessScore'] =1
 
   outputProducts = output_binary + outputProducts
