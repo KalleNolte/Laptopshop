@@ -48,32 +48,47 @@ class BinarySearchText:
     #     return result
 
     def compute_binary_text(self, field_name,field_weight,field_values):
+        # value could be a list of multiple terms
 
         result = []
+        innerList = []
         for value in field_values:
-            #The following is a case insensitive search
-            body = {
-                      "query":{
-                        "bool":{
-                          "must":[
-                            {
-                              "match":{
-                                field_name: value
-                              }
-                            }]
+          innerList.append({'match':{field_name: value}})
 
-                        }
-                      }
-                    }
-
-            res = self.es.search(index="amazon", body=body, size=10000)
+        print("innerList")
+        print(innerList)
 
 
-            # Add list including [asin, fuzzycalc] to result. Fuzzy Calculation is between 0 and 1
-            for hit in res['hits']['hits']:
-                # print("print hits")
-                # print(hit)
-                result.append([hit['_source']['asin'], field_weight*float(1.0)])
+            # #The following is a case insensitive search
+        body = {
+        #           "query":{
+        #             "bool":{
+        #               "must":[
+        #                 {
+        #                   "match":{
+        #                     field_name: value
+        #                   }
+        #                 }]
+        #
+        #             }
+        #           }
+        #         }
+
+          "query": {
+            "bool": {
+              "should":
+                innerList
+            }
+          }
+
+        }
+
+        res = self.es.search(index="amazon", body=body, size=10000)
+
+
+        # Add list including [asin, fuzzycalc] to result. Fuzzy Calculation is between 0 and 1
+        for hit in res['hits']['hits']:
+            result.append([hit['_source']['asin'], field_weight*float(1.0)])
 
         # print("what is in \"result\"")
         # print(result)

@@ -90,6 +90,14 @@ def searchText():
   data = request.get_json()
   print(data['searchValue'])
   outputProducts =[]
+  allDocs = es.search(index="amazon", body={
+    "size": 10000,
+    "query": {
+      "match_all": {}
+    }
+  })
+
+  #outputProducts = do_query(data, allDocs)
   return jsonify(outputProducts)
 
 
@@ -340,6 +348,7 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
         if field_type is "binary":
           field_value = field_value_dict[field_type][field_name]["value"]
           res_search.append(binary_searcher.compute_binary_text(field_name, field_weight, field_value))
+
         # --------------------------------------------------------------------#
         # Values for range key in the dict, these will be searched in the range_searcher
         elif field_type is "range":
