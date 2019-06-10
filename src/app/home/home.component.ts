@@ -20,7 +20,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   state: string = "";
   laptops: Laptop[] = [];
   displayedColumns: string[] = ["name", "price"];
-  dataSource = new MatTableDataSource(this.dummyData);
+  //dataSource = new MatTableDataSource(this.laptops);
+  dataSource: MatTableDataSource<Laptop>;
 
   processorTypes =['Intel Pentium','Intel Celeron', 'Intel Core M','Intel Core i3','Intel Core i5','Intel Core i7','Intel Core i9',
                     'AMD Ryzen 3','AMD Ryzen 5','AMD Ryzen 7'
@@ -46,15 +47,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sticky: boolean = false;
   elementPosition: any;
+  take: any;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) {
+    this.dataSource = new MatTableDataSource(this.laptops);
+    this.take= this.getSample();
+    console.log(this.take);
+  }
 
   ngOnInit() {
     //this.laptops = this.dummyData;
-    this.getSample();
+    this.take;
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
+    this.dataSource.sort= this.sort;
 
   }
 
@@ -86,7 +93,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     getLaptopByAsin(asin:string) {
-      if ( this.getSample() !== null || this.sendSign =="gut" )
+      if ( this.take !== null  )
           return this.laptops.find(
           laptopObject =>
             laptopObject.asin === asin
