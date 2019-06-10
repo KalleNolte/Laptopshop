@@ -256,6 +256,7 @@ class BinarySearch():
 
     body.update({"size": 100})
 
+    #print("body", body)
     return body
 
 
