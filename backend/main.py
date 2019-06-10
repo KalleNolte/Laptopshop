@@ -121,11 +121,11 @@ def do_query(data, allDocs):
   #create binary clean data if weighting is equal to 5
   binary_clean_data = {}
   clean_data = {}
-  bool_search_default = False #If no weighting = 5 for any value, do not caculate boolean search below
+  #bool_search_default = False #If no weighting = 5 for any value, do not caculate boolean search below
 
   for field in clean_data1.keys():
     if clean_data1[field]['weight'] == 5:
-      bool_search_default = True
+      #bool_search_default = True
       binary_clean_data[field] = clean_data1[field] #weigth doesn't matter for boolean search
     else:
       clean_data[field] = clean_data1[field]
@@ -133,16 +133,15 @@ def do_query(data, allDocs):
       # This doesn't matter though because weight has no meaning for boolean search and is not used in the calculation for the result set
       binary_clean_data[field] = {'weight':1}
 
-  output_binary = []
+
   #Compute boolean/binary search for items with weighting = 5
-  if bool_search_default is True: #Necessary, because binarySearch with no parameters returns all Documents with score = 1
-    bin_obj = binary_search.BinarySearch()
-    query = bin_obj.createBinarySearchQuery(binary_clean_data)
-    res = es.search(index="amazon", body=query)
-    output_binary = Backend_Helper.refineResult(res)
+  bin_obj = binary_search.BinarySearch()
+  query = bin_obj.createBinarySearchQuery(binary_clean_data)
+  res = es.search(index="amazon", body=query)
+  output_binary = Backend_Helper.refineResult(res)
 
   print("output Binary")
-  print(output_binary)
+  print(output_binary) #should be all attributes if no attribute has weight 5
 
   res_search = list()
 
@@ -240,25 +239,23 @@ def do_query(data, allDocs):
   # call the search function
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
-
-  #Compare outputProducts and output_binary to eliminate duplicates, erase duplicates from outputProducts not output_binary
-  outputProducts = remove_duplicates(outputProducts, output_binary)
+  # Compare outputProducts and output_binary to select only items that also occur in boolean search
+  outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
+    print(item['asin'])
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
   print(outputProducts)
 
-  for item in output_binary: #binary search results all have a vagueness score of 1
-    item['vaguenessScore'] =1
+  for item in output_binary: #binary search results that did not meet other vague requirements
+    item['vaguenessScore'] =0
 
   # concatenate with products with weighting 5 *******
-  print(output_binary)
-  print(outputProducts)
-  outputProducts = output_binary + outputProducts
+  outputProducts = outputProducts + output_binary
 
   # todo: products with same vagueness score should be listed according to price descending
 
@@ -266,13 +263,10 @@ def do_query(data, allDocs):
   return outputProducts
 
 
-def remove_duplicates(outputProducts, output_binary):
+def filter_from_boolean(outputProducts, output_binary):
   count_asin_in_list = []
   for item in outputProducts + output_binary:
     count_asin_in_list.append(item['asin'])
-
-  print("length of list")
-  print(len(outputProducts + output_binary))
 
   counter = collections.Counter(count_asin_in_list)
   duplicate_list = []  # list of duplicate items in concatenated list
@@ -283,13 +277,14 @@ def remove_duplicates(outputProducts, output_binary):
   print("duplicate_list")
   print(duplicate_list)
 
-  # Erase duplicates from outputProudcts
-  outputProducts = [item for item in outputProducts if item['asin'] not in duplicate_list]
+  # copy only items that are in both lists
+  outputProducts = [item for item in outputProducts if item['asin'] in duplicate_list]
+  #erase duplicates from output_binary
+  output_binary = [item for item in output_binary if item['asin'] not in duplicate_list]
 
-  print("length of list")
-  print(len(outputProducts + output_binary))
+  return outputProducts , output_binary
 
-  return outputProducts
+
 
 
 def callAttributeMethod(attributeName, attributeValue, attributeWeight, allDocs):
