@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   processorCounts=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   //laptop = new Laptop();
+  storeRes:any;
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -43,7 +44,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     //this.laptops = this.dummyData;
-    this.getSample();
+    //this.getSample();
+    this.getResponse()
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
@@ -71,7 +73,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+      this.storeRes= form.value;
+    }
 
-
+    getResponse(){
+    if( this.storeRes != null){
+      return this.getSample()
+    }else {
+      return this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
+    }
     }
 }
