@@ -11,7 +11,7 @@ import { HeaderComponent } from "./header/header.component";
 import { CartComponent } from "./cart/cart.component";
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
@@ -35,6 +35,7 @@ import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@a
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,

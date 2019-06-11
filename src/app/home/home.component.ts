@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, ElementRef } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  HostListener,
+  ElementRef
+} from "@angular/core";
+import { FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
@@ -21,57 +29,106 @@ export class HomeComponent implements OnInit, AfterViewInit {
   laptops: Laptop[] = [];
   displayedColumns: string[] = ["name", "price"];
   dataSource = new MatTableDataSource(this.dummyData);
+  brands = [
+    { id: "acer", name: "Acer" },
+    { id: "apple", name: "Apple" },
+    { id: "dell", name: "DELL" }
+  ];
 
-  processorTypes =['Intel Pentium','Intel Celeron', 'Intel Core M','Intel Core i3','Intel Core i5','Intel Core i7','Intel Core i9',
-                    'AMD Ryzen 3','AMD Ryzen 5','AMD Ryzen 7'
-  ]
+  manufacturers = [{ id: "intel", name: "Intel" }, { id: "amd", name: "AMD" }];
 
-  processorSpeeds=[0. , 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1. , 1.1, 1.2,
-       1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2. , 2.1, 2.2, 2.3, 2.4, 2.5,
-       2.6, 2.7, 2.8, 2.9, 3. , 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8,
-       3.9, 4. , 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5. ]
-
-  processorCounts=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-  //laptop = new Laptop();
+  widgetForm = this.fb.group({
+    brandSlider: ["1"],
+    brandNames: this.fb.array([]),
+    processorManufacturerSlider: ["1"],
+    processorManufacturers: this.fb.array([]),
+  });
+   globalForm = new FormGroup({
+    globalSearch: new FormControl()
+  });
 
   @ViewChild(MatSort) sort: MatSort;
 
   sticky: boolean = false;
   elementPosition: any;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit() {
     //this.laptops = this.dummyData;
     this.getSample();
-    // this.dataService.getSample();
-    // .subscribe(data => (this.laptops = data));
-    // this.dataSource = this.laptops;
+
+    // Clear empty fields in FormArray
+
+    // const i = this.brandNames.controls.findIndex(x => x.value === "");
+    // this.brandNames.removeAt(i);
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
   }
 
+  get brandNames() {
+    return this.widgetForm.get("brandNames") as FormArray;
+  }
+
+  get processorManufacturers() {
+    return this.widgetForm.get("processorManufacturers") as FormArray;
+  }
+
+  addBrandName() {
+    this.brandNames.push(this.fb.control("Acer"));
+  }
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onSubmit(form: NgForm) {
-    console.log(form.value);
-    this.dataService.searchText(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
-
+  touchFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.touchFormFields(control);
+      }
+    });
   }
 
-  getSample(){
-    this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
+  submitFormControls(formGroup: FormGroup) {
+    console.log(formGroup.controls);
   }
 
-  search(form: NgForm){
-    
-      console.log(form.value);
-      this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
-
-
+  onSubmit() {
+    if (this.widgetForm.touched) {
+      console.log(this.widgetForm.value);
     }
+
+    if (this.globalForm.touched) {
+      console.log(this.globalForm.value);
+    }
+  }
+  getSample() {
+    this.dataService.getSample().subscribe(data => (this.laptops = data));
+  }
+
+  search(form: NgForm) {
+    console.log(form.value);
+    this.dataService
+      .search(JSON.stringify(form.value))
+      .subscribe(laptops => (this.laptops = laptops));
+  }
+
+  onChange(event, fieldName) {
+    let field = (<FormArray>this.widgetForm.get(fieldName)) as FormArray;
+
+    if (event.checked) {
+      field.push(new FormControl(event.source.value));
+      this.widgetForm.get(fieldName).markAsTouched();
+      console.log("Field:" + fieldName);
+    } else {
+      const i = field.controls.findIndex(x => x.value === event.source.value);
+      field.removeAt(i);
+    }
+  }
 }
