@@ -92,13 +92,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return 'nix';
     }
   }
-  check_PT( chipset: string  ){
-    if(chipset !=null && chipset=='green'){
+  check_matched( att: string  ){
+    if(att !=null && att=='green'){
       return 'green';
-    }else  if(chipset === 'red') {
+    }else  if(att === 'red') {
       return 'red';
     }
-    else  if(chipset === null) {
+    else  if(att === null) {
       return 'nix';
     }
   }
