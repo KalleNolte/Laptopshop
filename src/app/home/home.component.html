@@ -242,9 +242,60 @@
         <p matLine > processor : {{ laptop.chipsetBrand }}</p>
         <strong matLine>Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
+
+
+<div id="flex-container" >
+ <div *ngIf="check_BrN(laptop.matched.brandName)=='green' " class="element"> {{ laptop.brandName }}: <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_BrN(laptop.matched.brandName)=='red' " class="element"> {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_BrN(laptop.matched.brandName)=='nix' " class="element">  {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+ <!--processorType und auch check_Chipset -->
+  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='green' " class="element"> {{laptop.processorManufacturer}} : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='red' " class="element"> {{ laptop.processorManufacturer}} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='nix' " class="element">  {{ laptop.processorManufacturer}}:  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_Chipset(laptop.matched.processorType)=='green' " class="element"> {{laptop.processorType}} : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_Chipset(laptop.matched.processorType)=='red' " class="element"> {{ laptop.processorType}} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_Chipset(laptop.matched.processorType)=='nix' " class="element">  {{ laptop.processorType}}:  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+</div>
+
       </mat-list-item>
     </mat-list>
+
     <pagination-controls (pageChange)="p = $event"></pagination-controls>
+
+    <div>{{take_laptops}}</div>
+<!--
+
+<div id="flex-container" >
+ <div *ngIf="check_BrN(laptop.matched.brandName)=='green' " class="element"> {{ laptop.brandName }}: <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_BrN(laptop.matched.brandName)=='red' " class="element"> {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_BrN(laptop.matched.brandName)=='nix' " class="element">  {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+
+  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='green' " class="element"> {{laptop.processorManufacturer}} : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='red' " class="element"> {{ laptop.processorManufacturer}} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='nix' " class="element">  {{ laptop.processorManufacturer}}:  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+</div>
+
+
+<div id="flex-container" >
+  <div class="element" *ngIf="checkTakes(takes)=='true' " > {{ takes.price }} $</div>
+  <div class="element" *ngIf="checkTakes(takes)=='true' " >{{takes.brandName}} </div>
+  <div class="element"*ngIf="checkTakes(takes)=='true' "  >{{takes.hard}} </div>
+</div>
+
+<div id="flex-container" >
+  <div *ngIf="checkTakes(takes) === 'true'  "
+       [ngClass]=" { 'leer':checkAtt_c1(takes.catched) ==='nix', 'element': checkAtt_c1(takes.catched)=== 'green' , 'element': checkAtt_c1(takes.catched)=== 'red' } ">
+    {{ takes.catched.c1 }} $</div>
+
+  <div *ngIf="checkTakes(takes) === 'false'  "
+       [ngClass]=" { 'leer':checkAtt_c1(takes.catched) ==='nix', 'element': checkAtt_c1(takes.catched)=== 'green', 'element': checkAtt_c1(takes.catched)=== 'red' } ">
+    {{ takes.catched.c1 }} $</div>
+
+
+
+</div>
+-->
 
     <mat-form-field>
       <input

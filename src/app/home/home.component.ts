@@ -6,6 +6,15 @@ import { moveIn, fallIn } from "../routing.animations";
 import data from "../../assets/dummyData.json";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
+import {PageEvent} from '@angular/material/paginator';
+
+
+interface catched {
+  // @ts-ignore
+  c1:string;
+  // @ts-ignore
+  c1:string;
+}
 
 @Component({
   selector: "app-home",
@@ -34,11 +43,66 @@ export class HomeComponent implements OnInit, AfterViewInit {
   processorCounts=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
   //laptop = new Laptop();
   storeRes:any;
-
+  take_laptops:any;
+  take_yep :  Laptop[] = [];
   @ViewChild(MatSort) sort: MatSort;
 
   sticky: boolean = false;
   elementPosition: any;
+  //takes={'price':23, 'brandName': 'Microsoft', 'hard':'SSD' };
+  takes={'price':'', 'brandName': 'Microsoft', 'hard':'dwkvnk', 'catched': { 'c1':'','c2': 'red'} };
+  //tk=[];
+
+  checkTakes(tk: { brandName: string; price: number; hard: string, catched:catched }){
+
+    if(tk.catched != null ){
+      return 'true';
+    }else {
+      return 'false';
+    }
+  }
+  checkAtt_c1 ( pr :{c1:string, c2:string } ){
+    if(pr.c1 !=null && pr.c1=='green'){
+      return 'green';
+    }else  if(pr.c1 !=null && pr.c1=='red'){
+      return 'red';
+
+    }else {
+      return 'nix'
+    }
+  }
+   check_BrN( brName: string  ){
+    if(brName !=null && brName=='green'){
+      return 'green';
+    }else  if(brName === 'red') {
+      return 'red';
+    }
+    else  if(brName === null) {
+      return 'nix';
+    }
+  }
+
+   check_Chipset( chipset: string  ){
+    if(chipset !=null && chipset=='green'){
+      return 'green';
+    }else  if(chipset === 'red') {
+      return 'red';
+    }
+    else  if(chipset === null) {
+      return 'nix';
+    }
+  }
+  check_PT( chipset: string  ){
+    if(chipset !=null && chipset=='green'){
+      return 'green';
+    }else  if(chipset === 'red') {
+      return 'red';
+    }
+    else  if(chipset === null) {
+      return 'nix';
+    }
+  }
+
 
   constructor(private dataService: DataService) {}
 
@@ -49,6 +113,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
+
   }
 
   ngAfterViewInit() {
@@ -61,7 +126,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   onSubmit(form: NgForm) {
     console.log(form.value);
+    this.take_laptops=JSON.stringify(form.value);
     this.dataService.searchText(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
+    //console.log(this.take_chipset)
+
 
   }
 
@@ -79,8 +147,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
     getResponse(){
     if( this.storeRes != null){
       return this.getSample()
-    }else {
-      return this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
+    //}else {
+     // return this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
     }
     }
+
+     check_price( chipset: string  ){
+
+    if(chipset !=null && chipset=='green'){
+      return 'green';
+    }else  if(chipset === 'red') {
+      return 'red';
+    }
+    else  if(chipset === null) {
+      return 'nix';
+    }
+  }
 }
