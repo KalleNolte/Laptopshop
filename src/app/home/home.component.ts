@@ -57,7 +57,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     //this.laptops = this.dummyData;
-    this.take;
+    //this.take;
+    this.getSample()
     // this.dataService.getSample();
     // .subscribe(data => (this.laptops = data));
     // this.dataSource = this.laptops;
@@ -78,7 +79,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // }
 
   getSample(){
-    this.dataService.getSample().subscribe(laptops => (this.laptops = laptops) );
+    this.dataService.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops) });
   }
 
   search(form: NgForm){

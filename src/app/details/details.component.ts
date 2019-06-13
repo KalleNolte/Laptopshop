@@ -34,6 +34,8 @@ export class DetailsComponent implements OnInit {
   imagePath: string;
 
   rec:any;
+  laptops: Laptop[]=[];
+  private item:any=[];
 
 
   constructor(private one_detail:DataService,
@@ -43,18 +45,17 @@ export class DetailsComponent implements OnInit {
     //this.showDetails();
     //const allData=this.route
     const asin=this.route.snapshot.params['asin'];
-    this.productTitle= this.homeFeatures.getLaptopByAsin(asin).productTitle;
-    this.brandName=this.homeFeatures.getLaptopByAsin(asin).brandName;
-    this.ram=this.homeFeatures.getLaptopByAsin(asin).ram;
-    this.hardDriveType=this.homeFeatures.getLaptopByAsin(asin).hardDriveType;
-    this.displaySize=this.homeFeatures.getLaptopByAsin(asin).displaySize;
-    this.operatingSystem=this.homeFeatures.getLaptopByAsin(asin).operatingSystem;
-    this.imagePath=this.homeFeatures.getLaptopByAsin(asin).imagePath;
-    //this.screenResoultionSize=this.homeFeatures.getLaptopByAsin(asin).screenResoultionSize;
+    //this.getSample();
+    console.log(asin);
+    this.getByAsin(asin);
 
 
     //console.log( this.homeFeatures.getLaptopByAsin(id).productTitle);
     //this.productTitle=this.homeFeatures.trackByAsin(index)
+  }
+  getSample(){
+    this.one_detail.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops) });
+
   }
 
    showDetails(){
@@ -62,6 +63,25 @@ export class DetailsComponent implements OnInit {
       .subscribe(data => this.laptop= data);
       error=> this.error=error;
   }
+
+  getByAsin(asin:string) {
+   this.one_detail.getSample().subscribe(laptops =>
+   {
+     (this.laptops = laptops);
+     this.item
+       .push(
+         this.laptops.filter(
+          laptopObject =>{
+
+            laptopObject.asin === asin
+          }))
+
+console.log(this.item) });
+
+
+
+    }
+
 }
 
 
