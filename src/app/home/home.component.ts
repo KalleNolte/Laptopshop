@@ -61,37 +61,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return 'false';
     }
   }
-  checkAtt_c1 ( pr :{c1:string, c2:string } ){
-    if(pr.c1 !=null && pr.c1=='green'){
-      return 'green';
-    }else  if(pr.c1 !=null && pr.c1=='red'){
-      return 'red';
 
-    }else {
-      return 'nix'
-    }
-  }
-   check_BrN( brName: string  ){
-    if(brName !=null && brName=='green'){
-      return 'green';
-    }else  if(brName === 'red') {
-      return 'red';
-    }
-    else  if(brName === null) {
-      return 'nix';
-    }
-  }
 
-   check_Chipset( chipset: string  ){
-    if(chipset !=null && chipset=='green'){
-      return 'green';
-    }else  if(chipset === 'red') {
-      return 'red';
-    }
-    else  if(chipset === null) {
-      return 'nix';
-    }
-  }
   check_matched( att: string  ){
     if(att !=null && att=='green'){
       return 'green';
@@ -152,15 +123,4 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     }
 
-     check_price( chipset: string  ){
-
-    if(chipset !=null && chipset=='green'){
-      return 'green';
-    }else  if(chipset === 'red') {
-      return 'red';
-    }
-    else  if(chipset === null) {
-      return 'nix';
-    }
-  }
 }

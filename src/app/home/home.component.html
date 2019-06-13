@@ -245,17 +245,33 @@
 
 
 <div id="flex-container" >
- <div *ngIf="check_BrN(laptop.matched.brandName)=='green' " class="element"> {{ laptop.brandName }}: <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
-  <div *ngIf="check_BrN(laptop.matched.brandName)=='red' " class="element"> {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
-   <div *ngIf="check_BrN(laptop.matched.brandName)=='nix' " class="element">  {{ laptop.brandName }} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
- <!--processorType und auch check_Chipset -->
-  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='green' " class="element"> {{laptop.processorManufacturer}} : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
-  <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='red' " class="element"> {{ laptop.processorManufacturer}} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
-   <div *ngIf="check_Chipset(laptop.matched.chipsetBrand)=='nix' " class="element">  {{ laptop.processorManufacturer}}:  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.price)=='green' " class="element"> price : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.price)=='red' " class="element"> price : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.price)=='nix' " class="element">  price : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
 
-   <div *ngIf="check_Chipset(laptop.matched.processorType)=='green' " class="element"> {{laptop.processorType}} : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
-  <div *ngIf="check_Chipset(laptop.matched.processorType)=='red' " class="element"> {{ laptop.processorType}} : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
-   <div *ngIf="check_Chipset(laptop.matched.processorType)=='nix' " class="element">  {{ laptop.processorType}}:  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+ <div *ngIf="check_matched(laptop.matched.brandName)=='green' " class="element"> BrandName: <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.brandName)=='red' " class="element"> BrandName : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.brandName)=='nix' " class="element">  BrandName : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+ <!--processorType und auch check_Chipset -->
+  <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='green' " class="element"> Pprocessor Manufacturer : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='red' " class="element"> Pprocessor Manufacturer  : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='nix' " class="element">  Pprocessor Manufacturer :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.processorType)=='green' " class="element"> ProcessorType : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.processorType)=='red' " class="element"> ProcessorType : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.processorType)=='nix' " class="element">  ProcessorType :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.hardDriveType)=='green' " class="element"> Hard Drive Type : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.hardDriveType)=='red' " class="element"> Hard Drive Type : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.hardDriveType)=='nix' " class="element">  Hard Drive Type :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.operatingSystem)=='green' " class="element"> OperatingSystem : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.operatingSystem)=='red' " class="element"> OperatingSystem : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.operatingSystem)=='nix' " class="element">  OperatingSystem :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+  <div *ngIf="check_matched(laptop.matched.ram)=='green' " class="element"> RAM : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.ram)=='red' " class="element"> RAM : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.ram)=='nix' " class="element">  RAM :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
 </div>
 
       </mat-list-item>

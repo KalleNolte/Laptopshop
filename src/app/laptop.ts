@@ -9,6 +9,10 @@ interface matched {
   brandName:string;
   chipsetBrand:string; // processorManufacturer
   processorType: string;
+  hardDriveType:string;
+  operatingSystem:string;
+  price:string;
+  ram:string
 }
 
 export interface Laptop {
