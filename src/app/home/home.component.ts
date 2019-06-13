@@ -123,4 +123,5 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     }
 
+        // CREATE NEW PAGE WHEN THE FILTERING IS STARTED
 }
