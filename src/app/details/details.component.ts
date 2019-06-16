@@ -67,6 +67,18 @@ export class DetailsComponent implements OnInit {
   getByAsin(asin:string) {
    this.one_detail.getSample().subscribe(laptops =>
    {
+
+     (this.laptops = laptops);
+     this.item=
+         this.laptops.find(
+          laptopObject =>{
+
+            return laptopObject.asin === asin;
+
+
+          } )
+            console.log(this.item)
+ /*
      (this.laptops = laptops);
      this.item
        .push(
@@ -74,9 +86,10 @@ export class DetailsComponent implements OnInit {
           laptopObject =>{
 
             laptopObject.asin === asin
+            console.log(this.item)
           }))
-
-console.log(this.item) });
+      */
+} );
 
 
 
