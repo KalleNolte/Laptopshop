@@ -1,0 +1,67 @@
+.headSection {
+  h3 {
+    width: 20%;
+  }
+  #searchInput {
+    width: 75%;
+  }
+  padding: 0 1rem;
+}
+
+.mainArea {
+  .widgetArea {
+    width: 20%;
+  }
+
+  .listArea {
+    width: 75%;
+  }
+
+  mat-card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mat-cart {
+    padding: 1rem;
+  }
+
+  mat-list-item {
+    cursor: pointer;
+  }
+
+  .mat-list-avatar{
+    width: 25% ;
+    height: auto;
+    border-radius: 0px;
+  }
+
+}
+.mat-list-base .mat-list-item.mat-3-line{
+  height: auto;
+}
+.sticky{
+  position: fixed;
+  top: 0;
+  overflow: hidden;
+  z-index: 10;
+  width: 100%;
+}
+
+#flex-container {
+  display: flex;
+  flex-direction: column;
+}
+.element{
+  border: 2px solid black;
+  width: 150px;
+  margin: 2px;
+
+}
+.leer{
+
+}
+.leer_Image{
+  width: 15px;
+  height: 15px;
+}

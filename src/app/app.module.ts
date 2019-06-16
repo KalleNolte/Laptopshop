@@ -24,7 +24,8 @@ import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
-import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
+import {NgxPaginationModule} from 'ngx-pagination';
+import {SearchComponent} from "./search/search.component"; // <-- import the module
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {NgxPaginationModule} from 'ngx-pagination'; // <-- import the module
     HomeComponent,
     DetailsComponent,
     HeaderComponent,
-    CartComponent
+    CartComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
