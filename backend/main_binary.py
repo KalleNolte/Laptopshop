@@ -1,12 +1,8 @@
-from flask import Flask, jsonify, render_template, request
-from elasticsearch import Elasticsearch
-import skfuzzy as fuzz
-import numpy as np
-from collections import Counter
-import json
 from collections import defaultdict
-from helper import Backend_Helper
 
+from elasticsearch import Elasticsearch
+from flask import Flask, jsonify, request
+from helper import Backend_Helper
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module

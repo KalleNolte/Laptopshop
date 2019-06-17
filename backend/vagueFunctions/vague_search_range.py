@@ -16,10 +16,10 @@ class VagueSearchRange():
 
     allValues = np.sort((np.array(allValues)))
     # print("allPrices: ", allPrices)
-    print(fieldName)
-    print(weight)
-    print(minValue)
-    print(maxValue)
+    # print(fieldName)
+    # print(weight)
+    # print(minValue)
+    # print(maxValue)
     lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
     upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
     if minValue == 0 :
