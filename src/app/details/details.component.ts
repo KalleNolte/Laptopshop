@@ -19,7 +19,6 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class DetailsComponent implements OnInit {
 
-
   laptop: Laptop[]=[];
   error;
   var;
@@ -27,16 +26,9 @@ export class DetailsComponent implements OnInit {
   productTitle: string ;
   brandName: string;
   ram: number;
-  hardDriveType: string;
-  displaySize: number;
-  operatingSystem: string;
-  //screenResoultionSize: screenResolutionSize;
-  imagePath: string;
-
   rec:any;
   laptops: Laptop[]=[];
   private item:any=[];
-
 
   constructor(private one_detail:DataService,
               private route:ActivatedRoute,
@@ -48,10 +40,8 @@ export class DetailsComponent implements OnInit {
     //this.getSample();
     console.log(asin);
     this.getByAsin(asin);
+    console.log(this.homeFeatures.getSample())
 
-
-    //console.log( this.homeFeatures.getLaptopByAsin(id).productTitle);
-    //this.productTitle=this.homeFeatures.trackByAsin(index)
   }
   getSample(){
     this.one_detail.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops) });
@@ -89,11 +79,11 @@ export class DetailsComponent implements OnInit {
             console.log(this.item)
           }))
       */
-} );
-
-
+    } );
 
     }
+
+
 
 }
 

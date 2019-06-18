@@ -6,6 +6,9 @@ import { moveIn, fallIn } from "../routing.animations";
 import data from "../../assets/dummyData.json";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
+import {ActivatedRouteSnapshot, DetachedRouteHandle, Router} from "@angular/router";
+import { RouteReuseStrategy} from "@angular/router";
+
 
 @Component({
   selector: "app-home",
@@ -49,7 +52,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   elementPosition: any;
   take: any;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,private router: Router) {
     this.dataSource = new MatTableDataSource(this.laptops);
     this.take= this.getSample();
     console.log(this.take);
@@ -79,7 +82,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // }
 
   getSample(){
-    this.dataService.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops) });
+    this.dataService.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops);localStorage.setItem('laptops', JSON.stringify(this.laptops));
+    console.log(localStorage.getItem('laptops')); });
   }
 
   search(form: NgForm){
@@ -87,6 +91,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
       this.sendSign= "gut";
+      //this.router.navigateByUrl('/search');
     }
 
     trackByAsin(index:number, laptops : any):any{
@@ -100,4 +105,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
             laptopObject.asin === asin
         );
     }
+
+
+
+
+
+
+
 }
