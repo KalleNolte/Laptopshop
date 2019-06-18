@@ -12,6 +12,7 @@ export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
   private for_detailsExample="../assets/jsonExample.json";
   private for_sendD='https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W';
+  array_laptops: Observable<Laptop[]>
 
  
   httpOptions = {
@@ -29,6 +30,7 @@ export class DataService {
 
 
   search(file:any): Observable<Laptop[]>{
+    this.array_laptops= this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
     return this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
   }
   // getSample(){
@@ -38,6 +40,9 @@ export class DataService {
 
   getLaptop_details():Observable<Laptop[]>{
     return this.http.get<Laptop[]>(this.for_detailsExample);
+  }
+   getLaptop_details_2():Observable<Laptop[]>{
+    return this.http.get<Laptop[]>('/api/search');
   }
 
 }

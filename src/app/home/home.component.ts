@@ -82,8 +82,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // }
 
   getSample(){
-    this.dataService.getSample().subscribe(laptops => { (this.laptops = laptops);  console.log(this.laptops);localStorage.setItem('laptops', JSON.stringify(this.laptops));
-    console.log(localStorage.getItem('laptops')); });
+    this.dataService.getSample().subscribe(laptops => { (this.laptops = laptops);   });
+    // console.log(this.laptops);localStorage.setItem('laptops', JSON.stringify(this.laptops));
+    //     console.log(localStorage.getItem('laptops'));
   }
 
   search(form: NgForm){
