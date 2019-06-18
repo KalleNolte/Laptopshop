@@ -86,8 +86,8 @@ export class HomeComponent implements OnInit {
   private dataSource: MatTableDataSource<Laptop>;
   ngOnInit() {
     //this.laptops = this.dummyData;
-    //this.getSample();
-    this.getResponse();
+    this.getSample();
+    //this.getResponse();
 
 
 
@@ -119,9 +119,7 @@ export class HomeComponent implements OnInit {
   }
 
   getSample(){
-    this.dataService.getSample().subscribe(laptops =>{ (this.laptops=laptops);
-                                                          this.dataSource = new MatTableDataSource(this.laptops);
-                                                          this.dataSource.sort=this.sort} )
+    this.dataService.getSample().subscribe(laptops =>{ (this.laptops=laptops); } )
   }
 
   search(form: NgForm){
