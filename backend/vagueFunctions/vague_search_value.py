@@ -45,7 +45,7 @@ class VagueSearchValue():
     result = np.array(result, dtype=object)
     result = result[np.argsort(-result[:, 1])]
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
-    result = result[:100]
+    #result = result[:100]
     result = list(map(tuple, result))
     # print(result)
     return result

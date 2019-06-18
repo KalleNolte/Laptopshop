@@ -1,14 +1,17 @@
+from backend.vagueFunctions.vague_search_price import VagueSearchPrice
+
+#Changed vague_search_price to access vagnuess-scores
+
 class ColorInformation:
-
-
 
   #data is the given json file trasmitted from angular
   #products should be initialized with ordered output set
-  def __init__(self, data, products):
+  def __init__(self, data, products, price_scores):
     self.data = data
     self.products = products
     self.matched = {}
     self.threshholdPrice = 0
+    self.price_scores = price_scores
 
 
 
@@ -16,7 +19,7 @@ class ColorInformation:
   #return as a dictionary---------
   #------------------------------#
   def extractKeyValuePairs(self):
-    print(self.data)
+    #print(self.data)
     searchedValues = {}
     for key in self.data:
       #if type(self.data[key]) == type(dict()):
@@ -43,7 +46,7 @@ class ColorInformation:
   #   }
   #
   def prozessDataBinary(self,searchedValues):
-    print(searchedValues)
+    print(self.price_scores)
     self.threshholdPrice = self.prozessThreshholdPrice(searchedValues)
 
     for laptop in self.products:
@@ -58,9 +61,11 @@ class ColorInformation:
       for key in searchedValues:
       #special case for price field, containing 3 infos instead of 2-------------------------------------#
         if key   == 'minValue':
-          self.prozessColorAttributePrice(searchedValues,laptop)
+          #self.prozessColorAttributePrice(searchedValues,laptop)
+          self.prozessColorAttributeByVaguenessScore(laptop)
         elif key == 'maxValue':
-          self.prozessColorAttributePrice(searchedValues,laptop)
+          #self.prozessColorAttributePrice(searchedValues,laptop)
+          self.prozessColorAttributeByVaguenessScore(laptop)
       #--------------------------------------------------------------------------------------------------#
 
         else: #all other attributes
@@ -91,17 +96,19 @@ class ColorInformation:
       self.matched = {}
       #----------------------------------------------------------------------#
 
+    print("In mathcer", VagueSearchPrice.price_scores)
+
   #Calculation of threshhold--------------------#
   #---------------------------------------------#
   def prozessThreshholdPrice(self,searchedValues):
     threshhold = 0
     try:
       threshhold = (float(searchedValues['maxValue']) - float(searchedValues['minValue']))
-      if threshhold > 100:
-        threshhold = 100
     except:
       threshhold = 50
-    print(threshhold)
+    if threshhold > 50:
+      threshhold = 50
+    #print(threshhold)
     return threshhold
 
 
@@ -126,7 +133,16 @@ class ColorInformation:
       pass
 
 
-
+  def prozessColorAttributeByVaguenessScore(self,laptop):
+    laptopName = laptop["asin"]
+    score = 0
+    for tupel in self.price_scores:
+      if laptopName == tupel[0]:
+        score = tupel[1]
+    if score < 1:
+      self.matched['price'] = 'yellow'
+    if score < 0.985:
+      self.matched['price'] = 'red'
 
 
 

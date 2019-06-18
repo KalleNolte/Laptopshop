@@ -19,8 +19,8 @@ from backend.binaryFunctions import binary_search_text
 from backend.helper import Backend_Helper
 
 from backend.addMatchedInformation.add_Matched_Information import ColorInformation
-
-
+from backend.sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
+from backend.vagueFunctions.vague_search_price import VagueSearchPrice
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -181,22 +181,22 @@ def search():
             price_min = clean_data['price']["value"]
             res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
         else :
-          if "minValue" in clean_data['price']:
-            if "maxValue" in clean_data['price']:
+          #if "minValue" in clean_data['price']:
+            #if "maxValue" in clean_data['price']:
               price_min = clean_data['price']["minValue"]
               price_max = clean_data['price']["maxValue"]
               price_weight = clean_data['price']["weight"]
               res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
-            else:
-              price_min = clean_data['price']["minValue"]
-              price_max = clean_data['price']["minValue"]
-              price_weight = clean_data['price']["weight"]
-              res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
-          elif "maxValue" in clean_data['price']:
-            price_min = clean_data['price']["maxValue"]
-            price_max = clean_data['price']["maxValue"]
-            price_weight = clean_data['price']["weight"]
-            res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+#            else:
+#              price_min = clean_data['price']["minValue"]
+#              price_max = clean_data['price']["minValue"]
+#              price_weight = clean_data['price']["weight"]
+#              res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+#          elif "maxValue" in clean_data['price']:
+#            price_min = clean_data['price']["maxValue"]
+#            price_max = clean_data['price']["maxValue"]
+#            price_weight = clean_data['price']["weight"]
+#            res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
     #--------------------------------------------------------------------#
     #Gets scores for all other attributes
     res_search += call_responsible_methods(allDocs,field_value_dict,range_searcher,binary_searcher,value_searcher)
@@ -233,11 +233,20 @@ def search():
 
     outputProducts =sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
-    c_i = ColorInformation(data,outputProducts)
+    c_i = ColorInformation(data,outputProducts,VagueSearchPrice.price_scores)
     searchedValues = c_i.extractKeyValuePairs()
     c_i.prozessDataBinary(searchedValues)
-    print(outputProducts[0])
-    print(outputProducts[9])
+
+    #print(outputProducts[0])
+    #print(outputProducts[100])
+
+    #If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
+    s_p = SortByPrice()
+    outputProducts = s_p.sort_by_price(outputProducts)
+
+
+    #print("----------------------------------------------------------------")
+    #print(outputProducts[47])
 
 
     return jsonify(outputProducts)

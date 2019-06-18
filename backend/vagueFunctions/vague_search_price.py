@@ -3,6 +3,10 @@ import numpy as np
 
 class VagueSearchPrice():
 
+  ###########################################-added
+  # Used for matched class, to calculate threshhold
+  price_scores = {}
+
   def __init__(self, es):
         self.es = es
 
@@ -17,8 +21,9 @@ class VagueSearchPrice():
     # print("allPrices: ", allPrices)
     lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
     upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
-    # print("lowerSupport: ", lowerSupport)
-    # print("upperSupport: ", upperSupport)
+    print("lowerSupport: ", lowerSupport)
+    print("upperSupport: ", upperSupport)
+    print(allPrices[0])
 
     trapmf = fuzz.trapmf(allPrices, [lowerSupport, float(minPrice), float(maxPrice), upperSupport])
 
@@ -46,7 +51,12 @@ class VagueSearchPrice():
     result = np.array(result, dtype=object)
     result = result[np.argsort(-result[:, 1])]
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
-    result = result[:100]
+    #result = result[:100]
     result = list(map(tuple, result))
+    print(result)
+
+    ###########################################-added
+    # Used for matched class, to calculate threshhold
+    VagueSearchPrice.price_scores = result
 
     return result
