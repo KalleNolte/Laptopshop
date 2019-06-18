@@ -35,7 +35,7 @@ class VagueSearchPrice():
             "lte": upperSupport  # elastic search lte operator = less than or equals
           }
         }
-      }
+      },"sort": {"price": {"order": "asc"}}
     }
 
     # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
@@ -60,3 +60,16 @@ class VagueSearchPrice():
     VagueSearchPrice.price_scores = result
 
     return result
+
+  def computeVaguePrice_alternative(allDocs, clean_data,   price_searcher, res_search):
+    #if 'price' in clean_data and len(clean_data["price"]) > 1:
+    price_weight = clean_data['price']["weight"]
+    if "value" in clean_data["price"]:  # Discrete value needed not a range
+      price_min = clean_data['price']["value"]
+      res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, None))
+    else:
+      price_min = clean_data['price']["minValue"]
+      price_max = clean_data['price']["maxValue"]
+      #price_weight = clean_data['price']["weight"]
+      res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+    return res_search

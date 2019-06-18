@@ -49,3 +49,8 @@ Thumbs.db
 
 *.pyc
 
+backend/__pycache__/
+
+backend/binaryFunctions/__pycache__/
+
+backend/vagueFunctions/__pycache__/

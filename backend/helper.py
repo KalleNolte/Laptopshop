@@ -7,11 +7,11 @@ class Backend_Helper:
         for key in json_dict :
             result[key] = dict()
             for sub_key in json_dict[key] :
-                if json_dict[key][sub_key] :
+                if json_dict[key][sub_key] or type(json_dict[key][sub_key]) is list or Backend_Helper.is_integer(json_dict[key][sub_key]) or Backend_Helper.is_float(json_dict[key][sub_key]):
                     value = json_dict[key][sub_key]
-                    if Backend_Helper.is_integer(value) :
+                    if type(json_dict[key][sub_key]) is not list and Backend_Helper.is_integer(value) :
                         value = int(value)
-                    elif Backend_Helper.is_float(value) :
+                    elif type(json_dict[key][sub_key]) is not list and Backend_Helper.is_float(value) :
                         value = float(value)
                     result[key].update({sub_key:value})
                 elif sub_key == "weight" and not json_dict[key][sub_key] :
@@ -48,9 +48,10 @@ class Backend_Helper:
               "color": hit['_source']['color'],
               "imagePath": hit['_source']['imagePath'],
               "avgRating": hit['_source']['avgRating'],
-              "ratingCount": [hit['_source']['ratingCount']],
+              #"ratingCount": [hit['_source']['ratingCount']],
             }
             outputProducts.append(item)
+
         return outputProducts
 
     @staticmethod
