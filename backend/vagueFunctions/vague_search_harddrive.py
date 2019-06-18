@@ -81,3 +81,16 @@ class VagueHardDrive():
       #result = result[:100]
       # print("print result of computeVagueHardDriveFunction")
       return result
+
+def computeVagueHardDrive_alternative(allDocs, clean_data, harddrive_searcher, res_search):
+  # Special case to handle hardDriveSize, length is >1 if it has values other than weight
+  #if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
+  hd_size_weight = clean_data['hardDriveSize']["weight"]
+  if "value" in clean_data["hardDriveSize"]:  # Discrete value needed not a range
+    hd_size_min = clean_data['hardDriveSize']["value"]
+    res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hd_size_weight, hd_size_min, None))
+  else:
+    hd_size_min = clean_data['hardDriveSize']["minValue"]
+    hd_size_max = clean_data['hardDriveSize']["maxValue"]
+    res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hd_size_weight, hd_size_min, hd_size_max))
+  return res_search
