@@ -25,7 +25,6 @@ import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
 import {NgxPaginationModule} from "ngx-pagination";
-import {SearchComponent} from "./search/search.component";
 import {RouteReuseStrategy} from "@angular/router";
 
 @NgModule({
@@ -34,8 +33,7 @@ import {RouteReuseStrategy} from "@angular/router";
     HomeComponent,
     DetailsComponent,
     HeaderComponent,
-    CartComponent,
-    SearchComponent
+    CartComponent
   ],
   imports: [
     BrowserModule,

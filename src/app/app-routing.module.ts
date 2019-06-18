@@ -4,7 +4,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { HomeComponent } from "./home/home.component";
 import { DetailsComponent } from "./details/details.component";
 import { CartComponent } from "./cart/cart.component";
-import {SearchComponent} from "./search/search.component";
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
