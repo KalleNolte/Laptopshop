@@ -71,4 +71,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(form.value);
       this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => (this.laptops = laptops));
     }
+  
+  check_matched( att: string  ){
+    if(att !=null && att=='green'){
+      return 'green';
+    }else  if(att === 'red') {
+      return 'red';
+    }
+    else  if(att === 'yellow') {
+      return 'yellow';
+    }
+    else  if(att === null) {
+      return 'nix';
+    }
+  }
 }
