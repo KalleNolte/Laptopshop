@@ -27,251 +27,176 @@
 <section class="mainArea" fxLayout="row" fxLayoutAlign="start">
   <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
     <form [formGroup]="widgetForm" (ngSubmit)="onSubmit()">
-      <mat-card fxLayout="column" class="brandWidget">
+      <mat-card fxLayout="column" formGroupName="brandName">
         <mat-card-title>Brand Name</mat-card-title>
-        <div *ngFor="let brand of brands; let i = index">
+        <div *ngFor="let brand of brands">
           <mat-checkbox
-            (change)="onChange($event, 'brandNames')"
+            (change)="onChange($event, 'brandName', 'brandNameValue')"
             [value]="brand.id"
             >{{ brand.name }}</mat-checkbox
           >
         </div>
         <mat-slider
-          formControlName="brandSlider"
+          formControlName="weight"
           min="1"
           max="5"
           step="1"
         ></mat-slider>
       </mat-card>
 
-      <mat-card fxLayout="column" class="manufacturerWidget">
-        <mat-card-title>Processor Manufacturer</mat-card-title>
-        <div *ngFor="let manufacturer of manufacturers; let i = index">
+      <mat-card fxLayout="column" formGroupName="chipsetBrand">
+        <mat-card-title>Chipset Brand</mat-card-title>
+        <div *ngFor="let option of chipsetBrands">
           <mat-checkbox
-            (change)="onChange($event, 'processorManufacturers')"
-            [value]="manufacturer.id"
-            >{{ manufacturer.name }}</mat-checkbox
+            (change)="onChange($event, 'chipsetBrand', 'chipsetBrandValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
           >
         </div>
         <mat-slider
-          formControlName="processorManufacturerSlider"
+          formControlName="weight"
           min="1"
           max="5"
           step="1"
         ></mat-slider>
       </mat-card>
 
-      <!-- <mat-card fxLayout="column" class="ramWidget">
-        <mat-card-title>RAM</mat-card-title>
-        <div ngModelGroup="ram">
-          <mat-radio-group fxLayout="column" ngModel name="ramValue">
-            <mat-checkbox [value]="2">2</mat-checkbox>
-            <mat-checkbox [value]="4">4</mat-checkbox>
-            <mat-checkbox [value]="8">8</mat-checkbox>
-          </mat-radio-group>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="column" class="processorType">
-        <mat-card-title>Processor Type</mat-card-title>
-        <div ngModelGroup="processorType">
-          <mat-select class="processorType" ngModel name="processorTypeValue">
-            <mat-option
-              *ngFor="let processorType of processorTypes"
-              [value]="processorType"
-            >
-              {{ processorType }}
-            </mat-option>
-          </mat-select>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="column" class="processorSpeed">
-        <mat-card-title>Processor Speed</mat-card-title>
-        <div ngModelGroup="processorSpeed">
-          <mat-select class="processorSpeed" ngModel name="processorSpeedValue">
-            <mat-option
-              *ngFor="let processorSpeed of processorSpeeds"
-              [value]="processorSpeed"
-            >
-              {{ processorSpeed }}
-            </mat-option>
-          </mat-select>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="column" class="processorCount">
-        <mat-card-title>Processor Count</mat-card-title>
-        <div ngModelGroup="processorCount">
-          <mat-select class="processorCount" ngModel name="processorCountValue">
-            <mat-option
-              *ngFor="let processorCount of processorCounts"
-              [value]="processorCount"
-            >
-              {{ processorCount }}
-            </mat-option>
-          </mat-select>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div>
-      </mat-card>
-
-      <mat-card class="priceWidget">
-        <mat-card-title fxLayout="column">Price</mat-card-title>
-        <div ngModelGroup="price">
-          <div fxLayout="row" fxLayoutGap="5%">
-            <input matInput ngModel placeholder="min" name="minValue" />
-            <input matInput ngModel placeholder="max" name="maxValue" />
-            $
-          </div>
-          <div fxLayout="row">
-            <mat-slider
-              [ngModel]="1"
-              min="1"
-              max="5"
-              step="1"
-              name="weight"
-            ></mat-slider>
-          </div>
-        </div> -->
-      <!-- <range-slider [min]="min" [max]="max" [toolTips]="[false,false]" [(ngModel)]="twoWayRange">        </range-slider> -->
-      <!-- </mat-card> -->
-      <!--      <mat-card fxLayout="column" class="displaySizeWidget">-->
-      <!--        <mat-card-title>Displaysize</mat-card-title>-->
-      <!--        <div ngModelGroup="DisplaySize">-->
-      <!--          <mat-checkbox>-->
-      <!--            25 cm (10") and less-->
-      <!--          </mat-checkbox>-->
-      <!--          <mat-checkbox>-->
-      <!--            28 - 30 cm (11" - 12")-->
-      <!--          </mat-checkbox>-->
-      <!--          <mat-checkbox>-->
-      <!--            33 - 36 cm (13" - 14")-->
-      <!--          </mat-checkbox>-->
-      <!--          <mat-checkbox>-->
-      <!--            38 - 41 cm (15" - 16")-->
-      <!--          </mat-checkbox>-->
-      <!--          <mat-checkbox>-->
-      <!--            43 cm (17") and above-->
-      <!--          </mat-checkbox>-->
-      <!--        </div>-->
-      <!--      </mat-card>-->
-
-      <!-- <mat-card fxLayout="column" class="brandWidget">
-        <mat-card-title>Hard Drive Type</mat-card-title>
-            <mat-checkbox value="hdd">HDD</mat-checkbox>
-            <mat-checkbox value="ssd">SSD</mat-checkbox>
-            <mat-checkbox value="hybrid">Hybrid</mat-checkbox>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-      
-      </mat-card>
-
-      <mat-card fxLayout="column" class="hardDriveWidget">
-        <mat-card-title>Hard Drive Capacity</mat-card-title>
-        <div ngModelGroup="hardDriveSize" fxLayout="column">
-          <div fxLayout="row">
-            <input
-              matInput
-              ngModel
-              placeholder="Capacity"
-              name="hardDriveSizeValue"
-            />
-            GB
-          </div>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div> -->
-      <!--<mat-checkbox>
-          Up to 159 GB
-        </mat-checkbox>
-        <mat-checkbox>
-          160 - 249 GB
-        </mat-checkbox>
-        <mat-checkbox>
-          250 - 499 GB
-        </mat-checkbox>
-        <mat-checkbox>
-          500 GB and more
-        </mat-checkbox>-->
-      <!-- </mat-card>
-
-      <mat-card fxLayout="column" class="hardDriveWidget">
-        <mat-card-title>Operating System</mat-card-title>
-        <div ngModelGroup="operatingSystem" fxLayout="column">
-          <mat-radio-group
-            ngModel
-            name="operatingSystemValue"
-            fxLayout="column"
+      <mat-card fxLayout="column" formGroupName="chipsetBrand">
+        <mat-card-title>Screen Size</mat-card-title>
+        <div *ngFor="let option of screenSizes">
+          <mat-checkbox
+            (change)="onChange($event, 'screenSize', 'screenSizeValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
           >
-            <mat-checkbox value="Windows">Windows 7</mat-checkbox>
-            <mat-checkbox value="Windows">Windows 8</mat-checkbox>
-            <mat-checkbox value="Windows">Windows 10</mat-checkbox>
-            <mat-checkbox value="Mac OS">Mac OS</mat-checkbox>
-          </mat-radio-group>
-          <mat-slider
-            [ngModel]="1"
-            min="1"
-            max="5"
-            step="1"
-            name="weight"
-          ></mat-slider>
-        </div> -->
-      <!--        <mat-checkbox>-->
-      <!--          Windows 7-->
-      <!--        </mat-checkbox>-->
-      <!--        <mat-checkbox>-->
-      <!--          Windows 8-->
-      <!--        </mat-checkbox>-->
-      <!--        <mat-checkbox>-->
-      <!--          Windows 10-->
-      <!--        </mat-checkbox>-->
-      <!--        <mat-checkbox>-->
-      <!--          DOS-->
-      <!--        </mat-checkbox>-->
-      <!--        <mat-checkbox>-->
-      <!--          Mac OS-->
-      <!--        </mat-checkbox>-->
-      <!--        <mat-checkbox>-->
-      <!--          No Operating System-->
-      <!--        </mat-checkbox>-->
-      <!-- </mat-card> -->
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="processorType">
+        <mat-card-title>Processor Type</mat-card-title>
+        <div *ngFor="let option of processorTypes">
+          <mat-checkbox
+            (change)="onChange($event, 'processorType', 'processorTypeValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="chipsetBrand">
+        <mat-card-title>Processor Speed</mat-card-title>
+        <div *ngFor="let option of processorSpeeds">
+          <mat-checkbox
+            (change)="onChange($event, 'processorSpeed', 'processorSpeedValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="hardDriveType">
+        <mat-card-title>Hard Drive Type</mat-card-title>
+        <div *ngFor="let option of hardDriveTypes">
+          <mat-checkbox
+            (change)="onChange($event, 'hardDriveType', 'hardDriveTypeValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="hardDriveSize">
+        <mat-card-title>Hard Drive Size</mat-card-title>
+        <div *ngFor="let option of hardDriveSizes">
+          <mat-checkbox
+            (change)="onChange($event, 'hardDriveSize', 'hardDriveSizeValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="operatingSystem">
+        <mat-card-title>Operating System</mat-card-title>
+        <div *ngFor="let option of operatingSystems">
+          <mat-checkbox
+            (change)="onChange($event, 'operatingSystem', 'operatingSystemValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="operatingSystem">
+        <mat-card-title>Ram Size</mat-card-title>
+        <div *ngFor="let option of ramOptions">
+          <mat-checkbox
+            (change)="onChange($event, 'ramSize', 'ramSizeValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="weight">
+        <mat-card-title>Weight</mat-card-title>
+        <div *ngFor="let option of weights">
+          <mat-checkbox
+            (change)="onChange($event, 'weight', 'weightValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          min="1"
+          max="5"
+          step="1"
+        ></mat-slider>
+      </mat-card>
+
       <mat-card-actions>
         <button mat-raised-button type="submit" color="primary">Search</button>
       </mat-card-actions>
@@ -279,33 +204,6 @@
   </div>
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
-    <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
-        <img
-          matListAvatar
-          src="{{ laptop.imagePath }}"
-          *ngIf="laptop.imagePath"
-        />
-        <img
-          matListAvatar
-          src="../assets/images/no-image.png"
-          *ngIf="!laptop.imagePath"
-        />
-        <h3 matLine>{{ laptop.productTitle }}</h3>
-        <!--        <p matLine>-->
-        <!--          Processor Type: {{ laptop.processorType }} @-->
-        <!--          {{ laptop.processorCount }} x {{ laptop.processorSpeed }} Ghz-->
-        <!--        </p>-->
-        <!--        <p matLine>OS: {{ laptop.operatingSystem }}</p>-->
-        <p matLine>Hard Drive Type: {{ laptop.hardDriveType }}</p>
-        <p matLine *ngIf="laptop.hddSize">HDD Size: {{ laptop.hddSize }}</p>
-        <p matLine *ngIf="laptop.ssdSize">SSD Size: {{ laptop.ssdSize }}</p>
-        <p matLine>processor : {{ laptop.chipsetBrand }}</p>
-        <strong matLine>Price: {{ laptop.price }} $</strong>
-        <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
-      </mat-list-item>
-    </mat-list>
-
     <mat-form-field>
       <input
         matInput
