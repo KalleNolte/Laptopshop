@@ -254,7 +254,7 @@ class BinarySearch():
     if len(sameFieldMultpleValues) > 0:
       body["query"]["bool"]["must"].append(sameFieldMultpleValues)
 
-    body.update({"size": 100})
+    body.update({"size": 10000})
 
     #print("body", body)
     return body

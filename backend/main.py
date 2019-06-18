@@ -75,17 +75,6 @@ def search():
     outputProducts = do_query(data,allDocs)
 
 
-    c_i = ColorInformation(data,outputProducts,VagueSearchPrice.price_scores)
-    searchedValues = c_i.extractKeyValuePairs()
-    c_i.prozessDataBinary(searchedValues)
-
-    #print(outputProducts[0])
-    #print(outputProducts[100])
-
-    #If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
-    s_p = SortByPrice()
-    outputProducts = s_p.sort_by_price(outputProducts)
-
 
     #print("----------------------------------------------------------------")
     #print(outputProducts[47])
@@ -199,15 +188,6 @@ def do_query(data, allDocs):
 
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
-  # if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
-  #     hd_size_weight = clean_data['hardDriveSize']["weight"]
-  #     if "value" in clean_data["hardDriveSize"]: # Discrete value needed not a range
-  #         hd_size_min = clean_data['hardDriveSize']["value"]
-  #         res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,None ))
-  #     else :
-  #        hd_size_min = clean_data['hardDriveSize']["minValue"]
-  #        hd_size_max = clean_data['hardDriveSize']["maxValue"]
-  #        res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,hd_size_weight,hd_size_min,hd_size_max ))
 
   if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
     res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
@@ -215,15 +195,6 @@ def do_query(data, allDocs):
                                                                                           res_search)
   #  --------------------------------------------------------------------#
   # Special case to handle price
-  # if 'price' in clean_data and len(clean_data["price"]) > 1:
-  #     if "value" in clean_data["price"]: # Discrete value needed not a range
-  #         price_min = clean_data['price']["value"]
-  #         res_search.append(price_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
-  #     else :
-  #        price_min = clean_data['price']["minValue"]
-  #        price_max = clean_data['price']["maxValue"]
-  #        price_weight = clean_data['price']["weight"]
-  #        res_search.append(price_searcher.computeVaguePrice(allDocs,price_weight,price_min,price_max))
 
   if 'price' in clean_data and len(clean_data["price"]) > 1:
     res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search)
@@ -269,7 +240,6 @@ def do_query(data, allDocs):
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
-  print(outputProducts)
 
   for item in output_binary: #binary search results that did not meet other vague requirements
     item['vaguenessScore'] =0
@@ -277,9 +247,16 @@ def do_query(data, allDocs):
   # concatenate with products with weighting 5 *******
   outputProducts = outputProducts + output_binary
 
-  # todo: products with same vagueness score should be listed according to price descending
+  # products with same vagueness score should be listed according to price descending
+  c_i = ColorInformation(data, outputProducts, VagueSearchPrice.price_scores)
+  searchedValues = c_i.extractKeyValuePairs()
+  c_i.prozessDataBinary(searchedValues)
 
+  print(outputProducts[0])
 
+  # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
+  s_p = SortByPrice()
+  outputProducts = s_p.sort_by_price(outputProducts)
   return outputProducts
 
 
@@ -294,8 +271,8 @@ def filter_from_boolean(outputProducts, output_binary):
     if value > 1:
       duplicate_list.append(key)
 
-  print("duplicate_list")
-  print(duplicate_list)
+  #print("duplicate_list")
+  #print(duplicate_list)
 
   # copy only items that are in both lists
   outputProducts = [item for item in outputProducts if item['asin'] in duplicate_list]

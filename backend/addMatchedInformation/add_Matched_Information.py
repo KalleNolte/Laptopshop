@@ -61,11 +61,11 @@ class ColorInformation:
       for key in searchedValues:
       #special case for price field, containing 3 infos instead of 2-------------------------------------#
         if key   == 'minValue':
-          #self.prozessColorAttributePrice(searchedValues,laptop)
-          self.prozessColorAttributeByVaguenessScore(laptop)
+          self.prozessColorAttributePrice(searchedValues,laptop)
+          #self.prozessColorAttributeByVaguenessScore(laptop)
         elif key == 'maxValue':
-          #self.prozessColorAttributePrice(searchedValues,laptop)
-          self.prozessColorAttributeByVaguenessScore(laptop)
+          self.prozessColorAttributePrice(searchedValues,laptop)
+          #self.prozessColorAttributeByVaguenessScore(laptop)
       #--------------------------------------------------------------------------------------------------#
 
         else: #all other attributes
