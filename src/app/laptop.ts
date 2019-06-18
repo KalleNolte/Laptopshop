@@ -4,9 +4,20 @@ interface screenResolutionSize {
 interface productDimension {
   [index: number]: number;
 }
+
+interface matched {
+  brandName:string;
+  chipsetBrand:string; // processorManufacturer
+  processorType: string;
+  hardDriveType:string;
+  operatingSystem:string;
+  price:string;
+  ram:string
+}
+
 export interface Laptop {
   asin: string;
-  productTitle: string; 
+  productTitle: string;
   price: number;
   displaySize: number;
   screenResoultionSize: screenResolutionSize;
@@ -30,6 +41,8 @@ export interface Laptop {
   imagePath: string;
   avgRating: number;
 
+  matched: matched;
+
 }
 /*
 *
@@ -41,13 +54,11 @@ export interface Laptop {
   operatingSystem: string;
   screenResoultionSize: string;
   imagePath: string;
-
-
 } */
 // export class Laptop {
 //   constructor(
 //     asin ?: string,
-//     productTitle ?: string, 
+//     productTitle ?: string,
 //     price ?: number,
 //     displaySize ?: number,
 //     screenResoultionSize ?: screenResolutionSize,

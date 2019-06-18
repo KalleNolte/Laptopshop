@@ -225,7 +225,7 @@
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
     <mat-list>
-      <mat-list-item *ngFor="let laptop of laptops" routerLink="/details">
+      <mat-list-item *ngFor="let laptop of laptops | paginate :{itemsPerPage:10, currentPage:p }" routerLink="/details">
         <img matListAvatar src="{{laptop.imagePath}}" *ngIf="laptop.imagePath"/>
         <img matListAvatar src="../assets/images/no-image.png" *ngIf="!laptop.imagePath"/>
         <h3 matLine>{{ laptop.productTitle }}</h3>
@@ -242,8 +242,44 @@
         <p matLine > processor : {{ laptop.chipsetBrand }}</p>
         <strong matLine>Price: {{ laptop.price }} $</strong>
         <!-- <p>{{ laptop.productDimension[0] }} x {{ laptop.productDimension[1] }} x {{ laptop.productDimension[2] }}</p> -->
+
+
+        <div id="flex-container" >
+  <div *ngIf="check_matched(laptop.matched.price)=='green' " class="element"> price : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.price)=='red' " class="element"> price : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+          <div *ngIf="check_matched(laptop.matched.price)=='yellow' " class="element">  price : <img class = "leer_Image" src="../assets/images/yellow.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.price)=='nix' " class="element">  price : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+
+ <div *ngIf="check_matched(laptop.matched.brandName)=='green' " class="element"> BrandName: <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.brandName)=='red' " class="element"> BrandName : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.brandName)=='nix' " class="element">  BrandName : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+ <!--processorType und auch check_Chipset -->
+  <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='green' " class="element"> Pprocessor Manufacturer : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='red' " class="element"> Pprocessor Manufacturer  : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.chipsetBrand)=='nix' " class="element">  Pprocessor Manufacturer :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.processorType)=='green' " class="element"> ProcessorType : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.processorType)=='red' " class="element"> ProcessorType : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.processorType)=='nix' " class="element">  ProcessorType :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.hardDriveType)=='green' " class="element"> Hard Drive Type : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.hardDriveType)=='red' " class="element"> Hard Drive Type : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.hardDriveType)=='nix' " class="element">  Hard Drive Type :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+   <div *ngIf="check_matched(laptop.matched.operatingSystem)=='green' " class="element"> OperatingSystem : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.operatingSystem)=='red' " class="element"> OperatingSystem : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.operatingSystem)=='nix' " class="element">  OperatingSystem :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+
+  <div *ngIf="check_matched(laptop.matched.ram)=='green' " class="element"> RAM : <img class = "leer_Image"src="../assets/images/right_symbol.png" /> </div>
+  <div *ngIf="check_matched(laptop.matched.ram)=='red' " class="element"> RAM : <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /></div>
+   <div *ngIf="check_matched(laptop.matched.ram)=='nix' " class="element">  RAM :  <img class = "leer_Image" src="../assets/images/wrong_symbol.png" /> </div>
+</div>
+
+
+
       </mat-list-item>
     </mat-list>
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
 
     <mat-form-field>
       <input
