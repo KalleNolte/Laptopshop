@@ -21,7 +21,7 @@ import { DataSource } from "@angular/cdk/table";
   styleUrls: ["./home.component.scss"],
   providers: [DataService],
   animations: [moveIn(), fallIn()],
-  host: { "[@moveIn]": "" }
+  host : {"[@moveIn]": ""}
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   dummyData = <any>data;
