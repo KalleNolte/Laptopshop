@@ -215,7 +215,7 @@
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" [routerLink]="['/details',element.asin]">
           {{ element.productTitle }}
         </td>
       </ng-container>
