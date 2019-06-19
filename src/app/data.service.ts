@@ -35,13 +35,15 @@ export class DataService {
     return this.http.post<Laptop[]>('/api/searchText', file, this.httpOptions);
   }
 
-  // getSample(){
-  //   return this.http.get(this.sampleUrl)
-  //   .pipe(map((resp: Response) => resp.json()));
-  // }
-
   getLaptop_details():Observable<Laptop[]>{
     return this.http.get<Laptop[]>(this.for_detailsExample);
+  }
+
+  getCritizedResult(): Observable<Laptop[]> {
+    let result = this.http.get<Laptop>('/alexa/setter');
+    if (result != null) {
+      return this.http.get<Laptop[]>('/alexa/getQuery')
+    }
   }
 
 }

@@ -24,11 +24,11 @@ import { DataSource } from "@angular/cdk/table";
   host: { "[@moveIn]": "" }
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  dummyData = <any>data;
+  // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
   displayedColumns: string[] = ["name", "price"];
-  dataSource = new MatTableDataSource(this.dummyData);
+  dataSource : MatTableDataSource<Laptop>;
   brands = [
     { id: "acer", name: "Acer" },
     { id: "apple", name: "Apple" },
@@ -164,7 +164,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
   }
 
   get brandNames() {
@@ -204,7 +204,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
   getSample() {
-    this.dataService.getSample().subscribe(data => (this.laptops = data));
+    this.dataService.getSample().subscribe(data => {
+      this.laptops = data;
+      this.dataSource = new MatTableDataSource(this.laptops);
+      this.dataSource.sort = this.sort;
+      });
   }
 
   search(form: NgForm) {
