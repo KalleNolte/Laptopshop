@@ -48,8 +48,6 @@ export class DataService {
 
 }
 
-
-
   // here i only use one Laptop info for the view page
  /* getLaptop_details():Observable<Laptop[]>{
     return this.http.get<Laptop[]>(this.for_detailsExample);

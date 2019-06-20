@@ -7,5 +7,15 @@
         "pathRewrite": {
             "^/api": ""
         }
+    },
+
+    "/alexa/*": {
+        "target": "http://localhost:5004/alexa",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/alexa": ""
+        }
     }
 }

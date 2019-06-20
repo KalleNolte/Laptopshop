@@ -56,7 +56,7 @@ import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@a
     MatRadioModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [HomeComponent, DetailsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

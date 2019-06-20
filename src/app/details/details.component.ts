@@ -40,7 +40,7 @@ export class DetailsComponent implements OnInit {
     //const allData=this.route
     const asin=this.route.snapshot.params['asin'];
     //this.getSample();
-    console.log(asin);
+    // console.log(asin);
     this.getByAsin(asin);
     // console.log(this.homeFeatures.getSample())
 
