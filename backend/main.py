@@ -188,14 +188,15 @@ def do_query(data, allDocs):
 
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
-
+  print("len(clean_data[hardDriveSize]: ", len(clean_data["hardDriveSize"]))
+  print("clean_data[hardDriveSize]", clean_data["hardDriveSize"])
   if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
     res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
                                                                                           harddrive_searcher,
                                                                                           res_search)
   #  --------------------------------------------------------------------#
   # Special case to handle price
-
+  print("len(clean_data[price]: ",len(clean_data["price"]) )
   if 'price' in clean_data and len(clean_data["price"]) > 1:
     res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search)
 
