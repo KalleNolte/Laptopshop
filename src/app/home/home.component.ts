@@ -19,7 +19,6 @@ import { DataSource } from "@angular/cdk/table";
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
-  providers: [DataService],
   animations: [moveIn(), fallIn()],
   host: { "[@moveIn]": "" }
 })
@@ -27,6 +26,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
+  firstTime = true;
   displayedColumns: string[] = ["name", "price"];
   dataSource : MatTableDataSource<Laptop>;
   brands = [
@@ -155,8 +155,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     //this.laptops = this.dummyData;
-    this.getSample();
-
+    if (this.dataService.firstTime) {
+      this.getSample();
+      this.dataService.firstTime = false;
+    }else{
+      this.getLaptops();
+    }
     // Clear empty fields in FormArray
 
     // const i = this.brandNames.controls.findIndex(x => x.value === "");
@@ -215,7 +219,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(form.value);
     this.dataService
       .search(JSON.stringify(form.value))
-      .subscribe(laptops => (this.laptops = laptops));
+      .subscribe(laptops => {
+        this.laptops = laptops;
+        this.dataSource = new MatTableDataSource(this.laptops);
+        this.dataSource.sort = this.sort;
+      });
   }
 
   onChange(event, groupName, fieldName) {
@@ -231,5 +239,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const i = field.controls.findIndex(x => x.value === event.source.value);
       field.removeAt(i);
     }
+  }
+
+  getLaptops(){
+    this.dataService.retriveLaptops().subscribe(data => {
+      this.laptops = data;
+      this.dataSource = new MatTableDataSource(this.laptops);
+      this.dataSource.sort = this.sort;
+    });
   }
 }

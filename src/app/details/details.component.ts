@@ -9,6 +9,8 @@ import { HttpResponse } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
+import {Observable} from 'rxjs';
+
 
 @Component({
   selector: "app-details",
@@ -19,113 +21,30 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class DetailsComponent implements OnInit {
 
-  laptop: Laptop[] = [];
-  error;
-  var;
-
-  productTitle: string;
+  asin;
   brandName: string;
-  ram: number;
-  rec: any;
   laptops: Laptop[] = [];
-  private item: any = [];
+  item: Laptop;
 
   constructor(private one_detail: DataService,
-    private route: ActivatedRoute,
-    private homeFeatures: HomeComponent) { }
-  ngOnInit() {
-    //this.showDetails();
-    //const allData=this.route
-    const asin = this.route.snapshot.params['asin'];
-    //this.getSample();
-    console.log(asin);
-    this.getByAsin(asin);
-    console.log(this.homeFeatures.getSample())
-
+              private route: ActivatedRoute,
+              private homeFeatures: HomeComponent) {
   }
-  getSample() {
-    this.one_detail.getSample().subscribe(laptops => { (this.laptops = laptops); console.log(this.laptops) });
 
+
+  ngOnInit() {
+    this.asin = this.route.snapshot.params['asin'];
+    this.showDetails()
   }
 
   showDetails() {
-    this.one_detail.getLaptop_details()
-      .subscribe(data => this.laptop = data);
-    error => this.error = error;
-  }
-
-  getByAsin(asin: string) {
-    this.one_detail.getSample().subscribe(laptops => {
-
-      (this.laptops = laptops);
-      this.item =
-        this.laptops.find(
-          laptopObject => {
-
-            return laptopObject.asin === asin;
-
-
-          })
-      console.log(this.item)
-      /*
-          (this.laptops = laptops);
-          this.item
-            .push(
-              this.laptops.filter(
-               laptopObject =>{
-     
-                 laptopObject.asin === asin
-                 console.log(this.item)
-               }))
-           */
+    this.one_detail.getLaptop_details(this.asin).subscribe(data => {
+      this.item = data[0];
+      // console.log(this.item.imagePath);
     });
-
   }
 
-//   getByAsin_1(asin: string) {
-//     //console.log(this.one_detail.search(this.item) )
-//     this.one_detail.array_laptops.subscribe(laptops => {
-
-//       (this.laptops = laptops);
-//       this.item =
-//         this.laptops.find(
-//           laptopObject => {
-
-//             return laptopObject.asin === asin;
-
-
-//           })
-//       console.log(this.item)
-//       /*
-//           (this.laptops = laptops);
-//           this.item
-//             .push(
-//               this.laptops.filter(
-//                laptopObject =>{
-     
-//                  laptopObject.asin === asin
-//                  console.log(this.item)
-//                }))
-//            */
-//     });
-
-//   }
-
+  sendItem() {
+    this.one_detail.getCritizedResult(this.item);
+  }
 }
-
-
-/*
-laptop :Laptop[]= [];
-
- public lap={};
-
- showDetails(){
-   this.one_detail.getLaptop_details()
-     .subscribe(data => this.laptop= data);
-     error=> this.error=error;
- }
- searchD(formDetails: NgForm){
-   this.one_detail.setLaptop_details(JSON.stringify(formDetails.value))
-     .subscribe(data => (this.lap = data));
- }
-* */

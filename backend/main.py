@@ -292,6 +292,19 @@ def getSample():
     outputProducts = Backend_Helper.refineResult(allDocs)
     return jsonify(outputProducts) #original from alfred
 
+@app.route('/api/<asin>', methods =['GET'])
+def getElementByAsin(asin):
+    product = es.search(index='amazon', body ={
+                                                "query":{
+                                                    "match":{
+                                                        "asin" : asin
+                                                      }
+                                                    },
+                                                  "size":1
+                                              })
+    product = Backend_Helper.refineResult(product)
+    return jsonify(product)
+
 
 
 def getElementsByAsin(asinKeys):

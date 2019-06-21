@@ -12,7 +12,8 @@ export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
   private for_detailsExample="../assets/jsonExample.json";
   private for_sendD='https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W';
-
+  laptops : Observable<Laptop[]>;
+  firstTime = true;
  
   httpOptions = {
     headers: new HttpHeaders({
@@ -35,14 +36,26 @@ export class DataService {
     return this.http.post<Laptop[]>('/api/searchText', file, this.httpOptions);
   }
 
-  getLaptop_details():Observable<Laptop[]>{
-    return this.http.get<Laptop[]>(this.for_detailsExample);
+  getLaptop_details(asin:String){
+    return this.http.get<Laptop>('/api/' + asin,this.httpOptions);
   }
 
-  getCritizedResult(): Observable<Laptop[]> {
-    let result = this.http.get<Laptop>('/alexa/setter');
+  getCritizedResult(laptop): Observable<Laptop[]> {
+    let result = this.http.post<Laptop[]>('/alexa/setter', laptop, this.httpOptions);
     if (result != null) {
+      this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
       return this.http.get<Laptop[]>('/alexa/getQuery')
+    }
+  }
+
+  saveLaptops(laptops:Observable<Laptop[]>){
+    this.laptops = laptops;
+  }
+
+  retriveLaptops():Observable<Laptop[]>{
+    if(this.laptops) {
+      console.log(this.laptops);
+      return this.laptops;
     }
   }
 
