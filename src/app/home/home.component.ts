@@ -243,6 +243,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   getLaptops(){
     this.dataService.retriveLaptops().subscribe(data => {
+
+      if (data.length == 0){
+        this.getLaptops();
+      }
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
