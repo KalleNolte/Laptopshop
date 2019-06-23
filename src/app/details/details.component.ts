@@ -10,6 +10,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import {Observable} from 'rxjs';
+import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/style-transforms';
 
 
 @Component({
@@ -45,6 +46,19 @@ export class DetailsComponent implements OnInit {
   }
 
   sendItem(){
+    let laptop = '{';
+    const mapped = Object.keys(this.item).map(key => ({ type: key, value: this.item[key] }));
+    for(let i in mapped){
+      laptop = laptop + mapped[i]['type']; 
+      laptop += '{';
+      laptop += mapped[i]['type']+'Value';
+      laptop += ':' + mapped[i]['value'];
+      laptop += ', ';
+      laptop += 'weight : 1 },'
+    }
+    laptop = laptop.substring(0, laptop.length - 1);
+    laptop += '}'
+    console.log(laptop);
     this.one_detail.setLaptop(this.item).subscribe(data=>console.log(data));
   }
 
