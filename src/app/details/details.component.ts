@@ -46,20 +46,25 @@ export class DetailsComponent implements OnInit {
   }
 
   sendItem(){
-    let laptop = '{';
+    let laptop = "{";
     const mapped = Object.keys(this.item).map(key => ({ type: key, value: this.item[key] }));
     for(let i in mapped){
-      laptop = laptop + mapped[i]['type']; 
-      laptop += '{';
-      laptop += mapped[i]['type']+'Value';
-      laptop += ':' + mapped[i]['value'];
+      if (mapped[i]['type'] == 'asin' || mapped[i]['type'] == 'productTitle'){
+        continue;
+      }
+      laptop = laptop + '"' +mapped[i]['type'] + '"'; 
+      laptop += ' :{';
+      laptop += '"' + mapped[i]['type'] + 'Value' + '"';
+      laptop += ':' + '"' + mapped[i]['value'] + '"';
       laptop += ', ';
-      laptop += 'weight : 1 },'
+      laptop += '"weight" : 1 },'
     }
     laptop = laptop.substring(0, laptop.length - 1);
-    laptop += '}'
+    laptop += "}";
+    // console.log(laptop);
+    laptop = JSON.parse(JSON.stringify(laptop));
     console.log(laptop);
-    this.one_detail.setLaptop(this.item).subscribe(data=>console.log(data));
+    this.one_detail.setLaptop(laptop).subscribe(data=>console.log(data));
   }
 
   sendLaptops(){
