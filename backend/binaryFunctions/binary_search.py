@@ -122,14 +122,12 @@ class BinarySearch():
           result.append([hit['_source']['asin'], float(1.0)])
 
 
-      print("what is in \"result\"")
-      print(result)
-      result = np.array(result, dtype=object)
-      print("what is in \"result\" with objects") #why?
-      print(result)
-      # result = result[np.argsort(-result[:, 1])] #sorts resuls with highest matching score first
-      # print("what is in \"result\" with objects")  # why?
+      # print("what is in \"result\"")
       # print(result)
+      result = np.array(result, dtype=object)
+      # print("what is in \"result\" with objects") #why?
+      # print(result)
+
 
       ##
       result = list(map(tuple, result))
