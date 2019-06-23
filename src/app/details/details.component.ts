@@ -52,6 +52,14 @@ export class DetailsComponent implements OnInit {
       if (mapped[i]['type'] == 'asin' || mapped[i]['type'] == 'productTitle'){
         continue;
       }
+      if (mapped[i]['type'] == 'price') {
+        laptop = laptop + '"' + mapped[i]['type'] + '"';
+        laptop += ' :{';
+        laptop += '"' + 'value' + '"';
+        laptop += ':' + '"' + mapped[i]['value'] + '"';
+        laptop += ', ';
+        laptop += '"weight" : 1 },'
+      } 
       laptop = laptop + '"' +mapped[i]['type'] + '"'; 
       laptop += ' :{';
       laptop += '"' + mapped[i]['type'] + 'Value' + '"';
