@@ -9,6 +9,8 @@ class VagueSearchValue():
 
   def compute_vague_value(self, allDocs, fieldName,weight,values):
     allValues = []
+    print(fieldName)
+    print(weight)
     for doc in allDocs['hits']['hits']:
       if (doc['_source'][fieldName]) :
           allValues.append(float(doc['_source'][fieldName]))

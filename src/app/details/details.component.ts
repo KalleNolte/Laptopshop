@@ -48,8 +48,16 @@ export class DetailsComponent implements OnInit {
   sendItem(){
     let laptop = "{";
     const mapped = Object.keys(this.item).map(key => ({ type: key, value: this.item[key] }));
+    console.log(mapped);
     for(let i in mapped){
-      if (mapped[i]['type'] == 'asin' || mapped[i]['type'] == 'productTitle'){
+      if (mapped[i]['type'] == 'asin' || mapped[i]['type'] == 'productTitle' || mapped[i]['type'] == 'displayResolutionSize'
+        || mapped[i]['type'] == 'productDimension'){
+        continue; 
+      }
+      if ((mapped[i]['type'] == 'hddSize' && mapped[i]['value'] == 0) || (mapped[i]['type'] == 'ssdSize' && mapped[i]['value'] == 0)) {
+        continue;
+      }
+      if (mapped[i]['value'] == null) {
         continue;
       }
       if (mapped[i]['type'] == 'price') {
@@ -59,13 +67,15 @@ export class DetailsComponent implements OnInit {
         laptop += ':' + '"' + mapped[i]['value'] + '"';
         laptop += ', ';
         laptop += '"weight" : 1 },'
+      } else{
+        laptop = laptop + '"' + mapped[i]['type'] + '"';
+        laptop += ' :{';
+        laptop += '"' + mapped[i]['type'] + 'Value' + '"';
+        laptop += ':' + '"' + mapped[i]['value'] + '"';
+        laptop += ', ';
+        laptop += '"weight" : 1 },'
       } 
-      laptop = laptop + '"' +mapped[i]['type'] + '"'; 
-      laptop += ' :{';
-      laptop += '"' + mapped[i]['type'] + 'Value' + '"';
-      laptop += ':' + '"' + mapped[i]['value'] + '"';
-      laptop += ', ';
-      laptop += '"weight" : 1 },'
+      
     }
     laptop = laptop.substring(0, laptop.length - 1);
     laptop += "}";

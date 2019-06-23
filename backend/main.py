@@ -224,9 +224,10 @@ def do_query(data,allDocs):
     #Special case to handle price
     # Special case to handle hardDriveSize
     if 'price' in clean_data and len(clean_data["price"]) > 1:
+        price_weight = clean_data['price']["weight"]
         if "value" in clean_data["price"]: # Discrete value needed not a range
             price_min = clean_data['price']["value"]
-            res_search.append(harddrive_searcher.computeVaguePrice(allDocs,hd_size_weight,price_min,None ))
+            res_search.append(value_searcher.compute_vague_value(allDocs,"price",price_weight,[price_min] ))
         else :
            price_min = clean_data['price']["minValue"]
            price_max = clean_data['price']["maxValue"]
