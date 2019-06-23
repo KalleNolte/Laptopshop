@@ -15,9 +15,9 @@ import requests
 # from helper import Backend_Helper
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
 
-from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions
-from binaryFunctions import binary_search_text
-from helper import Backend_Helper
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions
+from backend.binaryFunctions import binary_search_text
+from backend.helper import Backend_Helper
 
 
 
@@ -175,6 +175,7 @@ def search():
 
 
     data = request.get_json()
+    print(data)
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
