@@ -44,7 +44,11 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  sendItem() {
-    this.one_detail.getCritizedResult(this.item);
+  sendItem(){
+    this.one_detail.setLaptop(this.item).subscribe(data=>console.log(data));
+  }
+
+  sendLaptops(){
+    this.one_detail.getCritizedResult();
   }
 }

@@ -14,6 +14,7 @@ export class DataService {
   private for_sendD='https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W';
   laptops : Observable<Laptop[]>;
   firstTime = true;
+  laptop : Laptop;
  
   httpOptions = {
     headers: new HttpHeaders({
@@ -40,12 +41,16 @@ export class DataService {
     return this.http.get<Laptop>('/api/' + asin,this.httpOptions);
   }
 
-  getCritizedResult(laptop): Observable<Laptop[]> {
-    let result = this.http.post<Laptop[]>('/alexa/setter', laptop, this.httpOptions);
-    if (result != null) {
+  setLaptop(laptop): Observable<Laptop>{
+    return this.http.post<Laptop>('/alexa/setter', laptop, this.httpOptions);
+  }
+  getCritizedResult(): Observable<Laptop[]> {
+    
+    // if (result != null) {
       this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
       return this.http.get<Laptop[]>('/alexa/getQuery')
-    }
+    // }
+    
   }
 
   saveLaptops(laptops:Observable<Laptop[]>){
