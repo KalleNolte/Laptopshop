@@ -18,8 +18,10 @@ class VagueSearchPrice():
 
     allPrices = np.sort((np.array(allPrices)))
     # print("allPrices: ", allPrices)
+    # OLD VERSION
     #lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
     #upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
+    # NEW VERSION
     lowerSupport = float(minPrice) - (float(searchedValues["maxValue"]) - float(searchedValues["minValue"]))
     upperSupport = float(maxPrice) + float(searchedValues["maxValue"]) - float(searchedValues["minValue"])
     print("lowerSupport: ", lowerSupport)

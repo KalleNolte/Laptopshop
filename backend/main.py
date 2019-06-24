@@ -263,15 +263,10 @@ def do_query(data, allDocs):
   outputProducts = s_p.sort_by_price(outputProducts)
 
   #DELETE all products with vagueness_score = 0
-
   outputProducts_vaguenessGreaterZero = list()
-  print(type(outputProducts))
   for laptop in outputProducts:
     if laptop["vaguenessScore"] > 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
-
-  print(outputProducts_vaguenessGreaterZero[0])
-  print(outputProducts[0])
 
   return outputProducts_vaguenessGreaterZero
 
