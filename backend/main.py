@@ -202,7 +202,7 @@ def do_query(data, allDocs):
   #  --------------------------------------------------------------------#
   # Special case to handle price
 
-  if 'price' in clean_data and len(clean_data["price"]) > 1:
+  if 'price' in clean_data and len(clean_data["price"]) > 1:                                                                        ##NEW##########
     res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
 
   # --------------------------------------------------------------------#
