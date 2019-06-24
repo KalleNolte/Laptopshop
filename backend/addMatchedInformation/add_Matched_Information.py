@@ -96,7 +96,7 @@ class ColorInformation:
       self.matched = {}
       #----------------------------------------------------------------------#
 
-    print("In mathcer", VagueSearchPrice.price_scores)
+    #print("In mathcer", VagueSearchPrice.price_scores)
 
   #Calculation of threshhold--------------------#
   #---------------------------------------------#
@@ -105,10 +105,8 @@ class ColorInformation:
     try:
       threshhold = (float(searchedValues['maxValue']) - float(searchedValues['minValue']))
     except:
-      threshhold = 50
-    if threshhold > 50:
-      threshhold = 50
-    #print(threshhold)
+      pass
+    print(threshhold)
     return threshhold
 
 

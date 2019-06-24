@@ -182,7 +182,13 @@ def do_query(data, allDocs):
 
   value_searcher = vague_search_value.VagueSearchValue(es)
 
+  ######################################################################## NEW #########################################
+  #Function call in ColorInformation to extract searched values.
+  #function extractKeyValuePairs() will do that.
+  c_i_helper = ColorInformation(data, None, VagueSearchPrice.price_scores)
+  searchedValues = c_i_helper.extractKeyValuePairs()
   price_searcher = vague_search_price.VagueSearchPrice(es)
+  ######################################################################## NEW #########################################
 
   alexa_searcher = alexa_functions.AlexaSearch(es)
 
@@ -197,7 +203,7 @@ def do_query(data, allDocs):
   # Special case to handle price
 
   if 'price' in clean_data and len(clean_data["price"]) > 1:
-    res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search)
+    res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
 
   # --------------------------------------------------------------------#
   # Gets scores for all other attributes
@@ -217,11 +223,11 @@ def do_query(data, allDocs):
   ####new from beshoy
   # convert counter to dictionary
   result = dict(count_dict)
-  print("result")
-  print(result)
+  #print("result")
+  #print(result)
   sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-  print("sortedDict")
-  print(sortedDict)
+  #print("sortedDict")
+  #print(sortedDict)
   # get the keys(asin values)
   asinKeys = list(result.keys())
   # print("asinKeys")
@@ -235,7 +241,7 @@ def do_query(data, allDocs):
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
-    print(item['asin'])
+    #print(item['asin'])
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
@@ -252,12 +258,22 @@ def do_query(data, allDocs):
   searchedValues = c_i.extractKeyValuePairs()
   c_i.prozessDataBinary(searchedValues)
 
-  print(outputProducts[0])
-
   # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
   s_p = SortByPrice()
   outputProducts = s_p.sort_by_price(outputProducts)
-  return outputProducts
+
+  #DELETE all products with vagueness_score = 0
+
+  outputProducts_vaguenessGreaterZero = list()
+  print(type(outputProducts))
+  for laptop in outputProducts:
+    if laptop["vaguenessScore"] > 0:
+      outputProducts_vaguenessGreaterZero.append(laptop)
+
+  print(outputProducts_vaguenessGreaterZero[0])
+  print(outputProducts[0])
+
+  return outputProducts_vaguenessGreaterZero
 
 
 def filter_from_boolean(outputProducts, output_binary):
