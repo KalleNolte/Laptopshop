@@ -57,7 +57,7 @@ export class DataService {
     this.laptops = laptops;
   }
 
-  retriveLaptops():Observable<Laptop[]>{
+  retrieveLaptops():Observable<Laptop[]>{
     if(this.laptops) {
       console.log(this.laptops);
       return this.laptops;

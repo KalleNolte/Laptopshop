@@ -248,7 +248,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   getLaptops() {
-    this.dataService.retriveLaptops().subscribe(data => {
+    this.dataService.retrieveLaptops().subscribe(data => {
       if (!data) {
         this.getLaptops();
       }
