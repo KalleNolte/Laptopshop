@@ -27,8 +27,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   state: string = "";
   laptops: Laptop[] = [];
   firstTime = true;
-  displayedColumns: string[] = ["name", "price"];
-  dataSource : MatTableDataSource<Laptop>;
+  displayedColumns: string[] = ["image", "name", "price"];
+  dataSource: MatTableDataSource<Laptop>;
   brands = [
     { id: "acer", name: "Acer" },
     { id: "apple", name: "Apple" },
@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.dataService.firstTime) {
       this.getSample();
       this.dataService.firstTime = false;
-    }else{
+    } else {
       this.getLaptops();
     }
     // Clear empty fields in FormArray
@@ -201,6 +201,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onSubmit() {
     if (this.widgetForm.touched) {
       console.log(this.widgetForm.value);
+      console.log(JSON.stringify(this.widgetForm.value));
+      this.dataService
+        .search(JSON.stringify(this.widgetForm.value))
+        .subscribe(laptops => {
+          this.laptops = laptops;
+          this.dataSource = new MatTableDataSource(this.laptops);
+          this.dataSource.sort = this.sort;
+        });
     }
 
     if (this.globalForm.touched) {
@@ -212,18 +220,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
-      });
+    });
   }
 
   search(form: NgForm) {
     console.log(form.value);
-    this.dataService
-      .search(JSON.stringify(form.value))
-      .subscribe(laptops => {
-        this.laptops = laptops;
-        this.dataSource = new MatTableDataSource(this.laptops);
-        this.dataSource.sort = this.sort;
-      });
+    this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => {
+      this.laptops = laptops;
+      this.dataSource = new MatTableDataSource(this.laptops);
+      this.dataSource.sort = this.sort;
+    });
   }
 
   onChange(event, groupName, fieldName) {
@@ -241,10 +247,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getLaptops(){
+  getLaptops() {
     this.dataService.retriveLaptops().subscribe(data => {
-
-      if (!data){
+      if (!data) {
         this.getLaptops();
       }
       this.laptops = data;
