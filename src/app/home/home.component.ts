@@ -32,7 +32,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   brands = [
     { id: "acer", name: "Acer" },
     { id: "apple", name: "Apple" },
-    { id: "dell", name: "DELL" }
+    { id: "dell", name: "DELL" },
+    { id: "microsoft", name: "Microsoft" }
   ];
 
   chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
@@ -95,6 +96,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { id: 5, name: "> 2.5 kg" }
   ];
 
+
   widgetForm = this.fb.group({
     brandName: this.fb.group({
       brandNameValue: this.fb.array([]),
@@ -104,6 +106,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       chipsetBrandValue: this.fb.array([]),
       weight: [1]
     }),
+    price: this.fb.group( { priceValue: this.fb.array( []) } ),
+
     screenSize: this.fb.group({
       screenSizeValue: this.fb.array([]),
       weight: [1]
@@ -156,6 +160,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     //this.laptops = this.dummyData;
     this.getSample();
+    console.log(this.getSample())
 
     // Clear empty fields in FormArray
 

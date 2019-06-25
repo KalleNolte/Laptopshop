@@ -82,35 +82,6 @@ export class DetailsComponent implements OnInit {
 
     }
 
-getByAsin_1(asin:string) {
-    //console.log(this.one_detail.search(this.item) )
-   this.one_detail.array_laptops.subscribe(laptops =>
-   {
-
-     (this.laptops = laptops);
-     this.item=
-         this.laptops.find(
-          laptopObject =>{
-
-            return laptopObject.asin === asin;
-
-
-          } )
-            console.log(this.item)
- /*
-     (this.laptops = laptops);
-     this.item
-       .push(
-         this.laptops.filter(
-          laptopObject =>{
-            laptopObject.asin === asin
-            console.log(this.item)
-          }))
-      */
-    } );
-
-    }
-
 }
 
 
