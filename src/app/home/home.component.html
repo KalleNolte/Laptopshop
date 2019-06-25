@@ -42,6 +42,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="chipsetBrand">
@@ -59,6 +63,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="chipsetBrand">
@@ -76,6 +84,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="processorType">
@@ -93,6 +105,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="chipsetBrand">
@@ -110,6 +126,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="hardDriveType">
@@ -127,6 +147,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="hardDriveSize">
@@ -144,6 +168,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="operatingSystem">
@@ -163,6 +191,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="operatingSystem">
@@ -180,6 +212,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="weight">
@@ -197,6 +233,10 @@
           max="5"
           step="1"
         ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
       </mat-card>
 
       <mat-card-actions>
@@ -222,7 +262,11 @@
           *matCellDef="let element"
           [routerLink]="['/details', element.asin]"
         >
-          <img style="width:120px" src="{{ element.imagePath }}" alt="Product Image">
+          <img
+            style="width:120px"
+            src="{{ element.imagePath }}"
+            alt="Product Image"
+          />
         </td>
       </ng-container>
       <ng-container matColumnDef="name">
