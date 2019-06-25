@@ -5,7 +5,7 @@ class VagueSearchPrice():
 
   ###########################################-added
   # Used for matched class, to calculate threshhold
-  price_scores = {}
+  #price_scores = {}
 
   def __init__(self, es):
         self.es = es
@@ -60,7 +60,7 @@ class VagueSearchPrice():
 
     ###########################################-added
     # Used for matched class, to calculate threshhold
-    VagueSearchPrice.price_scores = result
+    #VagueSearchPrice.price_scores = result
 
     return result
 

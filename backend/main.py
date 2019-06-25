@@ -241,6 +241,7 @@ def do_query(data, allDocs):
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
+    print("item: ", item)
     #print(item['asin'])
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
@@ -253,22 +254,27 @@ def do_query(data, allDocs):
   # concatenate with products with weighting 5 *******
   outputProducts = outputProducts + output_binary
 
-  # products with same vagueness score should be listed according to price descending
-  c_i = ColorInformation(data, outputProducts, VagueSearchPrice.price_scores)
-  searchedValues = c_i.extractKeyValuePairs()
-  c_i.prozessDataBinary(searchedValues)
+  # # products with same vagueness score should be listed according to price descending
+  # c_i = ColorInformation(data, outputProducts, VagueSearchPrice.price_scores)
+  # searchedValues = c_i.extractKeyValuePairs()
+  # c_i.prozessDataBinary(searchedValues)
+  #
+  # # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
+  # s_p = SortByPrice()
+  # outputProducts = s_p.sort_by_price(outputProducts)
+  #
+  # #DELETE all products with vagueness_score = 0
+  # outputProducts_vaguenessGreaterZero = list()
+  # for laptop in outputProducts:
+  #   if laptop["vaguenessScore"] > 0:
+  #     outputProducts_vaguenessGreaterZero.append(laptop)
 
-  # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
-  s_p = SortByPrice()
-  outputProducts = s_p.sort_by_price(outputProducts)
 
-  #DELETE all products with vagueness_score = 0
-  outputProducts_vaguenessGreaterZero = list()
-  for laptop in outputProducts:
-    if laptop["vaguenessScore"] > 0:
-      outputProducts_vaguenessGreaterZero.append(laptop)
+  print("output products with vaguesness score<1: ", outputProducts[0])
 
-  return outputProducts_vaguenessGreaterZero
+  print("Cum_weight, " , cum_weight)
+  #return outputProducts_vaguenessGreaterZero
+  return outputProducts
 
 
 def filter_from_boolean(outputProducts, output_binary):
