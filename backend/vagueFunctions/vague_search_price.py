@@ -10,8 +10,7 @@ class VagueSearchPrice():
   def __init__(self, es):
         self.es = es
 
-
-  def computeVaguePrice(self, allDocs,weight, minPrice, maxPrice):
+  def computeVaguePrice(self, allDocs,weight, minPrice, maxPrice, searchedValues):
 
     allPrices = []
     for doc in allDocs['hits']['hits']:
@@ -19,11 +18,15 @@ class VagueSearchPrice():
 
     allPrices = np.sort((np.array(allPrices)))
     # print("allPrices: ", allPrices)
-    lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
-    upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
+    # OLD VERSION
+    #lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
+    #upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
+    # NEW VERSION
+    lowerSupport = float(minPrice) - (float(searchedValues["maxValue"]) - float(searchedValues["minValue"]))
+    upperSupport = float(maxPrice) + float(searchedValues["maxValue"]) - float(searchedValues["minValue"])
     print("lowerSupport: ", lowerSupport)
     print("upperSupport: ", upperSupport)
-    print(allPrices[0])
+    #print(allPrices[0])
 
     trapmf = fuzz.trapmf(allPrices, [lowerSupport, float(minPrice), float(maxPrice), upperSupport])
 
@@ -61,7 +64,8 @@ class VagueSearchPrice():
 
     return result
 
-  def computeVaguePrice_alternative(allDocs, clean_data,   price_searcher, res_search):
+  #Added the argument searchedValues
+  def computeVaguePrice_alternative(allDocs, clean_data,   price_searcher, res_search, searchedValues):
     #if 'price' in clean_data and len(clean_data["price"]) > 1:
     price_weight = clean_data['price']["weight"]
     if "value" in clean_data["price"]:  # Discrete value needed not a range
@@ -71,5 +75,6 @@ class VagueSearchPrice():
       price_min = clean_data['price']["minValue"]
       price_max = clean_data['price']["maxValue"]
       #price_weight = clean_data['price']["weight"]
-      res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max))
+      res_search.append(price_searcher.computeVaguePrice(allDocs, price_weight, price_min, price_max, searchedValues))
+      print(searchedValues, "In price Searcher")
     return res_search
