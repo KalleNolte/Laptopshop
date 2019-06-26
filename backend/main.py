@@ -241,7 +241,7 @@ def do_query(data, allDocs):
 
   # add a vagueness score to the returned objects
   for item in outputProducts:
-    #print(item['asin'])
+  # #print(item['asin'])
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
@@ -267,6 +267,8 @@ def do_query(data, allDocs):
   for laptop in outputProducts:
     if laptop["vaguenessScore"] > 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
+
+  print(outputProducts_vaguenessGreaterZero[0])
 
   return outputProducts_vaguenessGreaterZero
 

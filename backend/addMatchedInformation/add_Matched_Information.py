@@ -76,6 +76,8 @@ class ColorInformation:
               self.matched[key[:-5]] = 'red'
             else:
               self.matched[key[:-5]] = 'green'
+            if (laptop[key[:-5]] is None):
+              self.matched[key[:-5]] = 'red'
         #--------------------------------------------------------------------------------------------------#
 
         #Numbers cant be converted, so except for control flow if lower() - function fails-----------------#
