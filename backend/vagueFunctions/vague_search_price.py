@@ -39,6 +39,12 @@ class VagueSearchPrice():
 
     result = []
     for hit in res['hits']['hits']:
+      #print("float(hit['_source']['price']) ", float(hit['_source']['price']))
+      #if fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price'])) >1:
+      #print(fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price'])))
+      #print("weight ", weight)
+      if weight*fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price'])) > 1:
+        print("weight*fuzzy number: ", weight*fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price'])))
       result.append([hit['_source']['asin'],  # hit['_source']['price'],
                      weight*fuzz.interp_membership(allPrices, trapmf, float(hit['_source']['price']))])
 
@@ -48,6 +54,7 @@ class VagueSearchPrice():
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
     #result = result[:100]
     result = list(map(tuple, result))
+    #print("result ", result)
 
     return result
 
