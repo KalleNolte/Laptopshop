@@ -232,6 +232,7 @@ def do_query(data, allDocs):
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
+
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
   for item in output_binary: #binary search results that did not meet other vague requirements

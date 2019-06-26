@@ -52,11 +52,13 @@ class VagueSearchPrice():
 
 
     result = np.array(result, dtype=object)
+    #result2 = result[np.argsort(result[:])]
     result = result[np.argsort(-result[:, 1])]
+
+    #print("is there an element with vagueness 0?: ", result[:-1])
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
     #result = result[:100]
     result = list(map(tuple, result))
-    print("result from vague_search_price:", result)
 
     ###########################################-added
     # Used for matched class, to calculate threshhold
