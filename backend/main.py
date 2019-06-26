@@ -86,7 +86,7 @@ def search():
 @app.route('/api/searchText', methods=['POST'])
 def searchText():
   data = request.get_json()
-  print(data)
+  #print(data)
   query = data['searchValue']
   outputProducts =[]
   allDocs = es.search(index="amazon", body={
@@ -122,9 +122,9 @@ def getSample():
 
 
 def do_query(data, allDocs):
-  #print(data)
+
   clean_data1 = Backend_Helper.clean_frontend_json(data)
-  print("clean_data")
+  print("clean_data1")
   print(clean_data1)
 
   #create binary clean data if weighting is equal to 5
@@ -141,7 +141,8 @@ def do_query(data, allDocs):
       # binary_clean data has to also contain the empty/meaningless fields  because this is the format needed for BinarySearch() method
       # This doesn't matter though because weight has no meaning for boolean search and is not used in the calculation for the result set
       binary_clean_data[field] = {'weight':1}
-
+  print("print binary_clean_data: ", binary_clean_data)
+  print("print clean_data: ", clean_data)
 
   #Compute boolean/binary search for items with weighting = 5
   bin_obj = binary_search.BinarySearch()
@@ -149,15 +150,12 @@ def do_query(data, allDocs):
   res = es.search(index="amazon", body=query)
   output_binary = Backend_Helper.refineResult(res)
 
-  print("output Binary")
-  print(output_binary) #should be all attributes if no attribute has weight 5
 
   res_search = list()
 
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
-  print(field_value_dict)
 
   #Get total cumulative weight cum_weight (for example for all attributes weights were 7) and dividue each score by this cum_weight
   cum_weight = 0
@@ -167,10 +165,8 @@ def do_query(data, allDocs):
       if field_weight != 5: ##Shouldn't happen though because they have already been removed from clean_data
         cum_weight += field_weight
 
+  print("cum_weight: ", cum_weight)
 
-
-
-  #todo: erase attributes from field_value_dict that are boolean/weight =5
 
   # --------------------------------------------------------------------#
   # Objects for each class to use the vague searching functions
@@ -194,16 +190,18 @@ def do_query(data, allDocs):
 
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
-
   if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
-    res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
-                                                                                          harddrive_searcher,
-                                                                                          res_search)
+    # res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
+    #                                                                                       harddrive_searcher,
+    #                                                                                       res_search)
+    res_search = vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
+                                                                           harddrive_searcher,
+                                                                           res_search)
   #  --------------------------------------------------------------------#
   # Special case to handle price
-
   if 'price' in clean_data and len(clean_data["price"]) > 1:                                                                        ##NEW##########
-    res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
+    #res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
+    res_search = vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
 
   # --------------------------------------------------------------------#
   # Gets scores for all other attributes
@@ -211,8 +209,7 @@ def do_query(data, allDocs):
                                          alexa_searcher)
 
   # --------------------------------------------------------------------#
-  # resList is a list containing a dictionary of ASIN: score values
-  # resList = [dict(x) for x in (resVagueListPrice, resVagueListHardDrive)]
+
   resList = [dict(x) for x in res_search]
 
   # Counter objects count the occurrences of objects in the list...
@@ -220,18 +217,9 @@ def do_query(data, allDocs):
   for tmp in resList:
     count_dict += Counter(tmp)
 
-  ####new from beshoy
-  # convert counter to dictionary
   result = dict(count_dict)
-  #print("result")
-  #print(result)
   sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
-  #print("sortedDict")
-  #print(sortedDict)
-  # get the keys(asin values)
   asinKeys = list(result.keys())
-  # print("asinKeys")
-  # print(asinKeys)
 
   # call the search function
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
@@ -239,16 +227,15 @@ def do_query(data, allDocs):
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
 
-  # add a vagueness score to the returned objects
+  # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
-    #print(item['asin'])
     # Normalize the scores so that for each score x,  0< x <=1
     item['vaguenessScore'] = result[item['asin']]/cum_weight
 
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
   for item in output_binary: #binary search results that did not meet other vague requirements
-    item['vaguenessScore'] =0
+    item['vaguenessScore'] =None
 
   # concatenate with products with weighting 5 *******
   outputProducts = outputProducts + output_binary
@@ -262,13 +249,17 @@ def do_query(data, allDocs):
   s_p = SortByPrice()
   outputProducts = s_p.sort_by_price(outputProducts)
 
-  #DELETE all products with vagueness_score = 0
+  # #DELETE all products with vagueness_score = 0
   outputProducts_vaguenessGreaterZero = list()
   for laptop in outputProducts:
-    if laptop["vaguenessScore"] > 0:
+    if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
 
+  print("first product in outputproducts_vaguenessGreaterZero: ", outputProducts_vaguenessGreaterZero[0])
   return outputProducts_vaguenessGreaterZero
+
+  #print("first product in outputproducts: ", outputProducts[0])
+  #return outputProducts
 
 
 def filter_from_boolean(outputProducts, output_binary):
@@ -281,9 +272,6 @@ def filter_from_boolean(outputProducts, output_binary):
   for key, value in counter.items():
     if value > 1:
       duplicate_list.append(key)
-
-  #print("duplicate_list")
-  #print(duplicate_list)
 
   # copy only items that are in both lists
   outputProducts = [item for item in outputProducts if item['asin'] in duplicate_list]
@@ -377,8 +365,8 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
   # --------------------------------------------------------------------#
   # Extracts each field and its value and weight to the dict
   for field_type in field_value_dict.keys():
-    print("field_type")
-    print(field_type)
+    # print("field_type")
+    # print(field_type)
 
     for field_name in field_value_dict[field_type]:
       if field_name != "price" and field_name != "hardDriveSize":
@@ -419,8 +407,6 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
   return res_search
 
 def getElementsByAsin(asinKeys):
-  # print(asinKeys)
-  # print(len(asinKeys))
   result = es.search(index="amazon", body={
                                               "query": {
                                                   "terms": {
@@ -430,8 +416,7 @@ def getElementsByAsin(asinKeys):
                                               }, "size":7000
 
                                             })
-  # print("elastic search result")
-  # print(result)
+
   return Backend_Helper.refineResult(result)
 
 
