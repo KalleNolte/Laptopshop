@@ -269,7 +269,7 @@ def do_query(data, allDocs):
       outputProducts_vaguenessGreaterZero.append(laptop)
 
   print(outputProducts_vaguenessGreaterZero[0])
-
+  print(outputProducts[-1]["vaguenessScore"])
   return outputProducts_vaguenessGreaterZero
 
 
