@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   ViewChild,
-  AfterViewInit,
   HostListener,
   ElementRef
 } from "@angular/core";
@@ -10,40 +9,70 @@ import { FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
 import { Laptop } from "../laptop";
-import { moveIn, fallIn } from "../routing.animations";
 import data from "../../assets/dummyData.json";
+import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
-  animations: [moveIn(), fallIn()],
-  host: { "[@moveIn]": "" }
+  styleUrls: ["./home.component.scss"]
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit {
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
   firstTime = true;
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   brands = [
     { id: "acer", name: "Acer" },
     { id: "apple", name: "Apple" },
-    { id: "dell", name: "DELL" }
+    { id: "asus", name: "Asus" },
+    { id: "fujitsu", name: "Fujitsu" },
+    { id: "hp", name: "HP" },
+    { id: "huawei", name: "Huawei" },
+    { id: "lenovo", name: "Lenovo" },
+    { id: "medion", name: "Medion" },
+    { id: "msi", name: "MSI" },
+    { id: "razer", name: "Razer" },
+    { id: "samsung", name: "Samsung" },
+    { id: "sony", name: "Sony" },
+    { id: "toshiba", name: "Toshiba" },
+  ];
+  
+  prices = [
+    { id: { maxValue: 200 }, name: "< 200 €" },
+    { id: { minValue: 200, maxValue: 400 }, name: "200 - 400 €" },
+    { id: { minValue: 400, maxValue: 600 }, name: "400 - 600 €" },
+    { id: { minValue: 600, maxValue: 800 }, name: "600 - 800 €" },
+    { id: { minValue: 800, maxValue: 1000 }, name: "800 - 1000 €" },
+    { id: { minValue: 1000 }, name: "> 1000 €" }
+  ];
+  
+  ratings = [
+    { id: 1, name: "1 Star and more" },
+    { id: 2, name: "2 Stars and more" },
+    { id: 3, name: "3 Stars and more" },
+    { id: 4, name: "4 Stars and more" },
   ];
 
   chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
 
+
   screenSizes = [
-    { id: 1, name: "< 25 cm (10'')" },
-    { id: 2, name: "28 - 30 cm (11''-12'')" },
-    { id: 3, name: "33 - 36 cm (13''-14'')" },
-    { id: 4, name: "38 - 41 cm (15''-16'')" },
-    { id: 5, name: "> 43 cm (17'')" }
+    { id: { maxValue: 10 }, name: "< 25 cm (10'')" },
+    { id: { minValue: 11, maxValue: 12 }, name: "28 - 30 cm (11''-12'')" },
+    { id: { minValue: 13, maxValue: 14 }, name: "33 - 36 cm (13''-14'')" },
+    { id: { minValue: 15, maxValue: 16 }, name: "38 - 41 cm (15''-16'')" },
+    { id: { minValue: 17 }, name: "> 43 cm (17'')" }
   ];
+
 
   processorTypes = [
     { id: 2, name: "2 Cores" },
@@ -53,10 +82,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ];
 
   processorSpeeds = [
-    { id: 2, name: "< 2 GHz" },
-    { id: 3, name: "< 3 GHZ" },
-    { id: 4, name: "< 4 GHz" },
-    { id: 5, name: "< 5 GHz" }
+    { id: { maxValue: 1.5 }, name: "< 1.5 GHz" },
+    { id: { minValue: 1.5, maxValue: 1.9 }, name: "1.5 - 1.9 GHZ" },
+    { id: { minValue: 2, maxValue: 2.9 }, name: "2 - 2.9 GHz" },
+    { id: { minValue: 3 }, name: "> 3 GHz" }
   ];
 
   hardDriveTypes = [
@@ -66,11 +95,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ];
 
   hardDriveSizes = [
-    { id: 128, name: "up to 128 GB" },
-    { id: 256, name: "128 - 256 GB" },
-    { id: 512, name: "256 - 512 GB" },
-    { id: 1, name: "512 - 1 TB" },
-    { id: 2, name: "1 - 2 TB" }
+    { id: { maxValue: 128 }, name: "< 128 GB" },
+    { id: { minValue: 128, maxValue: 256 }, name: "128 - 256 GB" },
+    { id: { minValue: 256, maxValue: 512 }, name: "256 - 512 GB" },
+    { id: { minValue: 512, maxValue: 1000 }, name: "512 - 1 TB" },
+    { id: { minValue: 1000, maxValue: 2000 }, name: "1 - 2 TB" }
   ];
 
   operatingSystems = [
@@ -82,17 +111,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ramOptions = [
     { id: 2, name: "2 GB" },
     { id: 4, name: "4 GB" },
+    { id: 6, name: "6 GB" },
     { id: 8, name: "8 GB" },
-    { id: 16, name: "16 TB" },
-    { id: 32, name: "32 TB" }
+    { id: 12, name: "12 GB" },
+    { id: 16, name: "16 GB" },
+    { id: 24, name: "24 GB" },
+    { id: 32, name: "32 GB" }
   ];
 
   weights = [
-    { id: 1, name: "< 1 kg" },
-    { id: 2, name: "1 - 1.5 kg" },
-    { id: 3, name: "1.5 - 2 kg" },
-    { id: 4, name: "2 - 2.5 kg" },
-    { id: 5, name: "> 2.5 kg" }
+    { id: { maxValue: 1 }, name: "< 1 kg" },
+    { id: { minValue: 1, maxValue: 1.5 }, name: "1 - 1.5 kg" },
+    { id: { minValue: 1.5, maxValue: 2 }, name: "1.5 - 2 kg" },
+    { id: { minValue: 2, maxValue: 2.5 }, name: "2 - 2.5 kg" },
+    { id: { minValue: 2.5 }, name: "> 2.5 kg" }
   ];
 
   widgetForm = this.fb.group({
@@ -100,12 +132,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       brandNameValue: this.fb.array([]),
       weight: [1]
     }),
-    chipsetBrand: this.fb.group({
-      chipsetBrandValue: this.fb.array([]),
+    price: this.fb.group({
+      priceRange: this.fb.array([]),
       weight: [1]
     }),
-    screenSize: this.fb.group({
-      screenSizeValue: this.fb.array([]),
+    rating: this.fb.group({
+      ratingValue: this.fb.array([]),
+      weight: [1]
+    }),
+    chipsetBrand: this.fb.group({
+      chipsetBrandValue: this.fb.array([]),
       weight: [1]
     }),
     processorType: this.fb.group({
@@ -113,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       weight: [1]
     }),
     processorSpeed: this.fb.group({
-      processorSpeedValue: this.fb.array([]),
+      processorSpeedRange: this.fb.array([]),
       weight: [1]
     }),
     processorCount: this.fb.group({
@@ -125,7 +161,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       weight: [1]
     }),
     hardDriveSize: this.fb.group({
-      hardDriveSizeValue: this.fb.array([]),
+      hardDriveSizeRange: this.fb.array([]),
       weight: [1]
     }),
     operatingSystem: this.fb.group({
@@ -137,7 +173,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       weight: [1]
     }),
     weight: this.fb.group({
-      weightValue: this.fb.array([]),
+      weightRange: this.fb.array([]),
       weight: [1]
     })
   });
@@ -145,11 +181,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   globalForm = new FormGroup({
     globalSearch: new FormControl()
   });
-
-  @ViewChild(MatSort) sort: MatSort;
-
-  sticky: boolean = false;
-  elementPosition: any;
 
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
@@ -161,14 +192,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.getLaptops();
     }
-    // Clear empty fields in FormArray
-
-    // const i = this.brandNames.controls.findIndex(x => x.value === "");
-    // this.brandNames.removeAt(i);
-  }
-
-  ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
   }
 
   get brandNames() {
@@ -182,17 +205,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  // touchFormFields(formGroup: FormGroup) {
-  //   Object.keys(formGroup.controls).forEach(field => {
-  //     const control = formGroup.get(field);
-  //     if (control instanceof FormControl) {
-  //       control.markAsTouched({ onlySelf: true });
-  //     } else if (control instanceof FormGroup) {
-  //       this.touchFormFields(control);
-  //     }
-  //   });
-  // }
 
   submitFormControls(formGroup: FormGroup) {
     console.log(formGroup.controls);
@@ -220,6 +232,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      console.log(this.dataSource);
     });
   }
 

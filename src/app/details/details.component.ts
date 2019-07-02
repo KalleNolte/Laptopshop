@@ -17,8 +17,6 @@ import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/styl
   selector: "app-details",
   templateUrl: "./details.component.html",
   styleUrls: ["./details.component.scss"],
-  animations: [moveIn(), fallIn()],
-  host: { "[@moveIn]": "" }
 })
 export class DetailsComponent implements OnInit {
 
