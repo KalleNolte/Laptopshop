@@ -13,6 +13,8 @@ class ColorInformation:
     self.threshholdPrice = 0
     self.price_scores = price_scores
 
+    self.threshholdHardwareSize = 0
+
 
 
   #extract searched key value pair
@@ -146,5 +148,5 @@ class ColorInformation:
 
 
 
-
+  #def prozessColorAttribbuteHardwareSize(self,searchedValues,laptops):
 
