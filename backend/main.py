@@ -215,7 +215,7 @@ def do_query(data, allDocs):
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
-  outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
+
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -229,7 +229,6 @@ def do_query(data, allDocs):
     item['vaguenessScore'] =None
 
   # concatenate with products with weighting 5 *******
-  outputProducts = outputProducts + output_binary
 
   # products with same vagueness score should be listed according to price descending
 
@@ -246,6 +245,8 @@ def do_query(data, allDocs):
   for laptop in outputProducts:
     if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
+
+  outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
   outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
   c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
