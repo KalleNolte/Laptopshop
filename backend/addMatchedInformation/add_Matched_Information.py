@@ -1,4 +1,4 @@
-from backend.vagueFunctions.vague_search_price import VagueSearchPrice
+from vagueFunctions.vague_search_price import VagueSearchPrice
 
 #Changed vague_search_price to access vagnuess-scores
 
@@ -46,7 +46,7 @@ class ColorInformation:
   #   }
   #
   def prozessDataBinary(self,searchedValues):
-    print(self.price_scores)
+    print("fuckin ",type(searchedValues))
     self.threshholdPrice = self.prozessThreshholdPrice(searchedValues)
 
     for laptop in self.products:
@@ -58,7 +58,7 @@ class ColorInformation:
         self.matched['price'] = 'green'
 
 
-      for key in searchedValues:
+      '''for key in searchedValues:
       #special case for price field, containing 3 infos instead of 2-------------------------------------#
         if key   == 'minValue':
           self.prozessColorAttributePrice(searchedValues,laptop)
@@ -83,7 +83,7 @@ class ColorInformation:
             if ((laptop[key[:-5]] is not None) and not laptop[key[:-5]] == searchedValues[key]):
               self.matched[key[:-5]] = 'red'
             else:
-             self.matched[key[:-5]] = 'green'
+             self.matched[key[:-5]] = "green"'''
         #---------------------------------------------------------------------------------------------------#
 
 
@@ -96,7 +96,6 @@ class ColorInformation:
       self.matched = {}
       #----------------------------------------------------------------------#
 
-    print("In mathcer", VagueSearchPrice.price_scores)
 
   #Calculation of threshhold--------------------#
   #---------------------------------------------#
@@ -143,8 +142,3 @@ class ColorInformation:
       self.matched['price'] = 'yellow'
     if score < 0.985:
       self.matched['price'] = 'red'
-
-
-
-
-

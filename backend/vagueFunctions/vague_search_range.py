@@ -15,14 +15,16 @@ class VagueSearchRange():
           allValues.append(float(doc['_source'][fieldName]))
 
     allValues = np.sort((np.array(allValues)))
-    # print("allPrices: ", allPrices)
-    print(fieldName)
-    print(weight)
-    print(minValue)
-    print(maxValue)
+
+
+    if maxValue is None :
+        maxValue = allValues[-1]
+    if minValue is None:
+        minValue = allValues[0]
+
     lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
     upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
-    if minValue == 0 :
+    if minValue == 0:
         lowerSupport = 0
 
     trapmf = fuzz.trapmf(allValues, [lowerSupport, float(minValue), float(maxValue), upperSupport])
@@ -41,7 +43,6 @@ class VagueSearchRange():
     # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
     # (whose price actually between the minPrice and maxPrice) because we just want to get the first 100 element
     res = self.es.search(index="amazon", body=body, size=10000)
-    print(res)
 
     result = []
     for hit in res['hits']['hits']:

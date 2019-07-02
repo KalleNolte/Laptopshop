@@ -5,8 +5,8 @@ import numpy as np
 from collections import Counter
 import json
 from collections import defaultdict
-from backend.helper import Backend_Helper
-from backend.binaryFunctions import binary_search
+from helper import Backend_Helper
+from binaryFunctions import binary_search
 
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
@@ -25,7 +25,7 @@ def searchBinary():
     bin_obj = binary_search.BinarySearch();
     query = bin_obj.createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
-    #print(res)
+
     return jsonify(Backend_Helper.refineResult(res))
 
 @app.route('/api/search/alexa', methods=['POST'])
@@ -49,10 +49,8 @@ def alexa_search():
     clean_data = Backend_Helper.clean_frontend_json(data)
     bin_obj = binary_search.BinarySearch();
     query = bin_obj.createBinarySearchQuery(clean_data)
-    print(query)
     res = es.search(index="amazon", body=query)
-    print("-----")
-    print(res)
+
 
     return jsonify(Backend_Helper.refineResult(res))
 

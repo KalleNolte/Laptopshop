@@ -2,10 +2,10 @@ import skfuzzy as fuzz
 import numpy as np
 
 class VagueHardDrive():
-  def __init__(self, es):
+    def __init__(self, es):
         self.es = es
 
-  def computeVagueHardDrive(self, allDocs,  weight, minValue, maxValue):
+    def computeVagueHardDrive(self, allDocs,  weight, minValue, maxValue):
 
       allHardDrives = []
       for doc in allDocs['hits']['hits']:
@@ -19,16 +19,18 @@ class VagueHardDrive():
       allHardDrives = np.sort((np.array(allHardDrives)))
 
 
+      if maxValue is None :
+          maxValue = allValues[-1]
+      if minValue is None:
+          minValue = allValues[0]
+
+
       # in case the user enter the hard Drive size as a range
-      if (maxValue):
-        lowerSupport = float(minValue) - ((float(minValue) - allHardDrives[0]) / 2)
-        upperSupport = float(maxValue) + ((allHardDrives[-1] - float(maxValue)) / 2)
-        vagueFunction = fuzz.trapmf(allHardDrives, [lowerSupport, float(minValue), float(maxValue), upperSupport])
+      lowerSupport = float(minValue) - ((float(minValue) - allHardDrives[0]) / 2)
+      upperSupport = float(maxValue) + ((allHardDrives[-1] - float(maxValue)) / 2)
+      vagueFunction = fuzz.trapmf(allHardDrives, [lowerSupport, float(minValue), float(maxValue), upperSupport])
       # in case the user enter the hard drive as a single value
-      else:
-        lowerSupport = float(minValue) - ((float(minValue) - allHardDrives[0]) / 2)
-        upperSupport = float(minValue) + ((allHardDrives[-1] - float(minValue)) / 2)
-        vagueFunction = fuzz.trimf(allHardDrives, [lowerSupport, float(minValue), upperSupport])
+
 
 
       body = {
@@ -82,15 +84,22 @@ class VagueHardDrive():
       # print("print result of computeVagueHardDriveFunction")
       return result
 
-def computeVagueHardDrive_alternative(allDocs, clean_data, harddrive_searcher, res_search):
-  # Special case to handle hardDriveSize, length is >1 if it has values other than weight
-  #if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
-  hd_size_weight = clean_data['hardDriveSize']["weight"]
-  if "value" in clean_data["hardDriveSize"]:  # Discrete value needed not a range
-    hd_size_min = clean_data['hardDriveSize']["value"]
-    res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hd_size_weight, hd_size_min, None))
-  else:
-    hd_size_min = clean_data['hardDriveSize']["minValue"]
-    hd_size_max = clean_data['hardDriveSize']["maxValue"]
-    res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs, hd_size_weight, hd_size_min, hd_size_max))
-  return res_search
+    def computeVagueHardDrive_alternative(self,allDocs, clean_data, harddrive_searcher, res_search):
+      # Special case to handle hardDriveSize, length is >1 if it has values other than weight
+      #if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
+      hd_size_weight = clean_data["range"]['hardDriveSize']["weight"]
+      if "range" in clean_data["range"]["hardDriveSize"]:
+          for range in   clean_data["range"]["hardDriveSize"]["range"] :
+              if "minValue" in range and "maxValue" in range:
+                min_value = range["minValue"]
+                max_value = range["maxValue"]
+                res_search.append(
+                  harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, max_value)) # Discrete value needed not a range
+              elif "minValue" in range:
+                min_value = range["minValue"]
+                res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, None))
+
+              elif "maxValue" in field_value_dict[field_type][field_name]:
+                max_value = range["maxValue"]
+                res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, None, max_value))
+      return res_search
