@@ -14,13 +14,16 @@ import { moveIn, fallIn } from "../routing.animations";
 import data from "../../assets/dummyData.json";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
+import * as $ from 'jquery/dist/jquery.min.js';
+
+
+declare const test: any;
+
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
-  animations: [moveIn(), fallIn()],
-  host: { "[@moveIn]": "" }
 })
 export class HomeComponent implements OnInit, AfterViewInit {
   // dummyData = <any>data;
@@ -257,4 +260,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
     });
   }
+  onInputChange(event: any) {
+    if(event.value == 5){
+      console.log("fhfhfhf");
+      console.log(event.source);
+      $(event.source).find('.mat-slider-thumb').css('background-color', 'red');
+    }
+  }
+  createRange(number){
+  var items: number[] = [];
+  for(var i = 1; i <= number; i++){
+     items.push(i);
+  }
+  return items;
+}
+
 }
