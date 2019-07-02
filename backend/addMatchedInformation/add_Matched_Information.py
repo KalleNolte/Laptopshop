@@ -1,52 +1,151 @@
 from vagueFunctions.vague_search_price import VagueSearchPrice
+import numpy as np
 
 #Changed vague_search_price to access vagnuess-scores
 
 class ColorInformation:
 
-  #data is the given json file trasmitted from angular
-  #products should be initialized with ordered output set
-  def __init__(self, data, products, price_scores):
-    self.data = data
-    self.products = products
-    self.matched = {}
-    self.threshholdPrice = 0
-    self.price_scores = price_scores
-
-
 
   #extract searched key value pair
   #return as a dictionary---------
   #------------------------------#
-  def extractKeyValuePairs(self):
-    #print(self.data)
-    searchedValues = {}
-    for key in self.data:
-      #if type(self.data[key]) == type(dict()):
-        for nestedKey in self.data[key]:
-          if nestedKey != "weight" and self.data[key][nestedKey] != "":
-            searchedValues[nestedKey] = self.data[key][nestedKey]
-      #else:
-        #print(key)
-       # if self.data[key] != "" and key != 'weight':
-        #  searchedValues[key]= self.data[key]
-          #updated Version
-          #searchedValues[key][key+"Value"]
-    return searchedValues
+  def add_matched_information(self,query,laptops,allDocs):
+
+
+    for laptop in laptops:
+        result = list()
+        for field in laptop :
+            if laptop[field] is not None :
+                if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
+
+                    color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
+                    result.append({field:color_value})
+
+                elif field in query :
+
+                    field_range_name = field+"Range"
+                    field_value_name = field+"Value"
+
+                    if field is "price" :
+
+                      color_value = get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
+                      result.append({field:color_value})
+
+                    elif field_range_name in query[field] :
+
+                      color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
+                      result.append({field:color_value})
+
+                    elif field_value_name in query[field]:
+
+                      color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
+                      result.append({field:color_value})
+        laptop.update({"matched":result})
 
 
 
-  #add for each laptop in products the matched key with nested key - value pairs
-  #   Example:
-  #   ...
-  #   matched{
-  #     'brandName': 'green',
-  #     'price': 'red',
-  #     'hardDriveType': 'green'
-  #   }
-  #
+    return result
+
+
+  def get_discrete_value_field_color(self,laptop_value,query_values,allDocs,field_name):
+
+      for value in query_values :
+          if value == laptop_value :
+              return "green"
+      #==========================Yellow=========================#
+      allValues = []
+
+      for doc in allDocs['hits']['hits']:
+        if (doc['_source'][field_name]) :
+            allValues.append(float(doc['_source'][field_name]))
+
+      allValues = np.sort((np.array(allValues)))
+      # print("allPrices: ", allPrices)
+      for value in query_values :
+        lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
+        upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
+        if laptop_value >= lowerSupport and laptop_value <= upperSupport :
+            return "yellow"
+
+      return "red"
+  def get_ranged_field_color(self,laptop_value,query_values,allDocs,field_name):
+
+      for value in query_values :
+
+          if "minValue" in value and "maxValue" in value :
+
+              if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
+                  return "green"
+              maxValue = value["maxValue"]
+              minValue = value["minValue"]
+
+          elif "minValue" in value  :
+
+              if laptop_value >= value["minValue"]:
+                  return "green"
+              maxValue = None
+              minValue = value["minValue"]
+
+          elif "maxValue" in value  :
+
+              if laptop_value >= value["maxValue"]:
+                  return "green"
+              maxValue = value["maxValue"]
+              minValue = None
+
+      #==========================Yellow=========================#
+      allValues = []
+      for doc in allDocs['hits']['hits']:
+        if (doc['_source'][field_name]) :
+            allValues.append(float(doc['_source'][field_name]))
+
+      allValues = np.sort((np.array(allValues)))
+      for value in query_values :
+          if maxValue is None :
+              maxValue = allValues[-1]
+          if minValue is None:
+              minValue = allValues[0]
+
+          lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
+          upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
+          if minValue == 0:
+              lowerSupport = 0
+
+          if laptop_value >= lowerSupport and laptop_value <= upperSupport :
+              return "yellow"
+      return "red"
+
+  def get_price_field_color(self,laptop_value,query_values,allDocs,field_name):
+      best_answer = "red"
+      for value in query_values :
+
+          if "minValue" in value and "maxValue" in value :
+              if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
+                  answer =  "green"
+
+          elif "minValue" in value  :
+              if laptop_value >= value["minValue"]:
+                  answer =  "green"
+
+          elif "maxValue" in value  :
+              if laptop_value >= value["maxValue"]:
+                  answer =  "green"
+
+          if answer == "green" :
+              return answer
+
+          else :
+              answer = self.prozessColorAttributePrice(value,laptop_value)
+
+          if answer == "green" :
+              return answer
+          if answer == "yellow" :
+              best_answer = "yellow"
+
+      return best_answer
+
+
   def prozessDataBinary(self,searchedValues):
-    print("fuckin ",type(searchedValues))
     self.threshholdPrice = self.prozessThreshholdPrice(searchedValues)
 
     for laptop in self.products:
@@ -113,21 +212,22 @@ class ColorInformation:
 
   #Price can be green, yellow or red, depending on the threshhold-----------------#
   #-------------------------------------------------------------------------------#
-  def prozessColorAttributePrice(self,searchedValues,laptop):
+  def prozessColorAttributePrice(self,searchedValues,laptop_value):
+    threshholdPrice = self.prozessThreshholdPrice(searchedValues)
     try:
-      if (laptop["price"] >= float(searchedValues['minValue'])-self.threshholdPrice):
-        if (float(laptop["price"]) < float(searchedValues["minValue"])):
-          self.matched['price'] = 'yellow'
+      if (laptop_value >= float(searchedValues['minValue'])-threshholdPrice):
+        if (float(laptop_value) < float(searchedValues["minValue"])):
+          return 'yellow'
       else:
-        self.matched['price'] = 'red'
+        return 'red'
     except:
       pass
     try:
-      if (laptop["price"] <= float(searchedValues['maxValue'])+self.threshholdPrice):
-        if (float(laptop["price"]) > float(searchedValues["maxValue"])):
-          self.matched['price'] = 'yellow'
+      if (laptop_value <= float(searchedValues['maxValue'])+threshholdPrice):
+        if (float(laptop_value) > float(searchedValues["maxValue"])):
+          return 'yellow'
       else:
-        self.matched['price'] = 'red'
+        return 'red'
     except:
       pass
 

@@ -172,8 +172,7 @@ def do_query(data, allDocs):
   ######################################################################## NEW #########################################
   #Function call in ColorInformation to extract searched values.
   #function extractKeyValuePairs() will do that.
-  c_i_helper = ColorInformation(data, None, VagueSearchPrice.price_scores)
-  searchedValues = c_i_helper.extractKeyValuePairs()
+  c_i_helper = ColorInformation()
   price_searcher = vague_search_price.VagueSearchPrice(es)
   ######################################################################## NEW #########################################
 
@@ -233,9 +232,9 @@ def do_query(data, allDocs):
   outputProducts = outputProducts + output_binary
 
   # products with same vagueness score should be listed according to price descending
-  c_i = ColorInformation(data, outputProducts, VagueSearchPrice.price_scores)
-  searchedValues = c_i.extractKeyValuePairs()
-  c_i.prozessDataBinary(searchedValues)
+
+  #searchedValues = c_i.extractKeyValuePairs()
+  #c_i.prozessDataBinary(searchedValues)
 
   # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
   s_p = SortByPrice()
@@ -243,9 +242,12 @@ def do_query(data, allDocs):
 
   # #DELETE all products with vagueness_score = 0
   outputProducts_vaguenessGreaterZero = list()
+
   for laptop in outputProducts:
     if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
+  outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
+  c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
   return outputProducts_vaguenessGreaterZero
 
