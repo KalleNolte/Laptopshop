@@ -17,11 +17,8 @@ import { DataSource } from "@angular/cdk/table";
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
-
   styleUrls: ["./home.component.scss"],
   providers: [DataService],
-  styleUrls: ["./home.component.scss"]
-
 })
 export class HomeComponent implements OnInit {
   // dummyData = <any>data;

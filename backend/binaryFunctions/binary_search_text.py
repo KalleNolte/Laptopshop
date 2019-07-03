@@ -15,11 +15,10 @@ class BinarySearchText:
         for value in field_values:
           innerList.append({'match':{field_name: value}})
 
-        print("innerList")
-        print(innerList)
 
 
-            # #The following is a case insensitive search
+
+        # #The following is a case insensitive search
         body = {
         #           "query":{
         #             "bool":{
@@ -42,7 +41,7 @@ class BinarySearchText:
           }
 
         }
-
+        print(body)
         res = self.es.search(index="amazon", body=body, size=10000)
 
 

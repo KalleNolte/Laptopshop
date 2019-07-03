@@ -216,19 +216,6 @@ def do_query(data, allDocs):
 
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
 
-@app.route('/api/<asin>', methods =['GET'])
-def getElementByAsin(asin):
-    product = es.search(index='amazon', body ={
-                                                "query":{
-                                                    "match":{
-                                                        "asin" : asin
-                                                      }
-                                                    },
-                                                  "size":1
-                                              })
-    product = Backend_Helper.refineResult(product)
-    return jsonify(product)
-
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -313,7 +300,7 @@ def extract_fields_and_values(fieldNameToValueDict):
     # --------------------------------------------------------------------------------------------------------------------------------#
     # In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
     elif value_field_name in fieldNameToValueDict[fieldName]:
-      if type(fieldNameToValueDict[fieldName][value_field_name]) is list:
+      if type(fieldNameToValueDict[fieldName][value_field_name]) is list and len(fieldNameToValueDict[fieldName][value_field_name]) > 0:
         if type(fieldNameToValueDict[fieldName][value_field_name][0]) is str:
           fieldNameToValueDict[fieldName][value_field_name] = [x.lower() for x in
                                                                fieldNameToValueDict[fieldName][value_field_name]]

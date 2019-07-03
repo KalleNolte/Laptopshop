@@ -3,6 +3,8 @@ class Backend_Helper:
 
     @staticmethod
     def clean_frontend_json(json_dict) :
+        print('before cleaning')
+        print(json_dict)
         result = dict()
         for key in json_dict :
             result[key] = dict()
@@ -16,6 +18,7 @@ class Backend_Helper:
                     result[key].update({sub_key:value})
                 elif sub_key == "weight" and not json_dict[key][sub_key] :
                     result[key].update({sub_key:1})
+        print("after cleanfin",result)
         return result
 
     @staticmethod
