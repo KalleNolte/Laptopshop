@@ -37,15 +37,26 @@ class ColorInformation:
                       result.append({field:color_value})
 
                     elif field_value_name in query[field]:
-
-                      color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
-                      result.append({field:color_value})
+                      if type(query[field][field_value_name]) is str :
+                          color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
+                          result.append({field:color_value})
+                      else :
+                          color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
+                          result.append({field:color_value})
         laptop.update({"matched":result})
 
 
 
     return result
 
+
+  def get_text_value_field_color(self,laptop_value,query_values,allDocs,field_name):
+
+      for value in query_values :
+          if value == laptop_value :
+              return "green"
+
+      return "red"
 
   def get_discrete_value_field_color(self,laptop_value,query_values,allDocs,field_name):
 
