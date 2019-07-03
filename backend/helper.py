@@ -6,18 +6,15 @@ class Backend_Helper:
         print('before cleaning')
         print(json_dict)
         result = dict()
-        for key in json_dict :
-            result[key] = dict()
-            for sub_key in json_dict[key] :
-                if json_dict[key][sub_key] or type(json_dict[key][sub_key]) is list or Backend_Helper.is_integer(json_dict[key][sub_key]) or Backend_Helper.is_float(json_dict[key][sub_key]):
-                    value = json_dict[key][sub_key]
-                    if type(json_dict[key][sub_key]) is not list and Backend_Helper.is_integer(value) :
-                        value = int(value)
-                    elif type(json_dict[key][sub_key]) is not list and Backend_Helper.is_float(value) :
-                        value = float(value)
-                    result[key].update({sub_key:value})
-                elif sub_key == "weight" and not json_dict[key][sub_key] :
-                    result[key].update({sub_key:1})
+        for field in json_dict :
+            field_value_name = field+"Value"
+            field_range_name = field+"Range"
+            if field_range_name in json_dict[field] :
+                if len(json_dict[field][field_range_name]) > 0 :
+                    result.update({field:json_dict[field]})
+            elif field_value_name in json_dict[field] :
+                if len(json_dict[field][field_value_name]) > 0 :
+                    result.update({field:json_dict[field]})
         print("after cleanfin",result)
         return result
 
