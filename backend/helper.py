@@ -3,8 +3,6 @@ class Backend_Helper:
 
     @staticmethod
     def clean_frontend_json(json_dict) :
-        print('before cleaning')
-        print(json_dict)
         result = dict()
         for field in json_dict :
             field_value_name = field+"Value"
@@ -16,6 +14,7 @@ class Backend_Helper:
                 if len(json_dict[field][field_value_name]) > 0 :
                     result.update({field:json_dict[field]})
         print("after cleanfin",result)
+
         return result
 
     @staticmethod
@@ -30,7 +29,7 @@ class Backend_Helper:
                 item.update({field:hit["_source"][field]})
 
             outputProducts.append(item)
-            
+
         return outputProducts
 
     @staticmethod
