@@ -216,6 +216,19 @@ def do_query(data, allDocs):
 
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
 
+@app.route('/api/<asin>', methods =['GET'])
+def getElementByAsin(asin):
+    product = es.search(index='amazon', body ={
+                                                "query":{
+                                                    "match":{
+                                                        "asin" : asin
+                                                      }
+                                                    },
+                                                  "size":1
+                                              })
+    product = Backend_Helper.refineResult(product)
+    return jsonify(product)
+
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:

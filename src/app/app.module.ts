@@ -11,7 +11,7 @@ import { HeaderComponent } from "./header/header.component";
 import { CartComponent } from "./cart/cart.component";
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from "@angular/material/button";
@@ -23,7 +23,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
-import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
+import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
 
 @NgModule({
   declarations: [
@@ -35,6 +35,7 @@ import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@a
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -51,11 +52,12 @@ import {MatTableModule, MatSortModule, MatRadioModule, MatSelectModule} from "@a
     MatSliderModule,
     MatMenuModule,
     MatTableModule,
+    MatPaginatorModule,
     MatSortModule,
     MatRadioModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [HomeComponent, DetailsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

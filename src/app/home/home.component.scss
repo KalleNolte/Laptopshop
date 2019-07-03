@@ -1,20 +1,21 @@
 .headSection {
   h3 {
     width: 20%;
+    padding: 0 0 0 1rem;
   }
   #searchInput {
-    width: 75%;
+    width: 5%;
   }
-  padding: 0 1rem;
+ 
 }
 
 .mainArea {
   .widgetArea {
-    width: 20%;
+    width: 15%;
   }
 
   .listArea {
-    width: 75%;
+    width: 80%;
   }
 
   mat-card-title {
@@ -22,11 +23,7 @@
     font-weight: bold;
   }
 
-  .mat-cart {
-    padding: 1rem;
-  }
-
-  mat-list-item {
+  table {
     cursor: pointer;
   }
 

@@ -5,7 +5,7 @@ class BinarySearchText:
     def __init__(self, es):
         self.es = es
 
-    
+
 
     def compute_binary_text(self, field_name,field_weight,field_values):
         # value could be a list of multiple terms

@@ -1,193 +1,37 @@
-<app-header pageTitle="Details"  helpTitle="Help text for details page"></app-header>
+<app-header pageTitle="Details" helpTitle="Help text for details page"></app-header>
 <mat-card class=alexa-sign>
   <mat-card-header>
-    <div mat-card-avatar  class="alexa-image"></div>
+    <div mat-card-avatar class="alexa-image"></div>
     <mat-card-title>Hint: Use Amazon Alexa to refine your query!</mat-card-title>
     <mat-card-subtitle>(e.g. " I'm looking for a bigger screen")</mat-card-subtitle>
   </mat-card-header>
-</mat-card>
-
-<mat-card  fxLayout="row"  fxLayoutGap="20px" style="padding:20px">
-  
-   <mat-card-content >
-      <img    style="width: 200px;height:200px"mat-card-lg-image src="{{laptop.imagePath}}" alt="surf" >
-   </mat-card-content>
-
-   <mat-card-content  >
-  <!--  <p><strong> Lenovo 320 Business 15.6\" HD Touchscreen Laptop, Intel Quad-Core i7-8550U 1.8GHz 12GB DDR4 256GB SSD DVDRW Dolby Audio 802.11ac Bluetooth USB Type-C Windows 10 (Certified Refurbished)</strong> </p> -->
-  <p><strong>{{laptop.productTitle}} </strong> </p> 
-    <div>
-        <strong>Brand: </strong> {{laptop.processorType}}<br>
-        <strong>RAM: </strong> {{laptop.ram}} GB<br>
-        <strong>Hard drive capacity: </strong>{{laptop.hardDriveSize}} GB<br>
-        <strong>Display size: </strong>{{laptop.displaySize}} Zoll<br>
-        <strong>Operatin System: </strong>{{laptop.operatingSystem}}<br>
-        <strong>Display Resolution: </strong> {{laptop.screenResoultionSize}}
-        
-        <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
-          <div><button mat-raised-button color="primary" routerLink="/home" > Back</button></div>
-            <div><button mat-raised-button color="accent" routerLink="/cart">Add to basket</button></div>
-          <!--<button type="button" style="background-color:blue; color:red">Add to basket</button>-->
-        </div>
- 
-    </div>
-   </mat-card-content>
-</mat-card>
-
-<mat-card  >
-    <p><strong>Product Description:</strong></p>
-    <div>
-        Das Lenovo  IdeaPad 320  ist ein zuverlässiges Notebook, das mit einem Intel® Core i5 Prozessor der 7. Generation ausgestattet ist und genug Leistung für Home-Office- und Privatanwendungen bietet. Ein mattes 15,6-Zoll-Display mit Full HD Auflösung ermöglicht ein augenschonendes Arbeiten in heller Umgebung.
-        Mattes Display für entspannteres Arbeiten
-        Das matte 15,6-Zoll-LED-Display des Lenovo V130-15IKB Notebooks sorgt mit einer Full HD Auflösung von 1920 x 1080 Pixel für ermüdungsfreies Sehen über den ganzen Arbeitstag und verhindert störende Reflexionen. Eine komfortable Eingabe ermöglicht die Lenovo-Tastatur in Standardgröße inklusive Nummernblock
-        
-    </div>
-    
- </mat-card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
- <mat-card style="margin:50px">
-  <form #formDetails="ngForm" (ngSubmit)="searchD(formDetails)">
-   <div>
-    <label > title
-      <input type="text" [(ngModel)]= "laptop.productTitle">
-    </label>
-   </div>
-
-   <div>
-    <label > brand
-      <input type="text" [(ngModel)]= "laptop.brand">
-    </label>
-   </div>
-   <div>
-    <label > ram num
-      <input type="text" [(ngModel)]= "laptop.ram">
-    </label>
-   </div>
-   <div>
-    <label > hardDriveSize num
-      <input type="text" [(ngModel)]= "laptop.hardDriveSize">
-    </label>
-   </div>
-   <div>
-    <label > displaySize num
-      <input type="text" [(ngModel)]= "laptop.displaySize">
-    </label>
-   </div>
-   <div>
-    <label > operatingSystem
-      <input type="text" [(ngModel)]= "laptop.operatingSystem">
-    </label>
-   </div>
-   <div>
-    <label > screenResoultionSize num
-      <input type="text" [(ngModel)]= "laptop.screenResoultionSize">
-    </label>
-   </div>
-   <div>
-    <label > imagePath
-      <input type="text" [(ngModel)]= "laptop.imagePath">
-    </label>
-   </div>
-   <button mat-button  >send</button> (click)="sendData()"
-  </form>
+  <button (click)="sendItem()" *ngIf="laptops">send</button>
+  <button (click)="sendLaptops()" [routerLink]="['/home',laptops]" *ngIf="laptops">Result</button>
 
 </mat-card>
--->
- 
 
-<!--configuration add cart button-->
- <!--
-   <div >
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star checked"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-        </div>
- -->
-    
+<mat-card fxLayout="row" fxLayoutGap="20px" style="padding:20px; position:center" *ngIf="item">
 
-
-
-<!--
-  <mat-card class="example-card">
   <mat-card-content>
-    <mat-card-title-group>
-        
-          <img mat-card-lg-image src="assets\surface.jpeg" alt="surf" >
-      
-      <mat-card-title>Lenovo IdeaPad 320 Business 15.6\" HD Touchscreen Laptop, Intel Quad-Core i7-8550U 1.8GHz 12GB DDR4 256GB SSD DVDRW Dolby Audio 802.11ac Bluetooth USB Type-C Windows 10 (Certified Refurbished)</mat-card-title>
-      <mat-card-subtitle><strong>Brand: </strong><br>
-                         <strong>RAM: </strong><br>
-                         <strong>Hard drive capacity: </strong><br>
-                         <strong>Display size: </strong><br>
-                         <strong>Operatin System: </strong><br>
-                         <strong>Display Resolution: </strong>
-        </mat-card-subtitle>
-    </mat-card-title-group>
+    <img style="width:200px;height:200px" mat-card-lg-image src="{{item.imagePath}}" />
+  </mat-card-content>
+
+  <mat-card-content>
+    <p><strong>{{item.productTitle}} </strong> </p>
+    <div>
+      <strong>Brand: </strong> {{item.brandName}}<br>
+      <strong>RAM: </strong> {{item.ram}} GB<br>
+      <strong>Hard drive capacity: </strong>{{item.hardDriveType}} GB<br>
+      <strong>Display size: </strong>{{item.displaySize}} Zoll<br>
+      <strong>Operatin System: </strong>{{item.operatingSystem}}<br>
+
+
+      <div fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
+        <div><button mat-raised-button color="primary" routerLink="/home"> Back</button></div>
+        <div><button mat-raised-button color="accent" routerLink="/cart">Add to basket</button></div>
+        <!--<button type="button" style="background-color:blue; color:red">Add to basket</button>-->
+      </div>
+
+    </div>
   </mat-card-content>
 </mat-card>
--->
-
-  
-
-<!--
-  <mat-card-actions  style="align:end">
-    pratices makes better
-  </mat-card-actions>
--->
-
-<!--
-<ul>
-  <li>
-    <h2>
-      <a target="_blank" rel="noopener" href="https://angular.io/tutorial"
-        >Tour of Heroes</a
-      >
-    </h2>
-  </li>
-  <li>
-    <h2>
-      <a target="_blank" rel="noopener" href="https://angular.io/cli"
-        >CLI Documentation</a
-      >
-    </h2>
-  </li>
-  <li>
-    <h2>
-      <a target="_blank" rel="noopener" href="https://blog.angular.io/"
-        >Angular blog</a
-      >
-    </h2>
-  </li>
-</ul>
-
--->
