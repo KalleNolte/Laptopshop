@@ -17,9 +17,9 @@ class ColorInformation:
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
-
-                    color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
-                    result.append({field:color_value})
+                    if "hardDriveSize" in query :
+                        color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
+                        result.append({field:color_value})
 
                 elif field in query :
 
@@ -37,7 +37,8 @@ class ColorInformation:
                       result.append({field:color_value})
 
                     elif field_value_name in query[field]:
-                      if type(query[field][field_value_name]) is str :
+                      print(type(query[field][field_value_name]))
+                      if len(query[field][field_value_name]) > 0 and type(query[field][field_value_name][0]) is str :
                           color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
                           result.append({field:color_value})
                       else :
