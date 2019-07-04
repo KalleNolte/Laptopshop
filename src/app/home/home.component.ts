@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
     { id: { minValue: 17 }, name: "> 43 cm (17'')" }
   ];
 
-  processorTypes = [
+  processorCores = [
     { id: 2, name: "2 Cores" },
     { id: 4, name: "4 Cores" },
     { id: 6, name: "6 Cores" },
@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
 
   operatingSystems = [
     { id: "windows", name: "Windows" },
-    { id: "macos", name: "MacOS" },
+    { id: "mac os", name: "MacOS" },
     { id: "linux", name: "Linux" }
   ];
 
@@ -135,8 +135,8 @@ export class HomeComponent implements OnInit {
       priceRange: this.fb.array([]),
       weight: [1]
     }),
-    rating: this.fb.group({
-      ratingValue: this.fb.array([]),
+    avgRating: this.fb.group({
+      avgRatingValue: this.fb.array([]),
       weight: [1]
     }),
     chipsetBrand: this.fb.group({
@@ -147,16 +147,12 @@ export class HomeComponent implements OnInit {
       screenSizeRange: this.fb.array([]),
       weight: [1]
     }),
-    processorType: this.fb.group({
-      processorTypeValue: this.fb.array([]),
+    processorCount: this.fb.group({
+      processorCountValue: this.fb.array([]),
       weight: [1]
     }),
     processorSpeed: this.fb.group({
       processorSpeedRange: this.fb.array([]),
-      weight: [1]
-    }),
-    processorCount: this.fb.group({
-      processorCountValue: this.fb.array([]),
       weight: [1]
     }),
     hardDriveType: this.fb.group({
@@ -171,12 +167,12 @@ export class HomeComponent implements OnInit {
       operatingSystemValue: this.fb.array([]),
       weight: [1]
     }),
-    ramSize: this.fb.group({
-      ramSizeValue: this.fb.array([]),
+    ram: this.fb.group({
+      ramValue: this.fb.array([]),
       weight: [1]
     }),
-    weight: this.fb.group({
-      weightRange: this.fb.array([]),
+    itemWeight: this.fb.group({
+      itemWeightRange: this.fb.array([]),
       weight: [1]
     })
   });

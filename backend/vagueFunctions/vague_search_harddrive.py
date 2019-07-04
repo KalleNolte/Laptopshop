@@ -20,9 +20,9 @@ class VagueHardDrive():
 
 
       if maxValue is None :
-          maxValue = allValues[-1]
+          maxValue = allHardDrives[-1]
       if minValue is None:
-          minValue = allValues[0]
+          minValue = allHardDrives[0]
 
 
       # in case the user enter the hard Drive size as a range
@@ -89,7 +89,7 @@ class VagueHardDrive():
       #if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:
       hd_size_weight = clean_data["range"]['hardDriveSize']["weight"]
       if "range" in clean_data["range"]["hardDriveSize"]:
-          for range in   clean_data["range"]["hardDriveSize"]["range"] :
+          for range in clean_data["range"]["hardDriveSize"]["range"]:
               if "minValue" in range and "maxValue" in range:
                 min_value = range["minValue"]
                 max_value = range["maxValue"]
@@ -99,7 +99,7 @@ class VagueHardDrive():
                 min_value = range["minValue"]
                 res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, None))
 
-              elif "maxValue" in field_value_dict[field_type][field_name]:
+              elif "maxValue" in range:
                 max_value = range["maxValue"]
                 res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, None, max_value))
       return res_search

@@ -73,7 +73,7 @@
         <mat-card-title>Rating</mat-card-title>
         <div *ngFor="let option of ratings">
           <mat-checkbox
-            (change)="onChange($event, 'rating', 'ratingValue')"
+            (change)="onChange($event, 'avgRating', 'avgRatingValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -132,11 +132,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorType">
+      <mat-card fxLayout="column" formGroupName="processorCount">
         <mat-card-title>Processor Type</mat-card-title>
-        <div *ngFor="let option of processorTypes">
+        <div *ngFor="let option of processorCores">
           <mat-checkbox
-            (change)="onChange($event, 'processorType', 'processorTypeValue')"
+            (change)="onChange($event, 'processorCount', 'processorCountValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -239,11 +239,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="operatingSystem">
+      <mat-card fxLayout="column" formGroupName="ram">
         <mat-card-title>Ram Size</mat-card-title>
         <div *ngFor="let option of ramOptions">
           <mat-checkbox
-            (change)="onChange($event, 'ramSize', 'ramSizeValue')"
+            (change)="onChange($event, 'ram', 'ramValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -260,11 +260,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="weight">
+      <mat-card fxLayout="column" formGroupName="itemWeight">
         <mat-card-title>Weight</mat-card-title>
         <div *ngFor="let option of weights">
           <mat-checkbox
-            (change)="onChange($event, 'weight', 'weightRange')"
+            (change)="onChange($event, 'itemWeight', 'itemWeightRange')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >

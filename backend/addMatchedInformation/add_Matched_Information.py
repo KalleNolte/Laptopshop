@@ -11,9 +11,9 @@ class ColorInformation:
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
 
-
+    result = list()
     for laptop in laptops:
-        result = list()
+
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
