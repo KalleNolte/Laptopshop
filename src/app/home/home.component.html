@@ -72,48 +72,6 @@
         </div>
         <mat-slider
           formControlName="weight"
-          min="1"
-          max="5"
-          step="1"
-        ></mat-slider>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-          <span>optional</span>
-          <span>must have</span>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="column" formGroupName="chipsetBrand">
-        <mat-card-title>Rating</mat-card-title>
-        <div *ngFor="let option of ratings">
-          <mat-checkbox
-            (change)="onChange($event, 'avgRating', 'avgRatingValue')"
-            [value]="option.id"
-            >{{ option.name }}</mat-checkbox
-          >
-        </div>
-        <mat-slider
-          formControlName="weight"
-          min="1"
-          max="5"
-          step="1"
-        ></mat-slider>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-          <span>optional</span>
-          <span>must have</span>
-        </div>
-      </mat-card>
-
-      <mat-card fxLayout="column" formGroupName="chipsetBrand">
-        <mat-card-title>Chipset Brand</mat-card-title>
-        <div *ngFor="let option of chipsetBrands">
-          <mat-checkbox
-            (change)="onChange($event, 'chipsetBrand', 'chipsetBrandValue')"
-            [value]="option.id"
-            >{{ option.name }}</mat-checkbox
-          >
-        </div>
-        <mat-slider
-          formControlName="weight"
           color="primary"
           min="1"
           max="5"
@@ -138,10 +96,10 @@
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="chipsetBrand">
-        <mat-card-title>Screen Size</mat-card-title>
-        <div *ngFor="let option of screenSizes">
+        <mat-card-title>Rating</mat-card-title>
+        <div *ngFor="let option of ratings">
           <mat-checkbox
-            (change)="onChange($event, 'screenSize', 'screenSizeRange')"
+            (change)="onChange($event, 'avgRating', 'avgRatingValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -171,11 +129,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorCount">
-        <mat-card-title>Processor Type</mat-card-title>
-        <div *ngFor="let option of processorCores">
+      <mat-card fxLayout="column" formGroupName="chipsetBrand">
+        <mat-card-title>Chipset Brand</mat-card-title>
+        <div *ngFor="let option of chipsetBrands">
           <mat-checkbox
-            (change)="onChange($event, 'processorCount', 'processorCountValue')"
+            (change)="onChange($event, 'chipsetBrand', 'chipsetBrandValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -206,10 +164,10 @@
       </mat-card>
 
       <mat-card fxLayout="column" formGroupName="chipsetBrand">
-        <mat-card-title>Processor Speed</mat-card-title>
-        <div *ngFor="let option of processorSpeeds">
+        <mat-card-title>Screen Size</mat-card-title>
+        <div *ngFor="let option of screenSizes">
           <mat-checkbox
-            (change)="onChange($event, 'processorSpeed', 'processorSpeedRange')"
+            (change)="onChange($event, 'screenSize', 'screenSizeRange')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -239,11 +197,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveType">
-        <mat-card-title>Hard Drive Type</mat-card-title>
-        <div *ngFor="let option of hardDriveTypes">
+      <mat-card fxLayout="column" formGroupName="processorCount">
+        <mat-card-title>Processor Type</mat-card-title>
+        <div *ngFor="let option of processorCores">
           <mat-checkbox
-            (change)="onChange($event, 'hardDriveType', 'hardDriveTypeValue')"
+            (change)="onChange($event, 'processorCount', 'processorCountValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -273,11 +231,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveSize">
-        <mat-card-title>Hard Drive Size</mat-card-title>
-        <div *ngFor="let option of hardDriveSizes">
+      <mat-card fxLayout="column" formGroupName="chipsetBrand">
+        <mat-card-title>Processor Speed</mat-card-title>
+        <div *ngFor="let option of processorSpeeds">
           <mat-checkbox
-            (change)="onChange($event, 'hardDriveSize', 'hardDriveSizeRange')"
+            (change)="onChange($event, 'processorSpeed', 'processorSpeedRange')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -307,13 +265,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="operatingSystem">
-        <mat-card-title>Operating System</mat-card-title>
-        <div *ngFor="let option of operatingSystems">
+      <mat-card fxLayout="column" formGroupName="hardDriveType">
+        <mat-card-title>Hard Drive Type</mat-card-title>
+        <div *ngFor="let option of hardDriveTypes">
           <mat-checkbox
-            (change)="
-              onChange($event, 'operatingSystem', 'operatingSystemValue')
-            "
+            (change)="onChange($event, 'hardDriveType', 'hardDriveTypeValue')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -343,11 +299,11 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="ram">
-        <mat-card-title>Ram Size</mat-card-title>
-        <div *ngFor="let option of ramOptions">
+      <mat-card fxLayout="column" formGroupName="hardDriveSize">
+        <mat-card-title>Hard Drive Size</mat-card-title>
+        <div *ngFor="let option of hardDriveSizes">
           <mat-checkbox
-            (change)="onChange($event, 'ram', 'ramValue')"
+            (change)="onChange($event, 'hardDriveSize', 'hardDriveSizeRange')"
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -377,11 +333,13 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="itemWeight">
-        <mat-card-title>Weight</mat-card-title>
-        <div *ngFor="let option of weights">
+      <mat-card fxLayout="column" formGroupName="operatingSystem">
+        <mat-card-title>Operating System</mat-card-title>
+        <div *ngFor="let option of operatingSystems">
           <mat-checkbox
-            (change)="onChange($event, 'itemWeight', 'itemWeightRange')"
+            (change)="
+              onChange($event, 'operatingSystem', 'operatingSystemValue')
+            "
             [value]="option.id"
             >{{ option.name }}</mat-checkbox
           >
@@ -404,6 +362,74 @@
           value="5"
           *ngIf="arr[9]"
           (change)="onInputChange($event,9)"
+        ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="ram">
+        <mat-card-title>Ram Size</mat-card-title>
+        <div *ngFor="let option of ramOptions">
+          <mat-checkbox
+            (change)="onChange($event, 'ram', 'ramValue')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          color="primary"
+          min="1"
+          max="5"
+          step="1"
+          *ngIf="!arr[10]"
+          (change)="onInputChange($event,10)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[10]"
+          (change)="onInputChange($event,10)"
+        ></mat-slider>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <span>optional</span>
+          <span>must have</span>
+        </div>
+      </mat-card>
+
+      <mat-card fxLayout="column" formGroupName="itemWeight">
+        <mat-card-title>Weight</mat-card-title>
+        <div *ngFor="let option of weights">
+          <mat-checkbox
+            (change)="onChange($event, 'itemWeight', 'itemWeightRange')"
+            [value]="option.id"
+            >{{ option.name }}</mat-checkbox
+          >
+        </div>
+        <mat-slider
+          formControlName="weight"
+          color="primary"
+          min="1"
+          max="5"
+          step="1"
+          *ngIf="!arr[11]"
+          (change)="onInputChange($event,11)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[11]"
+          (change)="onInputChange($event,11)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>

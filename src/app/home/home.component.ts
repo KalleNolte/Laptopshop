@@ -195,7 +195,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.getLaptops();
     }
-    this.arr = new Array(10)
+    this.arr = new Array(12)
     this.arr.fill(0);
     // Clear empty fields in FormArray
 
