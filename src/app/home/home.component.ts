@@ -13,6 +13,11 @@ import data from "../../assets/dummyData.json";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
+import * as $ from 'jquery/dist/jquery.min.js';
+
+
+declare const callme: any;
+
 
 @Component({
   selector: "app-home",
@@ -181,6 +186,12 @@ export class HomeComponent implements OnInit {
     globalSearch: new FormControl()
   });
 
+  @ViewChild(MatSort) sort: MatSort;
+
+
+  arr;
+
+
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -190,6 +201,16 @@ export class HomeComponent implements OnInit {
     } else {
       this.getLaptops();
     }
+    this.arr = new Array(10)
+    this.arr.fill(0);
+    // Clear empty fields in FormArray
+
+    // const i = this.brandNames.controls.findIndex(x => x.value === "");
+    // this.brandNames.removeAt(i);
+  }
+
+  ngAfterViewInit() {
+    // this.dataSource.sort = this.sort;
   }
 
   get brandNames() {
@@ -271,4 +292,19 @@ export class HomeComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
     });
   }
+  onInputChange(event: any, index: number) {
+    if(event.value == 5){
+      this.arr[index] = 1;
+    }else{
+      this.arr[index] = 0;
+    }
+  }
+  createRange(number){
+  var items: number[] = [];
+  for(var i = 1; i <= number; i++){
+     items.push(i);
+  }
+  return items;
+}
+
 }

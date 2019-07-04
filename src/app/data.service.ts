@@ -26,10 +26,12 @@ export class DataService {
   constructor(private http: HttpClient) {}
 
   getSample(): Observable<Laptop[]>{
-    return this.http.get<Laptop[]>('/api/sample')
+    this.saveLaptops(this.http.get<Laptop[]>('/api/sample'));
+    return this.http.get<Laptop[]>('/api/sample');
   }
 
   search(file:any): Observable<Laptop[]>{
+    this.saveLaptops(this.http.post<Laptop[]>('/api/search', file, this.httpOptions));
     return this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
   }
 

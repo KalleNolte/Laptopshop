@@ -38,9 +38,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[0]"
+          (change)="onInputChange($event,0)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[0]"
+          (change)="onInputChange($event,0)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -101,9 +114,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[1]"
+          (change)="onInputChange($event,1)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[1]"
+          (change)="onInputChange($event,1)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -122,9 +148,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[2]"
+          (change)="onInputChange($event,2)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[2]"
+          (change)="onInputChange($event,2)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -143,9 +182,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[3]"
+          (change)="onInputChange($event,3)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[3]"
+          (change)="onInputChange($event,3)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -164,9 +216,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[4]"
+          (change)="onInputChange($event,4)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[4]"
+          (change)="onInputChange($event,4)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -185,9 +250,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[5]"
+          (change)="onInputChange($event,5)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[5]"
+          (change)="onInputChange($event,5)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -206,9 +284,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[6]"
+          (change)="onInputChange($event,6)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[6]"
+          (change)="onInputChange($event,6)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -229,9 +320,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[7]"
+          (change)="onInputChange($event,7)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[7]"
+          (change)="onInputChange($event,7)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -250,9 +354,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[8]"
+          (change)="onInputChange($event,8)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[8]"
+          (change)="onInputChange($event,8)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -271,9 +388,22 @@
         </div>
         <mat-slider
           formControlName="weight"
+          color="primary"
           min="1"
           max="5"
           step="1"
+          *ngIf="!arr[9]"
+          (change)="onInputChange($event,9)"
+        ></mat-slider>
+        <mat-slider
+          formControlName="weight"
+          color="warn"
+          min="1"
+          max="5"
+          step="1"
+          value="5"
+          *ngIf="arr[9]"
+          (change)="onInputChange($event,9)"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
