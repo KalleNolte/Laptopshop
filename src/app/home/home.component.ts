@@ -17,7 +17,7 @@ import { DataSource } from "@angular/cdk/table";
 import * as $ from 'jquery/dist/jquery.min.js';
 
 
-declare const test: any;
+declare const callme: any;
 
 
 @Component({
@@ -262,9 +262,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   onInputChange(event: any) {
     if(event.value == 5){
-      console.log("fhfhfhf");
+      // console.log("fhfhfhf");
+      // console.log(event.source);
+      // $(event.source).find('.mat-slider-thumb').css('background-color', 'red');
+
       console.log(event.source);
-      $(event.source).find('.mat-slider-thumb').css('background-color', 'red');
+      // var idAttr = target.attributes.id;
+      // var value = idAttr.nodeValue;
+      // console.log(target);
+      // console.log(idAttr);
+      // console.log(value);
+      callme(event);
     }
   }
   createRange(number){
