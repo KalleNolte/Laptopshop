@@ -18,7 +18,7 @@ import { DataSource } from "@angular/cdk/table";
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
-  providers: [DataService],
+  providers: [DataService]
 })
 export class HomeComponent implements OnInit {
   // dummyData = <any>data;
@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
     { id: "razer", name: "Razer" },
     { id: "samsung", name: "Samsung" },
     { id: "sony", name: "Sony" },
-    { id: "toshiba", name: "Toshiba" },
+    { id: "toshiba", name: "Toshiba" }
   ];
 
   prices = [
@@ -60,11 +60,10 @@ export class HomeComponent implements OnInit {
     { id: 1, name: "1 Star and more" },
     { id: 2, name: "2 Stars and more" },
     { id: 3, name: "3 Stars and more" },
-    { id: 4, name: "4 Stars and more" },
+    { id: 4, name: "4 Stars and more" }
   ];
 
   chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
-
 
   screenSizes = [
     { id: { maxValue: 10 }, name: "< 25 cm (10'')" },
@@ -73,7 +72,6 @@ export class HomeComponent implements OnInit {
     { id: { minValue: 15, maxValue: 16 }, name: "38 - 41 cm (15''-16'')" },
     { id: { minValue: 17 }, name: "> 43 cm (17'')" }
   ];
-
 
   processorTypes = [
     { id: 2, name: "2 Cores" },
@@ -143,6 +141,10 @@ export class HomeComponent implements OnInit {
     }),
     chipsetBrand: this.fb.group({
       chipsetBrandValue: this.fb.array([]),
+      weight: [1]
+    }),
+    screenSize: this.fb.group({
+      screenSizeRange: this.fb.array([]),
       weight: [1]
     }),
     processorType: this.fb.group({
