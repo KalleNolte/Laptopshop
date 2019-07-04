@@ -151,8 +151,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  sticky: boolean = false;
-  elementPosition: any;
+
+  arr;
+
 
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
@@ -164,6 +165,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.getLaptops();
     }
+    this.arr = new Array(10)
+    this.arr.fill(0);
     // Clear empty fields in FormArray
 
     // const i = this.brandNames.controls.findIndex(x => x.value === "");
@@ -260,19 +263,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
     });
   }
-  onInputChange(event: any) {
+  onInputChange(event: any, index: number) {
     if(event.value == 5){
-      // console.log("fhfhfhf");
-      // console.log(event.source);
-      // $(event.source).find('.mat-slider-thumb').css('background-color', 'red');
-
-      console.log(event.source);
-      // var idAttr = target.attributes.id;
-      // var value = idAttr.nodeValue;
-      // console.log(target);
-      // console.log(idAttr);
-      // console.log(value);
-      callme(event);
+      this.arr[index] = 1;
+    }else{
+      this.arr[index] = 0;
     }
   }
   createRange(number){
