@@ -185,13 +185,7 @@ export class HomeComponent implements OnInit {
   globalForm = new FormGroup({
     globalSearch: new FormControl()
   });
-
-  @ViewChild(MatSort) sort: MatSort;
-
-
   arr;
-
-
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit() {
