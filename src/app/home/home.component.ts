@@ -188,7 +188,6 @@ export class HomeComponent implements OnInit {
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit() {
-    //this.laptops = this.dummyData;
     if (this.dataService.firstTime) {
       this.getSample();
       this.dataService.firstTime = false;
@@ -246,6 +245,7 @@ export class HomeComponent implements OnInit {
       this.laptops = laptops;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 
@@ -272,6 +272,7 @@ export class HomeComponent implements OnInit {
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
     });
   }
 }
