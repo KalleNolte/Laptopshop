@@ -124,7 +124,8 @@ def getSample():
 def do_query(data, allDocs):
 
   data = Backend_Helper.clean_frontend_json(data)
-
+  print("clean_data1")
+  print(data)
 
   #create binary clean data if weighting is equal to 5
   binary_clean_data = {}
