@@ -186,6 +186,7 @@ export class HomeComponent implements OnInit {
     globalSearch: new FormControl()
   });
   arr;
+  matched : string[];
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -220,17 +221,17 @@ export class HomeComponent implements OnInit {
   }
 
   submitFormControls(formGroup: FormGroup) {
-    console.log(formGroup.controls);
+    // console.log(formGroup.controls);
   }
 
   onSubmit() {
     if (this.widgetForm.touched) {
-      console.log(this.widgetForm.value);
-      console.log(JSON.stringify(this.widgetForm.value));
+      // console.log(this.widgetForm.value);
+      // console.log(JSON.stringify(this.widgetForm.value));
       this.dataService
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
-          console.log(JSON.stringify(laptops));
+          // console.log(JSON.stringify(laptops));
           this.laptops = laptops;
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
@@ -239,7 +240,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.globalForm.touched) {
-      console.log(this.globalForm.value);
+      // console.log(this.globalForm.value);
     }
   }
   getSample() {
@@ -248,7 +249,7 @@ export class HomeComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      console.log(this.dataSource);
+      // console.log(this.dataSource);
     });
   }
 
@@ -270,7 +271,7 @@ export class HomeComponent implements OnInit {
     if (event.checked) {
       field.push(new FormControl(event.source.value));
       field.markAsTouched();
-      console.log("Field:" + fieldName);
+      // console.log("Field:" + fieldName);
     } else {
       const i = field.controls.findIndex(x => x.value === event.source.value);
       field.removeAt(i);
@@ -302,5 +303,12 @@ export class HomeComponent implements OnInit {
   }
   return items;
 }
+
+  checkMatched(element:string[]){
+    if (element && element.length > 1) {
+      return true;
+    }
+    return false;
+  }
 
 }

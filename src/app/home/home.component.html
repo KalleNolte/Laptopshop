@@ -480,7 +480,24 @@
 
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
-        <td mat-cell *matCellDef="let element">{{ element.price }} € <br /></td>
+        <td mat-cell *matCellDef="let element">{{ element.price }} € <br/>
+          <div id="flex-container" *ngIf="checkMatched(element.matched)">
+            <div class = "feedback" *ngFor="let item of element.matched[0] | keyvalue">
+              <div *ngIf="item.value=='green' " class="element">
+                  <span>{{item.key}} : {{element[item.key]}}</span>
+                  <img src="../assets/images/right_symbol.png" />
+              </div>
+              <div *ngIf="item.value=='red' " class="element">
+                  <span>{{item.key}} : {{element[item.key]}}</span>
+                  <img src="../assets/images/wrong_symbol.png" />
+              </div>
+              <div *ngIf="item.value=='yellow' " class="element">
+                  <span>{{item.key}} : {{element[item.key]}}</span>
+                  <img src="../assets/images/yellow.png" />
+              </div>
+            </div>
+          </div>
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

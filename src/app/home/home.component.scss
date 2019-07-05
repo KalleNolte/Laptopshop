@@ -44,6 +44,24 @@
   z-index: 10;
   width: 100%;
 }
+.feedback{
+  float:left;
+}
+.element{
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding:3px;
+}
+
+.element span{
+  margin :3px;
+}
+
+.element img{
+  width: 8%;
+  margin-top:1px;
+  float:right;
+}
 
 
 

@@ -12,8 +12,8 @@ class ColorInformation:
   def add_matched_information(self,query,laptops,allDocs):
 
     result = list()
-    for laptop in laptops:
 
+    for laptop in laptops:
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
@@ -28,7 +28,7 @@ class ColorInformation:
 
                     if field is "price" :
 
-                      color_value = get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
+                      color_value = self.get_price_field_color(laptop[field], query[field]["priceRange"], allDocs, field)
                       result.append({field:color_value})
 
                     elif field_range_name in query[field] :
@@ -45,16 +45,13 @@ class ColorInformation:
                           color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
                           result.append({field:color_value})
         laptop.update({"matched":result})
-
-
-
     return result
 
 
   def get_text_value_field_color(self,laptop_value,query_values,allDocs,field_name):
 
       for value in query_values :
-          if value == laptop_value :
+          if value.lower() == laptop_value.lower() :
               return "green"
 
       return "red"

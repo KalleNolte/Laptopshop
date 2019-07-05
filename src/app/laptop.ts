@@ -29,7 +29,6 @@ export interface Laptop {
   color: string;
   imagePath: string;
   avgRating: number;
-
 }
 /*
 *
