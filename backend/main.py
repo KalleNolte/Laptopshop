@@ -119,19 +119,6 @@ def getSample():
     outputProducts = Backend_Helper.refineResult(allDocs)
     return jsonify(outputProducts) #original from alfred
 
-@app.route('/api/<asin>', methods =['GET'])
-def getElementByAsin(asin):
-    product = es.search(index='amazon', body ={
-                                                "query":{
-                                                    "match":{
-                                                        "asin" : asin
-                                                      }
-                                                    },
-                                                  "size":1
-                                              })
-    product = Backend_Helper.refineResult(product)
-    return jsonify(product)
-
 
 def do_query(data, allDocs):
 
@@ -155,8 +142,10 @@ def do_query(data, allDocs):
   query = bin_obj.createBinarySearchQuery(binary_clean_data)
   res = es.search(index="amazon", body=query)
   output_binary = Backend_Helper.refineResult(res)
-
   res_search = list()
+
+  # if(len(output_binary)) > 0:
+  #     allDocs = [item for item in allDocs if item['asin']  in output_binary]
 
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
@@ -239,7 +228,7 @@ def do_query(data, allDocs):
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
   for item in output_binary: #binary search results that did not meet other vague requirements
-    item['vaguenessScore'] =None
+    item['vaguenessScore'] = None
 
   # concatenate with products with weighting 5 *******
 
@@ -260,8 +249,10 @@ def do_query(data, allDocs):
       outputProducts_vaguenessGreaterZero.append(laptop)
 
   outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
-  outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
+
+  #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
   c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+
   return outputProducts_vaguenessGreaterZero
 
   #print("first product in outputproducts: ", outputProducts[0])
@@ -269,6 +260,10 @@ def do_query(data, allDocs):
 
 
 def filter_from_boolean(outputProducts, output_binary):
+  if len(outputProducts) == 0 :
+      return output_binary,output_binary
+  if len(output_binary) == 0 :
+      return outputProducts, output_binary
   count_asin_in_list = []
   for item in outputProducts + output_binary:
     count_asin_in_list.append(item['asin'])
@@ -280,7 +275,7 @@ def filter_from_boolean(outputProducts, output_binary):
       duplicate_list.append(key)
 
   # copy only items that are in both lists
-  outputProducts = [item for item in outputProducts if item['asin'] in duplicate_list]
+  outputProducts = [item for item in outputProducts if item['asin']  in duplicate_list]
   #erase duplicates from output_binary
   output_binary = [item for item in output_binary if item['asin'] not in duplicate_list]
 
