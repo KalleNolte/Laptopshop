@@ -344,6 +344,15 @@ def get_all_documents():
 
   #return allDocs
 
+# def get_all_documents():
+#   allDocs = es.search(index="amazon", body={
+#     "size": 10000,
+#     "query": {
+#       "match_all": {}
+#     }
+#   })
+#   return allDocs
+
 def get_test_documents():
    some_docs = es.search(index="amazon", body ={
                                                   "query": {
