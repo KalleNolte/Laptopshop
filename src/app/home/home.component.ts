@@ -304,8 +304,9 @@ export class HomeComponent implements OnInit {
   return items;
 }
 
-  checkMatched(element:string[]){
-    if (element && element.length > 1) {
+  checkMatched(element:string){
+    if (element) {
+      console.log(element);
       return true;
     }
     return false;

@@ -11,15 +11,15 @@ class ColorInformation:
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
 
-    result = list()
 
     for laptop in laptops:
+        result = dict()
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
                     if "hardDriveSize" in query :
                         color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
-                        result.append({field:color_value})
+                        result.update({field:color_value})
 
                 elif field in query :
 
@@ -28,29 +28,28 @@ class ColorInformation:
 
                     if field is "price" :
 
-                      color_value = self.get_price_field_color(laptop[field], query[field]["priceRange"], allDocs, field)
-                      result.append({field:color_value})
+                      color_value = get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
+                      result.update({field:color_value})
 
                     elif field_range_name in query[field] :
 
                       color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
-                      result.append({field:color_value})
+                      result.update({field:color_value})
 
                     elif field_value_name in query[field]:
-                      # print(type(query[field][field_value_name]))
                       if len(query[field][field_value_name]) > 0 and type(query[field][field_value_name][0]) is str :
                           color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
-                          result.append({field:color_value})
+                          result.update({field:color_value})
                       else :
                           color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
-                          result.append({field:color_value})
+                          result.update({field:color_value})
         laptop.update({"matched":result})
-    return result
 
 
   def get_text_value_field_color(self,laptop_value,query_values,allDocs,field_name):
 
       for value in query_values :
+
           if value.lower() == laptop_value.lower() :
               return "green"
 

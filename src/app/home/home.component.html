@@ -482,7 +482,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
         <td mat-cell *matCellDef="let element">{{ element.price }} € <br/>
           <div id="flex-container" *ngIf="checkMatched(element.matched)">
-            <div class = "feedback" *ngFor="let item of element.matched[0] | keyvalue">
+            <div class = "feedback" *ngFor="let item of element.matched | keyvalue">
               <div *ngIf="item.value=='green' " class="element">
                   <span>{{item.key}} : {{element[item.key]}}</span>
                   <img src="../assets/images/right_symbol.png" />

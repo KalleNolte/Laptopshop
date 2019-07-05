@@ -46,11 +46,14 @@
 }
 .feedback{
   float:left;
+  max-width:240px;
+  margin-bottom: 1px;
 }
 .element{
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   padding:3px;
+  width:100%;
 }
 
 .element span{
@@ -62,6 +65,8 @@
   margin-top:1px;
   float:right;
 }
-
+.mat-cell cdk-column-price mat-column-price ng-star-inserted{
+  max-width:290px;
+}
 
 
