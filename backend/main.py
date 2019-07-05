@@ -15,13 +15,13 @@ import requests
 # from helper import Backend_Helper
 # from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_hdType
 
-from vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions, vague_search_freetext
-from binaryFunctions import binary_search_text, binary_search
-from helper import Backend_Helper
+from backend.vagueFunctions import vague_search_price, vague_search_harddrive,vague_search_range,vague_search_value,alexa_functions, vague_search_freetext
+from backend.binaryFunctions import binary_search_text, binary_search
+from backend.helper import Backend_Helper
 
-from addMatchedInformation.add_Matched_Information import ColorInformation
-from sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
-from vagueFunctions.vague_search_price import VagueSearchPrice
+from backend.addMatchedInformation.add_Matched_Information import ColorInformation
+from backend.sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
+from backend.vagueFunctions.vague_search_price import VagueSearchPrice
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -62,6 +62,7 @@ def search():
 
 
     data = request.get_json()
+    print(data)
 
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
