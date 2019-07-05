@@ -1,4 +1,5 @@
 import collections
+import os
 from collections import Counter
 
 from backend.addMatchedInformation.add_Matched_Information import ColorInformation
@@ -9,9 +10,15 @@ from backend.sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score impo
 from backend.vagueFunctions import vague_search_range, vague_search_harddrive, vague_search_value, vague_search_price, \
   alexa_functions
 from backend.vagueFunctions.vague_search_price import VagueSearchPrice
+import pickle
 
 
-def do_query(data, allDocs):
+allDocs_path = './allDocs.obj'
+
+def do_query(data):
+
+  with open(allDocs_path, 'rb') as input:
+    allDocs = pickle.load(input)
 
   clean_data1 = Backend_Helper.clean_frontend_json(data)
   print("clean_data1")
@@ -109,7 +116,6 @@ def do_query(data, allDocs):
 
   print("first product in outputproducts_vaguenessGreaterZero: ", outputProducts_vaguenessGreaterZero[0])
   return outputProducts_vaguenessGreaterZero
-
 
 
 def get_vague_result(res_search):
@@ -319,13 +325,24 @@ def getElementsByAsin(asinKeys):
 
 
 def get_all_documents():
-  allDocs = es.search(index="amazon", body={
-    "size": 10000,
-    "query": {
-      "match_all": {}
-    }
-  })
-  return allDocs
+
+  if os.path.exists('./allDocs.obj'):
+    print("allDocs exists")
+    if os.path.getsize(allDocs_path)>0:
+      with open(allDocs_path, "rb") as f:
+        unpickler = pickle.Unpickler(f)
+        allDocs = unpickler.load()
+  else:
+    allDocs = es.search(index="amazon", body={
+      "size": 10000,
+      "query": {
+        "match_all": {}
+      }
+    })
+    with open(allDocs_path, 'wb') as output:
+      pickle.dump(allDocs, output, pickle.HIGHEST_PROTOCOL)
+
+  #return allDocs
 
 def get_test_documents():
    some_docs = es.search(index="amazon", body ={

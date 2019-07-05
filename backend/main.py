@@ -52,9 +52,12 @@ def search():
 
     data = request.get_json()
 
-    allDocs = service.get_all_documents()
+    #allDocs = service.get_all_documents()
+    #outputProducts = service.do_query(data, allDocs)
 
-    outputProducts = service.do_query(data, allDocs)
+    #set serialized object
+    service.get_all_documents()
+    outputProducts = service.do_query(data)
 
 
     return jsonify(outputProducts)
