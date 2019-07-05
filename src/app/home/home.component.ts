@@ -230,9 +230,11 @@ export class HomeComponent implements OnInit {
       this.dataService
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
+          console.log(JSON.stringify(laptops));
           this.laptops = laptops;
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         });
     }
 
@@ -251,7 +253,7 @@ export class HomeComponent implements OnInit {
   }
 
   search(form: NgForm) {
-    console.log(form.value);
+    // console.log(form.value);
     this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => {
       this.laptops = laptops;
       this.dataSource = new MatTableDataSource(this.laptops);

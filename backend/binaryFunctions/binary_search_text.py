@@ -41,7 +41,7 @@ class BinarySearchText:
           }
 
         }
-        print(body)
+        # print(body)
         res = self.es.search(index="amazon", body=body, size=10000)
 
 

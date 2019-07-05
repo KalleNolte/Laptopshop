@@ -37,7 +37,7 @@ class ColorInformation:
                       result.append({field:color_value})
 
                     elif field_value_name in query[field]:
-                      print(type(query[field][field_value_name]))
+                      # print(type(query[field][field_value_name]))
                       if len(query[field][field_value_name]) > 0 and type(query[field][field_value_name][0]) is str :
                           color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
                           result.append({field:color_value})

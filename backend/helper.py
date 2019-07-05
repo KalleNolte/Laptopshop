@@ -13,7 +13,7 @@ class Backend_Helper:
             elif field_value_name in json_dict[field] :
                 if len(json_dict[field][field_value_name]) > 0 :
                     result.update({field:json_dict[field]})
-        print("after cleanfin",result)
+        # print("after cleanfin",result)
 
         return result
 
