@@ -26,6 +26,8 @@ import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
 import { StarRatingModule } from 'angular-star-rating';
 
+import { WebsocketService } from './websocket.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +61,7 @@ import { StarRatingModule } from 'angular-star-rating';
     MatSelectModule,
     StarRatingModule.forRoot()
   ],
-  providers: [HomeComponent, DetailsComponent],
+  providers: [HomeComponent, DetailsComponent,WebsocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

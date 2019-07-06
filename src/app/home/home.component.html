@@ -519,3 +519,8 @@
     >
   </div> -->
 </section>
+
+<button mat-raised-button type="submit" color="primary" (click)="send()">send</button>
+<div *ngFor="let message of messages">
+    {{message}}
+</div>

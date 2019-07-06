@@ -14,6 +14,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 import * as $ from 'jquery/dist/jquery.min.js';
+import {WebsocketService} from '../websocket.service';
 
 
 declare const callme: any;
@@ -187,8 +188,10 @@ export class HomeComponent implements OnInit {
   });
   arr;
   matched : string[];
-  constructor(private dataService: DataService, private fb: FormBuilder) {}
+  constructor(private dataService: DataService, private fb: FormBuilder,
+              private websocket: WebsocketService) {}
 
+  messages : string[] = [];
   ngOnInit() {
     if (this.dataService.firstTime) {
       this.getSample();
@@ -202,6 +205,12 @@ export class HomeComponent implements OnInit {
 
     // const i = this.brandNames.controls.findIndex(x => x.value === "");
     // this.brandNames.removeAt(i);
+
+    this.websocket.getMessages()
+      .subscribe((message: string) => {
+        console.log(message);
+        this.messages.push(message);
+      });
   }
 
   ngAfterViewInit() {
@@ -309,6 +318,10 @@ export class HomeComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  send(){
+    this.websocket.sendMessage('helllo');
   }
 
 }
