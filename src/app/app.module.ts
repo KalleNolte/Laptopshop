@@ -24,6 +24,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
+import { StarRatingModule } from 'angular-star-rating';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatS
     MatPaginatorModule,
     MatSortModule,
     MatRadioModule,
-    MatSelectModule
+    MatSelectModule,
+    StarRatingModule.forRoot()
   ],
   providers: [HomeComponent, DetailsComponent],
   bootstrap: [AppComponent]

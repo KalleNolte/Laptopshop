@@ -65,8 +65,24 @@
   margin-top:1px;
   float:right;
 }
-.mat-cell cdk-column-price mat-column-price ng-star-inserted{
-  max-width:290px;
+td.mat-cell:last-of-type {
+  max-width:300px;
 }
-
+.flex-container{
+  margin-bottom: 10px;
+}
+.price p{
+  margin:0px;
+  margin-top:10px;
+}
+td.mat-cell, td.mat-footer-cell, th.mat-header-cell{
+  max-width: 750px;
+}
+.stars{
+  width:100%;
+  float:left;
+}
+.title{
+  margin-bottom: 8px;
+}
 

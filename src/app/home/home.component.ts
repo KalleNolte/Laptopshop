@@ -62,10 +62,10 @@ export class HomeComponent implements OnInit {
   ];
 
   ratings = [
-    { id: 1, name: "1 Star and more" },
-    { id: 2, name: "2 Stars and more" },
+    { id: 4, name: "4 Stars and more" },
     { id: 3, name: "3 Stars and more" },
-    { id: 4, name: "4 Stars and more" }
+    { id: 2, name: "2 Stars and more" },
+    { id: 1, name: "1 Star and more" }
   ];
 
   chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
@@ -306,7 +306,6 @@ export class HomeComponent implements OnInit {
 
   checkMatched(element:string){
     if (element) {
-      console.log(element);
       return true;
     }
     return false;

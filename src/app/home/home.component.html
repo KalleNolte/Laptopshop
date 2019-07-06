@@ -8,7 +8,7 @@
   fxLayoutAlign="start end"
   (scroll)="onWindowScroll($event)"
 >
-  <h3>Choose criteria <br />to filter results:</h3>
+  <h3>Filter :</h3>
   <div class="searchInput">
     <form [formGroup]="globalForm" (ngSubmit)="onSubmit()">
       <mat-form-field>
@@ -101,7 +101,7 @@
           <mat-checkbox
             (change)="onChange($event, 'avgRating', 'avgRatingValue')"
             [value]="option.id"
-            >{{ option.name }}</mat-checkbox
+            ><star-rating  class="filter" [starType]="'svg'" [rating]="option.id"></star-rating><span>& more</span></mat-checkbox
           >
         </div>
         <mat-slider
@@ -474,17 +474,20 @@
           *matCellDef="let element"
           [routerLink]="['/details', element.asin]"
         >
-          {{ element.productTitle }}
+          <h3 class="title">{{ (element.productTitle.length > 100)? (element.productTitle | slice:0:100)+'..':(element.productTitle) }}</h3>
+          <star-rating  class="stars" *ngIf="element.avgRating" [starType]="'svg'" [rating]="element.avgRating"></star-rating>
+          <star-rating class="stars" *ngIf="!element.avgRating" [starType]="'svg'" [rating]="0"></star-rating>
+          <p class ="description">{{element.productTitle}}</p>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="price">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
-        <td mat-cell *matCellDef="let element">{{ element.price }} € <br/>
-          <div id="flex-container" *ngIf="checkMatched(element.matched)">
+        <td mat-cell class ="price" *matCellDef="let element"><h2>{{ element.price }} € </h2><br/>
+          <div class="flex-container" *ngIf="checkMatched(element.matched)">
             <div class = "feedback" *ngFor="let item of element.matched | keyvalue">
               <div *ngIf="item.value=='green' " class="element">
-                  <span>{{item.key}} : {{element[item.key]}}</span>
+                  <span>{{item.key | titlecase}} : {{element[item.key]}}</span>
                   <img src="../assets/images/right_symbol.png" />
               </div>
               <div *ngIf="item.value=='red' " class="element">
@@ -496,6 +499,7 @@
                   <img src="../assets/images/yellow.png" />
               </div>
             </div>
+            <div style="clear: both;"></div>
           </div>
         </td>
       </ng-container>
@@ -505,7 +509,7 @@
     </table>
 
     <mat-paginator
-      [pageSizeOptions]="[5, 10, 20]"
+      [pageSizeOptions]="[15, 25, 30]"
       showFirstLastButtons
     ></mat-paginator>
   </div>
