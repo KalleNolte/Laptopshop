@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs/';
 
 export class WebsocketService {
-    private url = 'http://localhost:5000/';
+    private url = 'http://localhost:5001/';
     private socket;
 
     constructor() {
