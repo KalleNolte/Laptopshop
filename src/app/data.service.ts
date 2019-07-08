@@ -75,7 +75,6 @@ export class DataService {
         });
     }))
     this.router.navigate(['home'])
-
   }
 
 }

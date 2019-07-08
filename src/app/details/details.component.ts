@@ -33,17 +33,18 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit() {
     this.asin = this.route.snapshot.params['asin'];
-    this.showDetails()
+    this.showDetails();
     // this.dataService.getResult()
     //   .subscribe((message) => {
     //     console.log(message);
     //     this.messages.push(message);
     //   });
-    this.dataService.getResult();
+    // this.dataService.getResult();
   }
 
   showDetails() {
     this.dataService.getLaptop_details(this.asin).subscribe(data => {
+      console.log(data);
       this.item = data[0];
       // console.log(this.item.imagePath);
     });
