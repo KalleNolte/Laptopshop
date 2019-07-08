@@ -8,15 +8,18 @@ import { HttpClient } from 'selenium-webdriver/http';
 import { HttpResponse } from '@angular/common/http';
 import { FormsModule, NgForm } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/style-transforms';
+import {WebsocketService} from '../websocket.service';
+import {MatTableDataSource} from '@angular/material';
 
 
 @Component({
   selector: "app-details",
   templateUrl: "./details.component.html",
   styleUrls: ["./details.component.scss"],
+  providers:[WebsocketService]
 })
 export class DetailsComponent implements OnInit {
 
@@ -24,27 +27,31 @@ export class DetailsComponent implements OnInit {
   brandName: string;
   laptops: Laptop[] = [];
   item: Laptop;
-
+  firstTime  = true;
   constructor(private dataService: DataService,
               private route: ActivatedRoute,
-              private homeFeatures: HomeComponent) {
+              private homeFeatures: HomeComponent, private router:Router) {
+
+    this.dataService.getResult()
+      .subscribe((message) => {
+        console.log(message);
+        this.router.navigate(['home']);
+      });
   }
 
 
   ngOnInit() {
     this.asin = this.route.snapshot.params['asin'];
     this.showDetails();
-    // this.dataService.getResult()
-    //   .subscribe((message) => {
-    //     console.log(message);
-    //     this.messages.push(message);
-    //   });
-    // this.dataService.getResult();
+     this.dataService.getResult()
+      .subscribe((message) => {
+        console.log(message);
+        this.router.navigate(['home']);
+      });
   }
 
   showDetails() {
     this.dataService.getLaptop_details(this.asin).subscribe(data => {
-      console.log(data);
       this.item = data[0];
       // console.log(this.item.imagePath);
     });

@@ -24,13 +24,11 @@ declare const callme: any;
   selector: "app-home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
-  providers: [DataService]
 })
 export class HomeComponent implements OnInit {
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
-  firstTime = true;
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
 
@@ -188,14 +186,13 @@ export class HomeComponent implements OnInit {
   });
   arr;
   matched : string[];
-  constructor(private dataService: DataService, private fb: FormBuilder,
-              private websocket: WebsocketService) {}
+  constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   messages : string[] = [];
   ngOnInit() {
     if (this.dataService.firstTime) {
       this.getSample();
-      this.dataService.firstTime = false;
+      this.dataService.firstTime = false
     } else {
       this.getLaptops();
     }
@@ -209,7 +206,7 @@ export class HomeComponent implements OnInit {
     // this.dataService.getResult()
     //   .subscribe((message) => {
     //     console.log(message);
-    //     this.messages.push(message);
+    //     // this.messages.push(message);
     //   });
   }
 
@@ -289,9 +286,11 @@ export class HomeComponent implements OnInit {
 
   getLaptops() {
     this.dataService.retrieveLaptops().subscribe(data => {
-      if (!data) {
-        this.getLaptops();
-      }
+      // if (!data) {
+      //   this.getLaptops();
+      // }
+      console.log("herereer");
+      console.log(data);
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
@@ -321,7 +320,7 @@ export class HomeComponent implements OnInit {
   }
 
   send(){
-    this.websocket.sendMessage('helllo');
+    // this.websocket.sendMessage('helllo');
   }
 
 }

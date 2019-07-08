@@ -13,7 +13,7 @@ export class DataService {
   private url = 'http://localhost:5004/';
   private socket;
   laptops : Observable<Laptop[]>;
-  firstTime = true;
+  firstTime = true ;
   laptop : Laptop;
  
   httpOptions = {
@@ -23,7 +23,7 @@ export class DataService {
     })
   };
 
-  constructor(private http: HttpClient, private router:Router) {
+  constructor(private http: HttpClient) {
     this.socket = io.connect(this.url);
   }
 
@@ -64,18 +64,34 @@ export class DataService {
   retrieveLaptops():Observable<Laptop[]>{
     if(this.laptops) {
       console.log(this.laptops);
+      this.laptops.subscribe(data=>console.log(data));
       return this.laptops;
     }
   }
 
-  public getResult = () => {
-    this.saveLaptops(Observable.create((observer) => {
-        this.socket.on('result', (message) => {
-            observer.next(message);
+  // public getResult = () => {
+    // this.saveLaptops(Observable.create((observer) => {
+    //         this.socket.on('result', (message) => {
+    //             observer.next(message);
+    //         });
+    //     }));
+    // return Observable.create((observer) => {
+    //         this.socket.on('result', (message) => {
+    //             observer.next(message);
+    //         });
+    //     });
+  // }
+
+  public getResult(): Observable<Laptop[]> {
+        this.socket.emit('getResult');
+        this.saveLaptops(new Observable<Laptop[]>(observer => {
+                this.socket.on('result', (data) => observer.next(data));
+            }));
+        return new Observable<Laptop[]>(observer => {
+            this.socket.on('result', (data) => observer.next(data));
         });
-    }))
-    this.router.navigate(['home'])
-  }
+    }
+
 
 }
 
