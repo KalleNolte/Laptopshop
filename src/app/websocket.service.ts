@@ -2,7 +2,7 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs/';
 
 export class WebsocketService {
-    private url = 'http://localhost:5001/';
+    private url = 'http://localhost:5004/';
     private socket;
 
     constructor() {
@@ -15,7 +15,7 @@ export class WebsocketService {
 
     public getMessages = () => {
         return Observable.create((observer) => {
-            this.socket.on('new-message', (message) => {
+            this.socket.on('result', (message) => {
                 observer.next(message);
             });
         });

@@ -25,7 +25,7 @@ export class DetailsComponent implements OnInit {
   laptops: Laptop[] = [];
   item: Laptop;
 
-  constructor(private one_detail: DataService,
+  constructor(private dataService: DataService,
               private route: ActivatedRoute,
               private homeFeatures: HomeComponent) {
   }
@@ -34,10 +34,16 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.asin = this.route.snapshot.params['asin'];
     this.showDetails()
+    // this.dataService.getResult()
+    //   .subscribe((message) => {
+    //     console.log(message);
+    //     this.messages.push(message);
+    //   });
+    this.dataService.getResult();
   }
 
   showDetails() {
-    this.one_detail.getLaptop_details(this.asin).subscribe(data => {
+    this.dataService.getLaptop_details(this.asin).subscribe(data => {
       this.item = data[0];
       // console.log(this.item.imagePath);
     });
@@ -80,10 +86,10 @@ export class DetailsComponent implements OnInit {
     // console.log(laptop);
     laptop = JSON.parse(JSON.stringify(laptop));
     console.log(laptop);
-    this.one_detail.setLaptop(laptop).subscribe(data=>console.log(data));
+    this.dataService.setLaptop(laptop).subscribe(data=>console.log(data));
   }
 
   sendLaptops(){
-    this.one_detail.getCritizedResult();
+    this.dataService.getCritizedResult();
   }
 }

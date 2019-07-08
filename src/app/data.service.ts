@@ -2,16 +2,16 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Laptop } from "./laptop";
 import { Observable } from 'rxjs';
-import { map } from "rxjs/operators";
-
+import * as io from 'socket.io-client';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: "root"
 })
 export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
-  private for_detailsExample="../assets/jsonExample.json";
-  private for_sendD='https://console.firebase.google.com/u/0/project/laptop-fc91e/database/firestore/data~2Flaptop~2FblCnfbhPDMjMEUNnFp4W';
+  private url = 'http://localhost:5004/';
+  private socket;
   laptops : Observable<Laptop[]>;
   firstTime = true;
   laptop : Laptop;
@@ -23,7 +23,9 @@ export class DataService {
     })
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router:Router) {
+    this.socket = io.connect(this.url);
+  }
 
   getSample(): Observable<Laptop[]>{
     this.saveLaptops(this.http.get<Laptop[]>('/api/sample'));
@@ -64,6 +66,16 @@ export class DataService {
       console.log(this.laptops);
       return this.laptops;
     }
+  }
+
+  public getResult = () => {
+    this.saveLaptops(Observable.create((observer) => {
+        this.socket.on('result', (message) => {
+            observer.next(message);
+        });
+    }))
+    this.router.navigate(['home'])
+
   }
 
 }

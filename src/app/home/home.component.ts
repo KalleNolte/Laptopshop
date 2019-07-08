@@ -206,11 +206,11 @@ export class HomeComponent implements OnInit {
     // const i = this.brandNames.controls.findIndex(x => x.value === "");
     // this.brandNames.removeAt(i);
 
-    this.websocket.getMessages()
-      .subscribe((message: string) => {
-        console.log(message);
-        this.messages.push(message);
-      });
+    // this.dataService.getResult()
+    //   .subscribe((message) => {
+    //     console.log(message);
+    //     this.messages.push(message);
+    //   });
   }
 
   ngAfterViewInit() {
