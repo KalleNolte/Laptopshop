@@ -96,7 +96,7 @@ class ColorInformation:
 
           elif "maxValue" in value  :
 
-              if laptop_value >= value["maxValue"]:
+              if laptop_value <= value["maxValue"]:
                   return "green"
               maxValue = value["maxValue"]
               minValue = None
