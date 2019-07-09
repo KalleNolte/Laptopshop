@@ -9,6 +9,7 @@ from backend.main import es
 from backend.sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
 from backend.vagueFunctions import vague_search_range, vague_search_harddrive, vague_search_value, vague_search_price, \
   alexa_functions
+import backend.all_docs_search as dao
 from backend.vagueFunctions.vague_search_price import VagueSearchPrice
 import pickle
 
@@ -333,16 +334,12 @@ def get_all_documents():
         unpickler = pickle.Unpickler(f)
         allDocs = unpickler.load()
   else:
-    allDocs = es.search(index="amazon", body={
-      "size": 10000,
-      "query": {
-        "match_all": {}
-      }
-    })
+    allDocs = dao.search_for_all_docs()
     with open(allDocs_path, 'wb') as output:
       pickle.dump(allDocs, output, pickle.HIGHEST_PROTOCOL)
 
   #return allDocs
+
 
 # def get_all_documents():
 #   allDocs = es.search(index="amazon", body={
@@ -354,12 +351,8 @@ def get_all_documents():
 #   return allDocs
 
 def get_test_documents():
-   some_docs = es.search(index="amazon", body ={
-                                                  "query": {
-                                                      "match": {
-                                                          "avgRating": 5
-                                                          }
-                                                      },
-                                                  "size" : 10
-                                                })
+   some_docs = dao.search_for_some_docs()
    return some_docs
+
+
+

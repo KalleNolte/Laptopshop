@@ -76,10 +76,12 @@ def searchText():
   res_search= free_text_searcher.compute_vague_freetext(allDocs, query, False) #False => not boolean search
   #print(res_search)
 
-
+  #Move this to the services layer..
   outputProducts = Backend_Helper.refineResult(res_search)
   for item in outputProducts: #binary search results all have a vagueness score of 1
     item['vaguenessScore'] =1 #todo: change vagueness score to reflect score
+
+
   return jsonify(outputProducts)
 
 
