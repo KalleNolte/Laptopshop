@@ -15,7 +15,7 @@ export class DataService {
   laptops : Observable<Laptop[]>;
   firstTime = true ;
   laptop : Laptop;
- 
+
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
@@ -49,12 +49,12 @@ export class DataService {
     return this.http.post<Laptop>('/alexa/setter', laptop, this.httpOptions);
   }
   getCritizedResult(): Observable<Laptop[]> {
-    
+
     // if (result != null) {
       this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
       return this.http.get<Laptop[]>('/alexa/getQuery')
     // }
-    
+
   }
 
   saveLaptops(laptops:Observable<Laptop[]>){
@@ -63,7 +63,7 @@ export class DataService {
 
   retrieveLaptops():Observable<Laptop[]>{
     if(this.laptops) {
-      console.log(this.laptops);
+      // console.log(this.laptops);
       this.laptops.subscribe(data=>console.log(data));
       return this.laptops;
     }

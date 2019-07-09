@@ -91,7 +91,7 @@ class VagueSearchPrice():
               min_value = range["minValue"]
               res_search.append(price_searcher.computeVaguePrice(allDocs,  price_weight, min_value, None))
 
-            elif "maxValue" in field_value_dict[field_type][field_name]:
+            elif "maxValue" in range:
               max_value = range["maxValue"]
               res_search.append(price_searcher.computeVaguePrice(allDocs,  price_weight, None, max_value))
     return res_search

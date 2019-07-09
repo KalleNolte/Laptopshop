@@ -16,6 +16,32 @@ class Backend_Helper:
         # print("after cleanfin",result)
 
         return result
+    @staticmethod
+    def clean_for_alexa(json_dict):
+        #data[intent_variable].update({"intent":intent,"value":intent_variable_value})
+        result = dict()
+        intent = json_dict["intent"]
+        intent_variable = json_dict["intentVariable"]
+        intent_variable_value = json_dict[json_dict["intentVariable"]][json_dict["intentVariable"]+"Value"]
+        for field_name in json_dict:
+            field_value_name = field_name+"Value"
+            if field_name == "intentVariable" or field_name == "intent":
+                pass
+            elif field_value_name in  json_dict[field_name] :
+                if Backend_Helper.is_integer(json_dict[field_name][field_value_name]):
+                    value = int(json_dict[field_name][field_value_name])
+                elif Backend_Helper.is_float(json_dict[field_name][field_value_name]):
+                    value = float(json_dict[field_name][field_value_name])
+                else :
+                    value = json_dict[field_name][field_value_name]
+
+                result.update({field_name:{field_value_name : [value],"weight":4}})
+        result.update({json_dict["intentVariable"]:{"intent":intent,"value":intent_variable_value}})
+        return result
+
+
+
+
 
     @staticmethod
     def refineResult(docs):

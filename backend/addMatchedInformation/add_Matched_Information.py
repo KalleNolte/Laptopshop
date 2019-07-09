@@ -70,9 +70,11 @@ class ColorInformation:
       allValues = np.sort((np.array(allValues)))
       # print("allPrices: ", allPrices)
       for value in query_values :
+
         lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
         upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
-        if laptop_value >= lowerSupport and laptop_value <= upperSupport :
+
+        if float(laptop_value) >= lowerSupport and float(laptop_value) <= upperSupport :
             return "yellow"
 
       return "red"
@@ -96,7 +98,7 @@ class ColorInformation:
 
           elif "maxValue" in value  :
 
-              if laptop_value >= value["maxValue"]:
+              if laptop_value <= value["maxValue"]:
                   return "green"
               maxValue = value["maxValue"]
               minValue = None
@@ -136,7 +138,7 @@ class ColorInformation:
                   answer =  "green"
 
           elif "maxValue" in value  :
-              if laptop_value >= value["maxValue"]:
+              if laptop_value <= value["maxValue"]:
                   answer =  "green"
 
           if answer == "green" :

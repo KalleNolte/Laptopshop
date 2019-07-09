@@ -31,28 +31,24 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 def alexa_search():
 
     data = request.get_json()
+    print(data)
     intent = data["intent"]
     intent_variable = data["intentVariable"]
     intent_variable_value = data[data["intentVariable"]][data["intentVariable"]+"Value"]
     #TODO: boolean method for intentVariable
     #TODO: delete intentVariable with its Value
-    del data[intent_variable][intent_variable+"Value"]
-
-    data[intent_variable].update({"intent":intent,"value":intent_variable_value})
-
-    data[intent_variable]["weight"] = 100
-
-    del data["intent"]
-    del data["intentVariable"]
-
+    data = Backend_Helper.clean_for_alexa(data)
     allDocs = es.search(index="amazon", body={
                                                 "size": 10000,
                                                 "query": {
                                                     "match_all": {}
                                                     }
                                                 })
-
+    print("-------------------")
+    print(data)
     outputProducts = do_query(data,allDocs)
+    print("-------------------")
+    print(outputProducts)
 
     return jsonify(outputProducts)
 
@@ -231,6 +227,7 @@ def do_query(data, allDocs):
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
+  outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
 
 
   # add a vagueness score to the returned objects and normalize
@@ -244,8 +241,8 @@ def do_query(data, allDocs):
   for item in output_binary: #binary search results that did not meet other vague requirements
     item['vaguenessScore'] = None
 
-  # concatenate with products with weighting 5 *******
-
+  # concatenate with products with weighting 5 ***
+  outputProducts = outputProducts + output_binary
   # products with same vagueness score should be listed according to price descending
 
   #searchedValues = c_i.extractKeyValuePairs()
@@ -262,22 +259,22 @@ def do_query(data, allDocs):
     if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
 
-  outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
+  #outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
 
   #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
-  c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+  #c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
   return outputProducts_vaguenessGreaterZero
 
   #print("first product in outputproducts: ", outputProducts[0])
   #return outputProducts
 
+  #print("first product in outputproducts: ", outputProducts[0])
+  #return outputProducts
+
 
 def filter_from_boolean(outputProducts, output_binary):
-  if len(outputProducts) == 0 :
-      return output_binary,output_binary
-  if len(output_binary) == 0 :
-      return outputProducts, output_binary
+
   count_asin_in_list = []
   for item in outputProducts + output_binary:
     count_asin_in_list.append(item['asin'])

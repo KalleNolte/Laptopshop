@@ -285,6 +285,7 @@ export class HomeComponent implements OnInit {
   }
 
   getLaptops() {
+    console.log("hi");
     this.dataService.retrieveLaptops().subscribe(data => {
       // if (!data) {
       //   this.getLaptops();

@@ -64,7 +64,7 @@ export class DetailsComponent implements OnInit {
     for(let i in mapped){
       if (mapped[i]['type'] == 'asin' || mapped[i]['type'] == 'productTitle' || mapped[i]['type'] == 'displayResolutionSize'
         || mapped[i]['type'] == 'productDimension'){
-        continue; 
+        continue;
       }
       if ((mapped[i]['type'] == 'hddSize' && mapped[i]['value'] == 0) || (mapped[i]['type'] == 'ssdSize' && mapped[i]['value'] == 0)) {
         continue;
@@ -86,8 +86,8 @@ export class DetailsComponent implements OnInit {
         laptop += ':' + '"' + mapped[i]['value'] + '"';
         laptop += ', ';
         laptop += '"weight" : 1 },'
-      } 
-      
+      }
+
     }
     laptop = laptop.substring(0, laptop.length - 1);
     laptop += "}";

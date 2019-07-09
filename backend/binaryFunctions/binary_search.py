@@ -5,57 +5,7 @@ import numpy as np
 
 
 class BinarySearch():
-  
-  def computeBinary(es, minPrice, maxPrice, harddrive):
 
-      #change "hardDrive" to "ssdSize" or "hddSize"
-      body = {
-                "query": {
-                  "bool":{
-                    "must":[
-                      {
-                        "match":{
-                          "hardDrive": harddrive
-                        }
-                      },
-                      {
-                        "range": {
-                    "price": {
-                      "gte": minPrice,
-                      "lte": maxPrice
-                              }
-                          }
-                      }
-                      ]
-
-                    }
-                  },
-                  "sort": {"price": {"order": "asc"}}
-                }
-
-
-      #Get a result of laptops that have price >= minPrice and price<=maxPrice
-      res = es.search(index="amazon", body=body)
-      ###
-
-      result = []
-      #Add list including [asin, fuzzycalc] to result. Fuzzy Calculation is between 0 and 1
-      for hit in res['hits']['hits']:
-
-          result.append([hit['_source']['asin'], float(1.0)])
-
-
-
-      result = np.array(result, dtype=object)
-
-      # result = result[np.argsort(-result[:, 1])] #sorts resuls with highest matching score first
-      # print("what is in \"result\" with objects")  # why?
-      # print(result)
-
-      ##
-      result = list(map(tuple, result))
-
-      return result
 
   def createBinarySearchQuery(self, fieldNameToValueDict):
     body = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(dict))))
