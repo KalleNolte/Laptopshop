@@ -34,8 +34,8 @@ export class DetailsComponent implements OnInit {
 
     this.dataService.getResult()
       .subscribe((message) => {
+        // this.router.navigate(['home']);
         console.log(message);
-        this.router.navigate(['home']);
       });
   }
 
@@ -43,11 +43,6 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.asin = this.route.snapshot.params['asin'];
     this.showDetails();
-     this.dataService.getResult()
-      .subscribe((message) => {
-        console.log(message);
-        this.router.navigate(['home']);
-      });
   }
 
   showDetails() {

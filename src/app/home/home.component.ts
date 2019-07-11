@@ -3,8 +3,9 @@ import {
   OnInit,
   ViewChild,
   HostListener,
-  ElementRef
-} from "@angular/core";
+  ElementRef,OnDestroy
+
+} from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
@@ -25,7 +26,7 @@ declare const callme: any;
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.scss"],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy{
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
@@ -186,6 +187,7 @@ export class HomeComponent implements OnInit {
   });
   arr;
   matched : string[];
+  subscription;
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
   messages : string[] = [];
@@ -210,9 +212,9 @@ export class HomeComponent implements OnInit {
     //   });
   }
 
-  ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
-  }
+  // ngAfterViewInit() {
+  //   this.getLaptops()
+  // }
 
   get brandNames() {
     return this.widgetForm.get("brandNames") as FormArray;
@@ -250,7 +252,8 @@ export class HomeComponent implements OnInit {
     }
   }
   getSample() {
-    this.dataService.getSample().subscribe(data => {
+    this.dataService.getSample();
+    this.subscription = this.dataService.retrieveLaptops().subscribe(data => {
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
@@ -286,10 +289,7 @@ export class HomeComponent implements OnInit {
 
   getLaptops() {
     console.log("hi");
-    this.dataService.retrieveLaptops().subscribe(data => {
-      // if (!data) {
-      //   this.getLaptops();
-      // }
+    this.subscription = this.dataService.laptops.subscribe(data => {
       console.log("herereer");
       console.log(data);
       this.laptops = data;
@@ -324,4 +324,9 @@ export class HomeComponent implements OnInit {
     // this.websocket.sendMessage('helllo');
   }
 
+
+  ngOnDestroy() {
+    // console.log("destroyyyyyeeeed");
+    this.subscription.unsubscribe();
+  }
 }
