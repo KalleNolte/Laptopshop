@@ -19,7 +19,6 @@ import {MatTableDataSource} from '@angular/material';
   selector: "app-details",
   templateUrl: "./details.component.html",
   styleUrls: ["./details.component.scss"],
-  providers:[WebsocketService]
 })
 export class DetailsComponent implements OnInit {
 
@@ -34,8 +33,8 @@ export class DetailsComponent implements OnInit {
 
     this.dataService.getResult()
       .subscribe((message) => {
-        // this.router.navigate(['home']);
-        console.log(message);
+        this.router.navigate(['home']);
+        this.dataService.laptops = message;
       });
   }
 

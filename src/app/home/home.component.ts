@@ -186,11 +186,8 @@ export class HomeComponent implements OnInit, OnDestroy{
     globalSearch: new FormControl()
   });
   arr;
-  matched : string[];
-  subscription;
   constructor(private dataService: DataService, private fb: FormBuilder) {}
 
-  messages : string[] = [];
   ngOnInit() {
     if (this.dataService.firstTime) {
       this.getSample();
@@ -200,21 +197,10 @@ export class HomeComponent implements OnInit, OnDestroy{
     }
     this.arr = new Array(12)
     this.arr.fill(0);
-    // Clear empty fields in FormArray
 
-    // const i = this.brandNames.controls.findIndex(x => x.value === "");
-    // this.brandNames.removeAt(i);
-
-    // this.dataService.getResult()
-    //   .subscribe((message) => {
-    //     console.log(message);
-    //     // this.messages.push(message);
-    //   });
   }
 
-  // ngAfterViewInit() {
-  //   this.getLaptops()
-  // }
+
 
   get brandNames() {
     return this.widgetForm.get("brandNames") as FormArray;
@@ -228,49 +214,31 @@ export class HomeComponent implements OnInit, OnDestroy{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  submitFormControls(formGroup: FormGroup) {
-    // console.log(formGroup.controls);
-  }
 
   onSubmit() {
     if (this.widgetForm.touched) {
-      // console.log(this.widgetForm.value);
-      // console.log(JSON.stringify(this.widgetForm.value));
-      this.dataService
-        .search(JSON.stringify(this.widgetForm.value))
-        .subscribe(laptops => {
-          // console.log(JSON.stringify(laptops));
-          this.laptops = laptops;
-          this.dataSource = new MatTableDataSource(this.laptops);
-          this.dataSource.sort = this.sort;
-          this.dataSource.paginator = this.paginator;
-        });
-    }
-
-    if (this.globalForm.touched) {
-      // console.log(this.globalForm.value);
-    }
-  }
-  getSample() {
-    this.dataService.getSample();
-    this.subscription = this.dataService.retrieveLaptops().subscribe(data => {
+      this.dataService.search(JSON.stringify(this.widgetForm.value)).subscribe(data => {
+      this.dataService.laptops = data;
       this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      // console.log(this.dataSource);
     });
-  }
+    }
 
-  search(form: NgForm) {
-    // console.log(form.value);
-    this.dataService.search(JSON.stringify(form.value)).subscribe(laptops => {
-      this.laptops = laptops;
+    if (this.globalForm.touched) {
+    }
+  }
+  getSample() {
+    this.dataService.getSample().subscribe(data => {
+      this.dataService.laptops = data;
+      this.laptops = data;
       this.dataSource = new MatTableDataSource(this.laptops);
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
     });
   }
+
 
   onChange(event, groupName, fieldName) {
     let field = (<FormArray>(
@@ -280,7 +248,6 @@ export class HomeComponent implements OnInit, OnDestroy{
     if (event.checked) {
       field.push(new FormControl(event.source.value));
       field.markAsTouched();
-      // console.log("Field:" + fieldName);
     } else {
       const i = field.controls.findIndex(x => x.value === event.source.value);
       field.removeAt(i);
@@ -288,15 +255,11 @@ export class HomeComponent implements OnInit, OnDestroy{
   }
 
   getLaptops() {
-    console.log("hi");
-    this.subscription = this.dataService.laptops.subscribe(data => {
-      console.log("herereer");
-      console.log(data);
-      this.laptops = data;
-      this.dataSource = new MatTableDataSource(this.laptops);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
+    this.laptops = this.dataService.laptops;
+    this.dataSource = new MatTableDataSource(this.laptops);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
   }
   onInputChange(event: any, index: number) {
     if(event.value == 5){
@@ -327,6 +290,6 @@ export class HomeComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     // console.log("destroyyyyyeeeed");
-    this.subscription.unsubscribe();
+    // this.subscription.unsubscribe();
   }
 }

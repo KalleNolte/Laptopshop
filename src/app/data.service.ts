@@ -12,7 +12,7 @@ export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
   private url = 'http://localhost:5004/';
   private socket;
-  laptops : Observable<Laptop[]>;
+  laptops : Laptop[];
   firstTime = true ;
   laptop : Laptop;
 
@@ -27,13 +27,11 @@ export class DataService {
     this.socket = io.connect(this.url);
   }
 
-  getSample(){
-    this.saveLaptops(this.http.get<Laptop[]>('/api/sample'));
-    // return this.http.get<Laptop[]>('/api/sample');
+  getSample() : Observable<Laptop[]>{
+    return this.http.get<Laptop[]>('/api/sample');
   }
 
   search(file:any): Observable<Laptop[]>{
-    this.saveLaptops(this.http.post<Laptop[]>('/api/search', file, this.httpOptions));
     return this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
   }
 
@@ -51,33 +49,32 @@ export class DataService {
   getCritizedResult(): Observable<Laptop[]> {
 
     // if (result != null) {
-      this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
+    //   this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
       return this.http.get<Laptop[]>('/alexa/getQuery')
     // }
 
   }
 
-  saveLaptops(laptops:Observable<Laptop[]>){
-    this.laptops = laptops;
-  }
-
-  retrieveLaptops():Observable<Laptop[]>{
-    if(this.laptops) {
-      return this.laptops;
-    }
-  }
+  // saveLaptops(laptops:Observable<Laptop[]>){
+  //   this.laptops = laptops;
+  // }
+  //
+  // retrieveLaptops():Observable<Laptop[]>{
+  //   if(this.laptops) {
+  //     console.log("yeah");
+  //     this.laptops.subscribe(data =>console.log(data));
+  //     return this.laptops;
+  //   }
+  // }
 
   public getResult(): Observable<Laptop[]> {
       // this.socket.emit('getResult');
-      this.laptops = new Observable<Laptop[]>(observer => {
+      return new Observable<Laptop[]>(observer => {
               this.socket.on('result', (data) => {
                 observer.next(data);
-                this.router.navigate(['home']);
               });
           });
-      return this.laptops;
   }
-
 
 }
 
