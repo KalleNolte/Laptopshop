@@ -47,28 +47,11 @@ export class DataService {
     return this.http.post<Laptop>('/alexa/setter', laptop, this.httpOptions);
   }
   getCritizedResult(): Observable<Laptop[]> {
-
-    // if (result != null) {
-    //   this.saveLaptops(this.http.get<Laptop[]>('/alexa/getQuery'));
       return this.http.get<Laptop[]>('/alexa/getQuery')
-    // }
-
   }
 
-  // saveLaptops(laptops:Observable<Laptop[]>){
-  //   this.laptops = laptops;
-  // }
-  //
-  // retrieveLaptops():Observable<Laptop[]>{
-  //   if(this.laptops) {
-  //     console.log("yeah");
-  //     this.laptops.subscribe(data =>console.log(data));
-  //     return this.laptops;
-  //   }
-  // }
 
   public getResult(): Observable<Laptop[]> {
-      // this.socket.emit('getResult');
       return new Observable<Laptop[]>(observer => {
               this.socket.on('result', (data) => {
                 observer.next(data);

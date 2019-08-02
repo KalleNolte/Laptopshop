@@ -54,6 +54,19 @@ def alexa_search():
 
     return jsonify(Backend_Helper.refineResult(res))
 
+@app.route('/api/<asin>', methods =['GET'])
+def getElementByAsin(asin):
+    product = es.search(index='amazon', body ={
+                                                "query":{
+                                                    "match":{
+                                                        "asin" : asin
+                                                      }
+                                                    },
+                                                  "size":1
+                                              })
+    product = Backend_Helper.refineResult(product)
+    return jsonify(product)
+
 
 @app.route('/api/sample', methods=['GET'])
 def getSample():
