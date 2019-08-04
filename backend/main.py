@@ -150,6 +150,8 @@ def do_query(data, allDocs):
   #Compute boolean/binary search for items with weighting = 5
   bin_obj = binary_search.BinarySearch()
   query = bin_obj.createBinarySearchQuery(binary_clean_data)
+  print(data)
+  print(binary_clean_data)
   res = es.search(index="amazon", body=query)
   output_binary = Backend_Helper.refineResult(res)
   res_search = list()
@@ -225,10 +227,13 @@ def do_query(data, allDocs):
 
   # call the search function
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
-
+  print("before filter")
+  print(len(output_binary))
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
-
+  print("after filter")
+  print(len(output_binary))
+  print(len(outputProducts))
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -250,7 +255,7 @@ def do_query(data, allDocs):
 
   # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
   s_p = SortByPrice()
-  outputProducts = s_p.sort_by_price(outputProducts)
+
 
   # #DELETE all products with vagueness_score = 0
   outputProducts_vaguenessGreaterZero = list()
@@ -258,11 +263,15 @@ def do_query(data, allDocs):
   for laptop in outputProducts:
     if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
+  outputProducts_vaguenessGreaterZero = s_p.sort_by_price(outputProducts_vaguenessGreaterZero)
 
   #outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
 
   #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
   #c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+
+  #Needed in frontend
+  outputProducts_vaguenessGreaterZero.append(data)
 
   return outputProducts_vaguenessGreaterZero
 

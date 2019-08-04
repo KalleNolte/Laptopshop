@@ -23,12 +23,12 @@ class BinarySearch():
 
     if "hardDriveSize" in fieldNameToValueDict and len(fieldNameToValueDict["hardDriveSize"].keys()) > 1:
 
-      if "hardDriveType" not in fieldNameToValueDict or fieldNameToValueDict["hardDriveType"].lower() == "hybrid":
+      if "hardDriveType" not in fieldNameToValueDict or "hybrid" in fieldNameToValueDict["hardDriveType"]["hardDriveTypeValue"]:
         hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
         del fieldNameToValueDict["hardDriveSize"]
         fieldNameToValueDict.update({"ssdSize": hardDriveSize_value, "hddSize": hardDriveSize_value})
         boolean_ssd_and_hdd = True
-      elif fieldNameToValueDict["hardDriveType"].lower() == "ssd":
+      elif "ssd" in fieldNameToValueDict["hardDriveType"]["hardDriveTypeValue"]:
         hardDriveSize_value = fieldNameToValueDict["hardDriveSize"]
         del fieldNameToValueDict["hardDriveSize"]
         fieldNameToValueDict.update({"ssdSize": hardDriveSize_value})

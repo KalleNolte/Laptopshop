@@ -22,9 +22,15 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 def searchBinary():
     data = request.get_json()
     clean_data = Backend_Helper.clean_frontend_json(data)
+
     bin_obj = binary_search.BinarySearch();
+
     query = bin_obj.createBinarySearchQuery(clean_data)
+
     res = es.search(index="amazon", body=query)
+
+    print(len(Backend_Helper.refineResult(res)))
+
 
     return jsonify(Backend_Helper.refineResult(res))
 
@@ -50,6 +56,7 @@ def alexa_search():
     bin_obj = binary_search.BinarySearch();
     query = bin_obj.createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
+
 
 
     return jsonify(Backend_Helper.refineResult(res))
