@@ -222,8 +222,8 @@ export class HomeComponent implements OnInit, OnDestroy{
       this.dataService
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
-          // console.log(JSON.stringify(laptops));
-          this.laptops = laptops;
+          console.log(JSON.stringify(laptops));
+          this.laptops = laptops[0];
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

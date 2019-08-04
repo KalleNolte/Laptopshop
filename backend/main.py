@@ -271,7 +271,11 @@ def do_query(data, allDocs):
   #c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
   #Needed in frontend
-  outputProducts_vaguenessGreaterZero.append(data)
+  # outputProducts_vaguenessGreaterZero.append(data)
+
+  outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero, data]
+
+  return outputProducts_vaguenessGreaterZero_with_original_query
 
   return outputProducts_vaguenessGreaterZero
 

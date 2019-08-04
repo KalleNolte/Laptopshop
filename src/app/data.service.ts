@@ -24,7 +24,7 @@ export class DataService {
   };
 
   constructor(private http: HttpClient, private router:Router) {
-    this.socket = io.connect(this.url);
+    // this.socket = io.connect(this.url);
   }
 
   getSample() : Observable<Laptop[]>{

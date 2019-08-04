@@ -452,7 +452,7 @@
       />
     </mat-form-field>
 
-    <table mat-table [dataSource]="dataSource" matSort *ngIf="laptops">
+    <table mat-table [dataSource]="dataSource" matSort *ngIf="laptops[0]">
       <ng-container matColumnDef="image">
         <th mat-header-cell *matHeaderCellDef>Product Image</th>
         <td
