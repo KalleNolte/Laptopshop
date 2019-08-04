@@ -62,10 +62,10 @@ export class HomeComponent implements OnInit, OnDestroy{
   ];
 
   ratings = [
-    { id: 4, name: "4 Stars and more" },
-    { id: 3, name: "3 Stars and more" },
-    { id: 2, name: "2 Stars and more" },
-    { id: 1, name: "1 Star and more" }
+    { id: { minValue: 4, maxValue: 5 }, name: "4 Stars and more" },
+    { id: { minValue: 3, maxValue: 5 }, name: "3 Stars and more" },
+    { id: { minValue: 2, maxValue: 5 }, name: "2 Stars and more" },
+    { id: { minValue: 1, maxValue: 5 }, name: "1 Star and more" }
   ];
 
   chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
@@ -141,7 +141,7 @@ export class HomeComponent implements OnInit, OnDestroy{
       weight: [1]
     }),
     avgRating: this.fb.group({
-      avgRatingValue: this.fb.array([]),
+      avgRatingRange: this.fb.array([]),
       weight: [1]
     }),
     chipsetBrand: this.fb.group({
@@ -223,6 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy{
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
           console.log(JSON.stringify(laptops));
+          // @ts-ignore
           this.laptops = laptops[0];
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;

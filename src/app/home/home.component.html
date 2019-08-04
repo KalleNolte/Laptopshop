@@ -99,9 +99,9 @@
         <mat-card-title>Rating</mat-card-title>
         <div *ngFor="let option of ratings">
           <mat-checkbox
-            (change)="onChange($event, 'avgRating', 'avgRatingValue')"
+            (change)="onChange($event, 'avgRating', 'avgRatingRange')"
             [value]="option.id"
-            ><star-rating  class="filter" [starType]="'svg'" [rating]="option.id"></star-rating><span>& more</span></mat-checkbox
+            ><star-rating  class="filter" [starType]="'svg'" [rating]="option.id.minValue"></star-rating><span>& more</span></mat-checkbox
           >
         </div>
         <mat-slider
