@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
+  attributes : string[] = [];
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
 
@@ -222,13 +223,16 @@ export class HomeComponent implements OnInit, OnDestroy{
       this.dataService
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
-          console.log(JSON.stringify(laptops));
+          // console.log(laptops[1]);
           // @ts-ignore
           this.laptops = laptops[0];
+          this.attributes = Object.keys(laptops[1]);
+          // console.log(this.attributes);
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         });
+      window.scroll(0,0);
     }
   }
 

@@ -477,7 +477,8 @@
           <h3 class="title">{{ (element.productTitle.length > 100)? (element.productTitle | slice:0:100)+'..':(element.productTitle) }}</h3>
           <star-rating  class="stars" *ngIf="element.avgRating" [starType]="'svg'" [rating]="element.avgRating"></star-rating>
           <star-rating class="stars" *ngIf="!element.avgRating" [starType]="'svg'" [rating]="0"></star-rating>
-          <p class ="description">{{element.productTitle}}</p>
+          <div *ngFor="let attr of attributes"></div>
+          <p class ="description">{{element.attr}}</p>
         </td>
       </ng-container>
 
@@ -513,10 +514,6 @@
       showFirstLastButtons
     ></mat-paginator>
   </div>
-  <!-- <div *ngFor="let star of ratings">
-    <mat-icon color="warn" aria-hidden="false" aria-label="star rating"
-      >star</mat-icon
-    >
-  </div> -->
+  <p class ="description">{{attributes[0]}}</p>
 </section>
 

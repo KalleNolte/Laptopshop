@@ -35,8 +35,8 @@ export class DataService {
     return this.http.post<Laptop[]>('/api/search', file, this.httpOptions);
   }
 
-  searchText(file:any): Observable<Laptop[]>{
-    return this.http.post<Laptop[]>('/api/searchText', file, this.httpOptions);
+  searchText(file:any): Observable<any[]>{
+    return this.http.post<any[]>('/api/searchText', file, this.httpOptions);
   }
 
   getLaptop_details(asin:String){

@@ -268,16 +268,18 @@ def do_query(data, allDocs):
   #outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
 
   #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
-  #c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+  c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
   #Needed in frontend
   # outputProducts_vaguenessGreaterZero.append(data)
 
   outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero, data]
 
+  # print(outputProducts)
+
   return outputProducts_vaguenessGreaterZero_with_original_query
 
-  return outputProducts_vaguenessGreaterZero
+  # return outputProducts_vaguenessGreaterZero
 
   #print("first product in outputproducts: ", outputProducts[0])
   #return outputProducts
