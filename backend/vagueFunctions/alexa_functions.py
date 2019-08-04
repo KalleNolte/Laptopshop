@@ -40,4 +40,3 @@ class AlexaSearch :
         result = result[:100]
         result = list(map(tuple, result))
         return result
-    

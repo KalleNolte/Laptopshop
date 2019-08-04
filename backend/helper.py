@@ -13,12 +13,15 @@ class Backend_Helper:
             elif field_value_name in json_dict[field] :
                 if len(json_dict[field][field_value_name]) > 0 :
                     result.update({field:json_dict[field]})
+            elif "intent" in json_dict[field]:
+                result.update({field:json_dict[field]})
         # print("after cleanfin",result)
 
         return result
     @staticmethod
     def clean_for_alexa(json_dict):
         #data[intent_variable].update({"intent":intent,"value":intent_variable_value})
+
         result = dict()
         intent = json_dict["intent"]
         intent_variable = json_dict["intentVariable"]
@@ -36,7 +39,9 @@ class Backend_Helper:
                     value = json_dict[field_name][field_value_name]
 
                 result.update({field_name:{field_value_name : [value],"weight":4}})
-        result.update({json_dict["intentVariable"]:{"intent":intent,"value":intent_variable_value}})
+
+        result.update({intent_variable:{"intent":intent,"value":intent_variable_value,"weight":6}})
+
         return result
 
 
