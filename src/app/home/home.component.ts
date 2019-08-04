@@ -217,18 +217,20 @@ export class HomeComponent implements OnInit, OnDestroy{
 
   onSubmit() {
     if (this.widgetForm.touched) {
-      this.dataService.search(JSON.stringify(this.widgetForm.value)).subscribe(data => {
-      this.dataService.laptops = data;
-      this.laptops = data;
-      this.dataSource = new MatTableDataSource(this.laptops);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
-    }
-
-    if (this.globalForm.touched) {
+      // console.log(this.widgetForm.value);
+      // console.log(JSON.stringify(this.widgetForm.value));
+      this.dataService
+        .search(JSON.stringify(this.widgetForm.value))
+        .subscribe(laptops => {
+          // console.log(JSON.stringify(laptops));
+          this.laptops = laptops;
+          this.dataSource = new MatTableDataSource(this.laptops);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        });
     }
   }
+
   getSample() {
     this.dataService.getSample().subscribe(data => {
       this.dataService.laptops = data;
