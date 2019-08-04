@@ -46,7 +46,7 @@ def alexa_search():
 
     outputProducts = do_query(data,allDocs)
 
-    return jsonify(outputProducts)
+    return jsonify(outputProducts[0])
 
 
 @app.route('/api/search', methods=['POST'])
@@ -130,6 +130,7 @@ def do_query(data, allDocs):
   binary_clean_data = {}
   clean_data = {}
   alexa_clean_data = {}
+  output_binary = list()
   #bool_search_default = False #If no weighting = 5 for any value, do not caculate boolean search below
 
   for field in data.keys():
@@ -145,20 +146,25 @@ def do_query(data, allDocs):
   #Compute boolean/binary search for items with weighting = 5
   bin_obj = binary_search.BinarySearch()
   alexa_searcher = alexa_functions.AlexaSearch(es)
-  query = bin_obj.createBinarySearchQuery(binary_clean_data)
 
-  res = es.search(index="amazon", body=query)
+  if len(binary_clean_data) > 0:
+      query = bin_obj.createBinarySearchQuery(binary_clean_data)
+
+      res = es.search(index="amazon", body=query)
 
 
 
-  output_binary = Backend_Helper.refineResult(res)
+      output_binary = Backend_Helper.refineResult(res)
+
+
+  if len(alexa_clean_data) > 0 :
 
   #Add alexa search results to output_binary, same mechanism and logic for both.
-  alexa_result = get_alexa_search_result(allDocs, alexa_clean_data, alexa_searcher)
+      alexa_result = get_alexa_search_result(allDocs, alexa_clean_data, alexa_searcher)
 
-  print("hello..",alexa_result)
 
-  output_binary += alexa_result
+      output_binary += alexa_result
+
 
 
 
@@ -229,7 +235,6 @@ def do_query(data, allDocs):
 
 
   # --------------------------------------------------------------------#
-  print("KOSOM 7YATY ",res_search)
   resList = [dict(x) for x in res_search]
 
   # Counter objects count the occurrences of objects in the list...
@@ -287,7 +292,8 @@ def do_query(data, allDocs):
   outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero,data]
 
 
-  return outputProducts_vaguenessGreaterZero_with_original_query[0] #For now, TODO: IMPLEMENT THE FRONTEND FOR THIS MATES.
+
+  return outputProducts_vaguenessGreaterZero_with_original_query#For now, TODO: IMPLEMENT THE FRONTEND FOR THIS MATES.
 
   #print("first product in outputproducts: ", outputProducts[0])
   #return outputProducts
@@ -297,6 +303,9 @@ def do_query(data, allDocs):
 
 
 def filter_from_boolean(outputProducts, output_binary):
+
+  if len(output_binary) == 0:
+      return outputProducts,output_binary
 
   count_asin_in_list = []
   for item in outputProducts + output_binary:
@@ -419,7 +428,7 @@ def get_alexa_search_result(allDocs, field_value_dict,alexa_searcher):
       field_value = field_value_dict[field_name]["value"]
       field_intent = field_value_dict[field_name]["intent"]
       res_search.append(alexa_searcher.compute_boolean_value(field_name, 6, field_value, field_intent))
-    print("hoi alexa ",res_search)
+
     resList = [dict(x) for x in res_search]
 
     # Counter objects count the occurrences of objects in the list...
