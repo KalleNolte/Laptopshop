@@ -27,9 +27,9 @@ def searchBinary():
 
     query = bin_obj.createBinarySearchQuery(clean_data)
 
-    res = es.search(index="amazon", body=query)
+    print(query)
 
-    print(len(Backend_Helper.refineResult(res)))
+    res = es.search(index="amazon", body=query)
 
 
     return jsonify(Backend_Helper.refineResult(res))
@@ -47,7 +47,7 @@ def alexa_search():
 
     data[intent_variable].update({"intent":intent,"value":intent_variable_value})
 
-    data[intent_variable]["weight"] = 100
+    data[intent_variable]["weight"] = 5
 
     del data["intent"]
     del data["intentVariable"]
@@ -56,6 +56,8 @@ def alexa_search():
     bin_obj = binary_search.BinarySearch();
     query = bin_obj.createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
+
+    print(query)
 
 
 

@@ -31,7 +31,6 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 def alexa_search():
 
     data = request.get_json()
-    print(data)
     intent = data["intent"]
     intent_variable = data["intentVariable"]
     intent_variable_value = data[data["intentVariable"]][data["intentVariable"]+"Value"]
@@ -44,13 +43,10 @@ def alexa_search():
                                                     "match_all": {}
                                                     }
                                                 })
-    print("-------------------")
-    print(data)
-    outputProducts = do_query(data,allDocs)
-    print("-------------------")
-    print(outputProducts)
 
-    return jsonify(outputProducts)
+    outputProducts = do_query(data,allDocs)
+
+    return jsonify(outputProducts[0])
 
 
 @app.route('/api/search', methods=['POST'])
@@ -70,18 +66,13 @@ def search():
     outputProducts = do_query(data,allDocs)
 
 
-
-    #print("----------------------------------------------------------------")
-    #print(outputProducts[47])
-
-
     return jsonify(outputProducts)
 
 
 @app.route('/api/searchText', methods=['POST'])
 def searchText():
   data = request.get_json()
-  #print(data)
+
   query = data['searchValue']
   outputProducts =[]
   allDocs = es.search(index="amazon", body={
@@ -138,23 +129,51 @@ def do_query(data, allDocs):
   #create binary clean data if weighting is equal to 5
   binary_clean_data = {}
   clean_data = {}
+  alexa_clean_data = {}
+  output_binary = list()
   #bool_search_default = False #If no weighting = 5 for any value, do not caculate boolean search below
 
   for field in data.keys():
     if data[field]['weight'] == 5:
       #bool_search_default = True
       binary_clean_data[field] = data[field] #weigth doesn't matter for boolean search
+    elif data[field]["weight"] == 6: #This is for alexa_search, will be used at the end
+      alexa_clean_data[field] = data[field]
+      pass
     else:
       clean_data[field] = data[field]
 
   #Compute boolean/binary search for items with weighting = 5
   bin_obj = binary_search.BinarySearch()
-  query = bin_obj.createBinarySearchQuery(binary_clean_data)
-  print(data)
-  print(binary_clean_data)
-  res = es.search(index="amazon", body=query)
-  output_binary = Backend_Helper.refineResult(res)
+  alexa_searcher = alexa_functions.AlexaSearch(es)
+
+  if len(binary_clean_data) > 0:
+      query = bin_obj.createBinarySearchQuery(binary_clean_data)
+
+      res = es.search(index="amazon", body=query)
+
+
+
+      output_binary = Backend_Helper.refineResult(res)
+
+
+  if len(alexa_clean_data) > 0 :
+
+  #Add alexa search results to output_binary, same mechanism and logic for both.
+      alexa_result = get_alexa_search_result(allDocs, alexa_clean_data, alexa_searcher)
+
+
+      output_binary += alexa_result
+
+
+
+
+
   res_search = list()
+
+
+
+
 
   # if(len(output_binary)) > 0:
   #     allDocs = [item for item in allDocs if item['asin']  in output_binary]
@@ -162,6 +181,7 @@ def do_query(data, allDocs):
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
+
 
   #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
   #For normalization
@@ -190,7 +210,7 @@ def do_query(data, allDocs):
   price_searcher = vague_search_price.VagueSearchPrice(es)
   ######################################################################## NEW #########################################
 
-  alexa_searcher = alexa_functions.AlexaSearch(es)
+
 
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
@@ -212,8 +232,9 @@ def do_query(data, allDocs):
   res_search += call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_searcher, value_searcher,
                                          alexa_searcher)
 
-  # --------------------------------------------------------------------#
 
+
+  # --------------------------------------------------------------------#
   resList = [dict(x) for x in res_search]
 
   # Counter objects count the occurrences of objects in the list...
@@ -227,13 +248,9 @@ def do_query(data, allDocs):
 
   # call the search function
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
-  print("before filter")
-  print(len(output_binary))
+
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
-  print("after filter")
-  print(len(output_binary))
-  print(len(outputProducts))
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -271,9 +288,8 @@ def do_query(data, allDocs):
   c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
 
   #Needed in frontend
-  # outputProducts_vaguenessGreaterZero.append(data)
 
-  outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero, data]
+  outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero,data]
 
   # print(outputProducts)
 
@@ -289,6 +305,9 @@ def do_query(data, allDocs):
 
 
 def filter_from_boolean(outputProducts, output_binary):
+
+  if len(output_binary) == 0:
+      return outputProducts,output_binary
 
   count_asin_in_list = []
   for item in outputProducts + output_binary:
@@ -402,11 +421,30 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
           res_search.append(value_searcher.compute_vague_value(allDocs, field_name, field_weight, field_value))
         # --------------------------------------------------------------------#
         # Values for alexa
-        elif field_type is "alexa":
-          field_value = field_value_dict[field_type][field_name]["value"]
-          field_intent = field_value_dict[field_type][field_name]["intent"]
-          res_search.append(alexa_searcher.compute_boolean_value(field_name, field_weight, field_value, field_intent))
+
   return res_search
+
+def get_alexa_search_result(allDocs, field_value_dict,alexa_searcher):
+    res_search = list()
+    for field_name in field_value_dict:
+      field_value = field_value_dict[field_name]["value"]
+      field_intent = field_value_dict[field_name]["intent"]
+      res_search.append(alexa_searcher.compute_boolean_value(field_name, 6, field_value, field_intent))
+
+    resList = [dict(x) for x in res_search]
+
+    # Counter objects count the occurrences of objects in the list...
+    count_dict = Counter()
+    for tmp in resList:
+      count_dict += Counter(tmp)
+
+    result = dict(count_dict)
+    asinKeys = list(result.keys())
+
+    # call the search function
+    outputProducts = getElementsByAsin(asinKeys)
+    return outputProducts
+
 
 def getElementsByAsin(asinKeys):
   result = es.search(index="amazon", body={
