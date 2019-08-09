@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
-  attributes : string[] = [];
+  attributes : any[] = [];
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
 
@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit, OnDestroy{
   brands = [
     { id: "acer", name: "Acer" },
     { id: "apple", name: "Apple" },
+    { id: "dell", name: "Dell" },
     { id: "asus", name: "Asus" },
     { id: "fujitsu", name: "Fujitsu" },
     { id: "hp", name: "HP" },
@@ -69,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy{
     { id: { minValue: 1, maxValue: 5 }, name: "1 Star and more" }
   ];
 
-  chipsetBrands = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
+  processorManufacturers = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
 
   screenSizes = [
     { id: { maxValue: 10 }, name: "< 25 cm (10'')" },
@@ -145,8 +146,8 @@ export class HomeComponent implements OnInit, OnDestroy{
       avgRatingRange: this.fb.array([]),
       weight: [1]
     }),
-    chipsetBrand: this.fb.group({
-      chipsetBrandValue: this.fb.array([]),
+    processorManufacturer: this.fb.group({
+      processorManufacturerValue: this.fb.array([]),
       weight: [1]
     }),
     screenSize: this.fb.group({
@@ -207,9 +208,9 @@ export class HomeComponent implements OnInit, OnDestroy{
     return this.widgetForm.get("brandNames") as FormArray;
   }
 
-  get processorManufacturers() {
-    return this.widgetForm.get("processorManufacturers") as FormArray;
-  }
+  // get processorManufacturers() {
+  //   return this.widgetForm.get("processorManufacturers") as FormArray;
+  // }
 
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -226,8 +227,41 @@ export class HomeComponent implements OnInit, OnDestroy{
           // console.log(laptops[1]);
           // @ts-ignore
           this.laptops = laptops[0];
-          this.attributes = Object.keys(laptops[1]);
-          // console.log(this.attributes);
+          let attributes = laptops[1];
+          for (let attributesKey in attributes){
+            for(let y in attributes[attributesKey]){
+              let values = '';
+              if(y.includes("Value")){
+                length = attributes[attributesKey][y].length;
+                for (var i = 0; i < length; i++) {
+                    values +=  attributes[attributesKey][y][i];
+                    if (i != length - 1){
+                        values += "," + " ";
+                    }
+                }
+              }else if (y.includes("Range")){
+                length = attributes[attributesKey][y].length;
+                for (var i = 0; i < length; i++) {
+                    let range = "";
+                    if (! ("maxValue" in attributes[attributesKey][y][i])){
+                      range = " > " + attributes[attributesKey][y][i]["minValue"] ;
+                    }else if (! ("minValue" in attributes[attributesKey][y][i])){
+                      range = "< " + attributes[attributesKey][y][i]["maxValue"] ;
+                    }else{
+                      range = attributes[attributesKey][y][i]["minValue"] + " - " +  attributes[attributesKey][y][i]["maxValue"];
+                    }
+                    values +=  range;
+                    if (i != length - 1){
+                        values += "," + " ";
+                    }
+                }
+              }
+              let obj = {};
+              obj[attributesKey] = values
+              this.attributes.push(obj);
+              break;
+            }
+          }
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;

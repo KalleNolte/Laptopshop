@@ -26,9 +26,6 @@ def searchBinary():
     bin_obj = binary_search.BinarySearch();
 
     query = bin_obj.createBinarySearchQuery(clean_data)
-
-    print(query)
-
     res = es.search(index="amazon", body=query)
 
 

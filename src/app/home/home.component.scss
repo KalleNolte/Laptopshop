@@ -6,7 +6,7 @@
   #searchInput {
     width: 5%;
   }
- 
+
 }
 
 .mainArea {
@@ -77,6 +77,7 @@ td.mat-cell:last-of-type {
 }
 td.mat-cell, td.mat-footer-cell, th.mat-header-cell{
   max-width: 750px;
+  padding-left: 10px;
 }
 .stars{
   width:100%;
@@ -84,5 +85,10 @@ td.mat-cell, td.mat-footer-cell, th.mat-header-cell{
 }
 .title{
   margin-bottom: 8px;
+}
+.description {
+  font-size: 18px;
+  font-weight : 500;
+  margin-bottom: 5px;
 }
 
