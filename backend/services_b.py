@@ -70,6 +70,7 @@ def do_query(data):
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
+  print(field_value_dict)
 
 
   #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
@@ -114,7 +115,6 @@ def do_query(data):
   # Special case to handle price
   if 'price' in clean_data and len(clean_data["price"]) > 1:
     ##NEW##########
-    print(clean_data['price'])
     #res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
     res_search = price_searcher.computeVaguePrice_alternative(allDocs, field_value_dict, price_searcher, res_search)
 
@@ -235,6 +235,10 @@ def get_vague_and_binary_lists(clean_data1):
 
 
 def filter_from_boolean(outputProducts, output_binary):
+
+  if len(output_binary) == 0:
+      return outputProducts,output_binary
+
   count_asin_in_list = []
   for item in outputProducts + output_binary:
     count_asin_in_list.append(item['asin'])
@@ -246,7 +250,7 @@ def filter_from_boolean(outputProducts, output_binary):
       duplicate_list.append(key)
 
   # copy only items that are in both lists
-  outputProducts = [item for item in outputProducts if item['asin'] in duplicate_list]
+  outputProducts = [item for item in outputProducts if item['asin']  in duplicate_list]
   #erase duplicates from output_binary
   output_binary = [item for item in output_binary if item['asin'] not in duplicate_list]
 
@@ -275,27 +279,16 @@ def extract_fields_and_values(fieldNameToValueDict):
     # Ranged terms, example : ram : { minRam : 2,maxRam : 4}
     # If that's the case, then search for minRam and maxRam in fieldNameToValueDict, get them and add range to the query
     value_field_name = fieldName + "Value"
-    if type(fieldNameToValueDict[fieldName]) is dict and (
-      "minValue" in fieldNameToValueDict[fieldName] or "maxValue" in fieldNameToValueDict[fieldName]):
-      # Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
-      # Extract the values of minField and maxField from the JSON coming from the front end
-      if "minValue" in fieldNameToValueDict[fieldName] and "maxValue" in fieldNameToValueDict[fieldName]:
-        result["range"].update({fieldName: {"minValue": fieldNameToValueDict[fieldName]["minValue"]
-          , "maxValue": fieldNameToValueDict[fieldName]["maxValue"]
+    range_field_name = fieldName+"Range"
+    min_field_name = "minValue"
+    max_field_name = "maxValue"
+    if range_field_name in fieldNameToValueDict[fieldName]:
+      result["range"].update({fieldName: {"range" : fieldNameToValueDict[fieldName][range_field_name]
           , "weight": fieldNameToValueDict[fieldName]["weight"]}})
-
-      elif "minValue" in fieldNameToValueDict[fieldName]:
-        result["range"].update({fieldName: {"minValue": fieldNameToValueDict[fieldName]["minValue"],
-                                            "weight": fieldNameToValueDict[fieldName]["weight"]}})
-
-      elif "maxValue" in fieldNameToValueDict[fieldName]:
-        result["range"].update({fieldName: {"maxValue": fieldNameToValueDict[fieldName]["maxValue"],
-                                            "weight": fieldNameToValueDict[fieldName]["weight"]}})
-
     # --------------------------------------------------------------------------------------------------------------------------------#
     # In case of multiple values for the same field, example : ram : [2,4,6], ram is either 2, 4 or 6.
     elif value_field_name in fieldNameToValueDict[fieldName]:
-      if type(fieldNameToValueDict[fieldName][value_field_name]) is list:
+      if type(fieldNameToValueDict[fieldName][value_field_name]) is list and len(fieldNameToValueDict[fieldName][value_field_name]) > 0:
         if type(fieldNameToValueDict[fieldName][value_field_name][0]) is str:
           fieldNameToValueDict[fieldName][value_field_name] = [x.lower() for x in
                                                                fieldNameToValueDict[fieldName][value_field_name]]
@@ -306,12 +299,6 @@ def extract_fields_and_values(fieldNameToValueDict):
           fieldNameToValueDict[fieldName][value_field_name][0]) is float:
           result["vague"].update({fieldName: {"value": fieldNameToValueDict[fieldName][value_field_name],
                                               "weight": fieldNameToValueDict[fieldName]["weight"]}})
-        # --------------------------------------------------------------------------------------------------------------------------------#
-        # Example : match "{ ram :{"value": 8}}"
-      elif type(fieldNameToValueDict[fieldName][value_field_name]) is int or type(
-        fieldNameToValueDict[fieldName][value_field_name]) is float:
-        result["vague"].update({fieldName: {"value": [fieldNameToValueDict[fieldName][value_field_name]],
-                                            "weight": fieldNameToValueDict[fieldName]["weight"]}})
       # --------------------------------------------------------------------------------------------------------------------------------#
       # A normal string match as brandName or hardDriveType
       else:
@@ -327,6 +314,7 @@ def extract_fields_and_values(fieldNameToValueDict):
                                           "value": fieldNameToValueDict[fieldName]["value"],
                                           "weight": fieldNameToValueDict[fieldName]["weight"]}})
   return result
+
 
 
 def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_searcher, value_searcher,
@@ -349,20 +337,20 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
         # --------------------------------------------------------------------#
         # Values for range key in the dict, these will be searched in the range_searcher
         elif field_type is "range":
-          if "minValue" in field_value_dict[field_type][field_name] and "maxValue" in field_value_dict[field_type][
-            field_name]:
-            min_value = field_value_dict[field_type][field_name]["minValue"]
-            max_value = field_value_dict[field_type][field_name]["maxValue"]
-            res_search.append(
-              range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value))
+          for range in field_value_dict[field_type][field_name]["range"] :
+              if "minValue" in range and "maxValue" in range:
+                min_value = range["minValue"]
+                max_value = range["maxValue"]
+                res_search.append(
+                  range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value))
 
-          elif "minValue" in field_value_dict[field_type][field_name]:
-            min_value = field_value_dict[field_type][field_name]["minValue"]
-            res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
+              elif "minValue" in range:
+                min_value = range["minValue"]
+                res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
 
-          elif "maxValue" in field_value_dict[field_type][field_name]:
-            max_value = field_value_dict[field_type][field_name]["maxValue"]
-            res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
+              elif "maxValue" in field_value_dict[field_type][field_name]:
+                max_value = range["maxValue"]
+                res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
         # --------------------------------------------------------------------#
         # Values for binary key in the dict, these will be searched in the value_searcher
         elif field_type is "vague":
@@ -370,11 +358,9 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
           res_search.append(value_searcher.compute_vague_value(allDocs, field_name, field_weight, field_value))
         # --------------------------------------------------------------------#
         # Values for alexa
-        elif field_type is "alexa":
-          field_value = field_value_dict[field_type][field_name]["value"]
-          field_intent = field_value_dict[field_type][field_name]["intent"]
-          res_search.append(alexa_searcher.compute_boolean_value(field_name, field_weight, field_value, field_intent))
+
   return res_search
+
 
 
 def getElementsByAsin(asinKeys):
