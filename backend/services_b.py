@@ -21,20 +21,66 @@ def do_query(data):
   with open(allDocs_path, 'rb') as input:
     allDocs = pickle.load(input)
 
-  clean_data1 = Backend_Helper.clean_frontend_json(data)
-  print("clean_data1")
-  print(clean_data1)
 
-  #The following function actually carries out the binary search by calling the binary search function and removes binary fields from clean_data (vague data)
-  clean_data, output_binary = get_vague_and_binary_lists(clean_data1) #output_binary is an elasticsearch output of a binary search
+  data = Backend_Helper.clean_frontend_json(data)
+
+
+  #create binary clean data if weighting is equal to 5
+  binary_clean_data = {}
+  clean_data = {}
+  alexa_clean_data = {}
+  output_binary = list()
+  #bool_search_default = False #If no weighting = 5 for any value, do not caculate boolean search below
+
+  for field in data.keys():
+    if data[field]['weight'] == 5:
+      #bool_search_default = True
+      binary_clean_data[field] = data[field] #weigth doesn't matter for boolean search
+    elif data[field]["weight"] == 6: #This is for alexa_search, will be used at the end
+      alexa_clean_data[field] = data[field]
+      pass
+    else:
+      clean_data[field] = data[field]
+
+  #Compute boolean/binary search for items with weighting = 5
+  bin_obj = binary_search.BinarySearch()
+  alexa_searcher = alexa_functions.AlexaSearch(es)
+
+  if len(binary_clean_data) > 0:
+      query = bin_obj.createBinarySearchQuery(binary_clean_data)
+
+      res = es.search(index="amazon", body=query)
+
+
+
+      output_binary = Backend_Helper.refineResult(res)
+
+
+  if len(alexa_clean_data) > 0 :
+
+  #Add alexa search results to output_binary, same mechanism and logic for both.
+      alexa_result = get_alexa_search_result(allDocs, alexa_clean_data, alexa_searcher)
+      output_binary += alexa_result
 
   res_search = list()
 
-  # field_value_dict has the form: {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
+  # if(len(output_binary)) > 0:
+  #     allDocs = [item for item in allDocs if item['asin']  in output_binary]
+
+  # field_value_dict has the form:
+  # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
 
-  #Get total cumulative weight cum_weight (for example for all attributes weights were 7) and dividue each score by this cum_weight
-  cum_weight = get_cumulative_weight(field_value_dict)
+
+  #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
+  #For normalization
+
+  weight_sum = 0
+  for field_type in field_value_dict.keys():
+    for field_name in field_value_dict[field_type]:
+      field_weight = field_value_dict[field_type][field_name]["weight"]
+      if field_weight != 5: ##Shouldn't happen though because they have already been removed from clean_data
+        weight_sum += field_weight
 
   # --------------------------------------------------------------------#
   # Objects for each class to use the vague searching functions
@@ -49,12 +95,11 @@ def do_query(data):
   ######################################################################## NEW #########################################
   #Function call in ColorInformation to extract searched values.
   #function extractKeyValuePairs() will do that.
-  c_i_helper = ColorInformation(data, None, VagueSearchPrice.price_scores)
-  searchedValues = c_i_helper.extractKeyValuePairs()
+  c_i_helper = ColorInformation()
   price_searcher = vague_search_price.VagueSearchPrice(es)
   ######################################################################## NEW #########################################
 
-  alexa_searcher = alexa_functions.AlexaSearch(es)
+
 
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
@@ -62,61 +107,82 @@ def do_query(data):
     # res_search += vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
     #                                                                                       harddrive_searcher,
     #                                                                                       res_search)
-    res_search = vague_search_harddrive.computeVagueHardDrive_alternative(allDocs, clean_data,
+    res_search = harddrive_searcher.computeVagueHardDrive_alternative(allDocs, field_value_dict,
                                                                            harddrive_searcher,
                                                                            res_search)
   #  --------------------------------------------------------------------#
   # Special case to handle price
-  if 'price' in clean_data and len(clean_data["price"]) > 1:                                                                        ##NEW##########
+  if 'price' in clean_data and len(clean_data["price"]) > 1:
+    ##NEW##########
+    print(clean_data['price'])
     #res_search += vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
-    res_search = vague_search_price.VagueSearchPrice.computeVaguePrice_alternative(allDocs, clean_data, price_searcher, res_search, searchedValues)
+    res_search = price_searcher.computeVaguePrice_alternative(allDocs, field_value_dict, price_searcher, res_search)
 
   # --------------------------------------------------------------------#
   # Gets scores for all other attributes
   res_search += call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_searcher, value_searcher,
                                          alexa_searcher)
 
-  # --------------------------------------------------------------------#
 
-  #The following function makes all the calls to functions that carry out an elastic search per field
-  # result is just the dictionary of asin, score values, outputProducts contains all fields per asin
-  outputProducts, result = get_vague_result(res_search)
+
+  # --------------------------------------------------------------------#
+  resList = [dict(x) for x in res_search]
+
+  # Counter objects count the occurrences of objects in the list...
+  count_dict = Counter()
+  for tmp in resList:
+    count_dict += Counter(tmp)
+
+  result = dict(count_dict)
+  sortedDict = collections.OrderedDict(sorted(result.items(), key=lambda x: x[1], reverse=True))
+  asinKeys = list(result.keys())
+
+  # call the search function
+  outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
 
-  # Add a vagueness score to the returned objects and normalize
+  # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
     # Normalize the scores so that for each score x,  0< x <=1
-    item['vaguenessScore'] = result[item['asin']]/cum_weight
+    item['vaguenessScore'] = result[item['asin']]/weight_sum
 
-  #sort outputProducts based on vagueness score
+
   outputProducts = sorted(outputProducts, key=lambda x: x["vaguenessScore"], reverse=True)
 
-
   for item in output_binary: #binary search results that did not meet other vague requirements
-    item['vaguenessScore'] =None
+    item['vaguenessScore'] = None
 
-  # concatenate with products with weighting 5 *******
+  # concatenate with products with weighting 5 ***
   outputProducts = outputProducts + output_binary
-
   # products with same vagueness score should be listed according to price descending
-  c_i = ColorInformation(data, outputProducts, VagueSearchPrice.price_scores)
-  searchedValues = c_i.extractKeyValuePairs()
-  c_i.prozessDataBinary(searchedValues)
+
+  #searchedValues = c_i.extractKeyValuePairs()
+  #c_i.prozessDataBinary(searchedValues)
 
   # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
   s_p = SortByPrice()
-  outputProducts = s_p.sort_by_price(outputProducts)
+
 
   # #DELETE all products with vagueness_score = 0
   outputProducts_vaguenessGreaterZero = list()
+
   for laptop in outputProducts:
     if laptop["vaguenessScore"] != 0:
       outputProducts_vaguenessGreaterZero.append(laptop)
+  outputProducts_vaguenessGreaterZero = s_p.sort_by_price(outputProducts_vaguenessGreaterZero)
 
-  print("first product in outputproducts_vaguenessGreaterZero: ", outputProducts_vaguenessGreaterZero[0])
-  return outputProducts_vaguenessGreaterZero
+  #outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
+
+  #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
+  c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+
+  #Needed in frontend
+
+  outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero,data]
+
+  return outputProducts_vaguenessGreaterZero_with_original_query
 
 
 def get_vague_result(res_search):
@@ -349,6 +415,27 @@ def get_all_documents():
 #     }
 #   })
 #   return allDocs
+
+def get_alexa_search_result(allDocs, field_value_dict, alexa_searcher):
+    res_search = list()
+    for field_name in field_value_dict:
+      field_value = field_value_dict[field_name]["value"]
+      field_intent = field_value_dict[field_name]["intent"]
+      res_search.append(alexa_searcher.compute_boolean_value(field_name, 6, field_value, field_intent))
+
+    resList = [dict(x) for x in res_search]
+
+    # Counter objects count the occurrences of objects in the list...
+    count_dict = Counter()
+    for tmp in resList:
+      count_dict += Counter(tmp)
+
+    result = dict(count_dict)
+    asinKeys = list(result.keys())
+
+    # call the search function
+    outputProducts = getElementsByAsin(asinKeys)
+    return outputProducts
 
 def get_test_documents():
    some_docs = dao.search_for_some_docs()
