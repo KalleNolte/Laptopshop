@@ -497,15 +497,15 @@
                     <div *ngFor="let y of x | keyvalue">
                         <div *ngIf="element.matched[y.key]=='green' " class="element">
                             <span>{{y.key | titlecase}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
-                            <img src="../assets/images/right_symbol.png" />
+                            <img src="../assets/images/check.jpg" />
                         </div>
                         <div *ngIf="element.matched[y.key]=='red' " class="element">
                             <span>{{y.key}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
-                            <img src="../assets/images/wrong_symbol.png" />
+                            <img src="../assets/images/x.jpg" />
                         </div>
                         <div *ngIf="element.matched[y.key]=='yellow' " class="element">
                             <span>{{y.key}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
-                            <img src="../assets/images/yellow.png" />
+                            <img src="../assets/images/question.png" />
                         </div>
                     </div>
                 </div>
