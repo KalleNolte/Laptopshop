@@ -225,6 +225,7 @@ export class HomeComponent implements OnInit, OnDestroy{
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
           // console.log(laptops[1]);
+          this.attributes = [];
           // @ts-ignore
           this.laptops = laptops[0];
           let attributes = laptops[1];
