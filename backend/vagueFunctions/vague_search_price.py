@@ -22,8 +22,8 @@ class VagueSearchPrice():
     #lowerSupport = float(minPrice) - ((float(minPrice) - allPrices[0]) / 2)
     #upperSupport = float(maxPrice) + ((allPrices[-1] - float(maxPrice)) / 2)
     # NEW VERSION
-    lowerSupport = float(minPrice) - (float(searchedValues["maxValue"]) - float(searchedValues["minValue"]))
-    upperSupport = float(maxPrice) + float(searchedValues["maxValue"]) - float(searchedValues["minValue"])
+    lowerSupport = float(minPrice) * 0.8
+    upperSupport = float(maxPrice) * 1.2
     print("lowerSupport: ", lowerSupport)
     print("upperSupport: ", upperSupport)
     #print(allPrices[0])
