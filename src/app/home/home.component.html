@@ -479,7 +479,7 @@
           <star-rating class="stars" *ngIf="!element.avgRating" [starType]="'svg'" [rating]="0"></star-rating>
           <div *ngFor="let x of attributes">
             <div *ngFor="let y of x | keyvalue">
-              <span class = "description">{{y.key | titlecase}} : {{element[y.key]}}</span>
+                <span class = "description" *ngIf="element[y.key]">{{y.key | titlecase}} : {{element[y.key]}}</span>
               <div style="clear: both"></div>
             </div>
             <div style="clear: both"></div>
@@ -500,11 +500,11 @@
                             <img src="../assets/images/check.jpg" />
                         </div>
                         <div *ngIf="element.matched[y.key]=='red' " class="element">
-                            <span>{{y.key}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
+                            <span>{{y.key | titlecase}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
                             <img src="../assets/images/x.jpg" />
                         </div>
                         <div *ngIf="element.matched[y.key]=='yellow' " class="element">
-                            <span>{{y.key}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
+                            <span>{{y.key | titlecase}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
                             <img src="../assets/images/question.png" />
                         </div>
                     </div>

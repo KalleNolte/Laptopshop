@@ -258,7 +258,12 @@ export class HomeComponent implements OnInit, OnDestroy{
                 }
               }
               let obj = {};
-              obj[attributesKey] = values
+              if(attributesKey == 'hardDriveSize'){
+                obj['ssdSize'] = values;
+                obj['hddSize'] = values;
+              }else {
+                obj[attributesKey] = values;
+              }
               this.attributes.push(obj);
               break;
             }

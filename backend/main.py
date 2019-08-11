@@ -54,7 +54,6 @@ def search():
     service.get_all_documents()
     outputProducts = service.do_query(data)
 
-    print(outputProducts)
     return jsonify(outputProducts)
 
 

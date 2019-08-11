@@ -83,22 +83,21 @@ class ColorInformation:
       for value in query_values :
 
           if "minValue" in value and "maxValue" in value :
-
-              if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
+              if float(laptop_value) >= value["minValue"] and float(laptop_value) <=value["maxValue"]:
                   return "green"
               maxValue = value["maxValue"]
               minValue = value["minValue"]
 
           elif "minValue" in value  :
 
-              if laptop_value >= value["minValue"]:
+              if float(laptop_value) >= value["minValue"]:
                   return "green"
               maxValue = None
               minValue = value["minValue"]
 
           elif "maxValue" in value  :
 
-              if laptop_value <= value["maxValue"]:
+              if float(laptop_value) <= value["maxValue"]:
                   return "green"
               maxValue = value["maxValue"]
               minValue = None
@@ -121,7 +120,7 @@ class ColorInformation:
           if minValue == 0:
               lowerSupport = 0
 
-          if laptop_value >= lowerSupport and laptop_value <= upperSupport :
+          if float(laptop_value) >= lowerSupport and float(laptop_value) <= upperSupport :
               return "yellow"
       return "red"
 

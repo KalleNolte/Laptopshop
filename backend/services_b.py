@@ -70,7 +70,7 @@ def do_query(data):
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
-  print(field_value_dict)
+  # print(field_value_dict)
 
 
   #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
@@ -206,7 +206,7 @@ def get_cumulative_weight(field_value_dict):
       field_weight = field_value_dict[field_type][field_name]["weight"]
       if field_weight != 5:  ##Shouldn't happen though because they have already been removed from clean_data
         cum_weight += field_weight
-  print("cum_weight: ", cum_weight)
+  # print("cum_weight: ", cum_weight)
   return cum_weight
 
 
@@ -224,8 +224,8 @@ def get_vague_and_binary_lists(clean_data1):
       # binary_clean data has to also contain the empty/meaningless fields  because this is the format needed for BinarySearch() method
       # This doesn't matter though because weight has no meaning for boolean search and is not used in the calculation for the result set
       binary_clean_data[field] = {'weight': 1}
-  print("print binary_clean_data: ", binary_clean_data)
-  print("print clean_data: ", clean_data)
+  # print("print binary_clean_data: ", binary_clean_data)
+  # print("print clean_data: ", clean_data)
   # Compute boolean/binary search for items with weighting = 5
   bin_obj = binary_search.BinarySearch()
   query = bin_obj.createBinarySearchQuery(binary_clean_data)
@@ -380,7 +380,7 @@ def getElementsByAsin(asinKeys):
 def get_all_documents():
 
   if os.path.exists('./allDocs.obj'):
-    print("allDocs exists")
+    # print("allDocs exists")
     if os.path.getsize(allDocs_path)>0:
       with open(allDocs_path, "rb") as f:
         unpickler = pickle.Unpickler(f)
