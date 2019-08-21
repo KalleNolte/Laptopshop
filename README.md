@@ -1,27 +1,19 @@
 # Laptopshop
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+Laptop Search engine with the following freatures :
+
+1- Vague search system to results with according to its relevance to the searched laptop
+2- Boolean search system to show only Laptops with the given criteria
+3- The ability to refine the search result using voice queries for one attribute at a time
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+1- Navigate in the backend Folder and run main.py using python interpreter for the Vague search system or main_binary.py for the binary search system.
+2- Run `ng start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+3- if you want to activate Alexa, run main_alexa.py 
 
-## Code scaffolding
+# Using Alexa
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+1- Choose any laptop from the search result that will direct to the details page of this laptop
+2- To activate Alexa use the command Voice Choice
+3- You can use commands like (bigger screen, smaller ram size ,..) to refine the search result using the choosen laptop as refrence.
