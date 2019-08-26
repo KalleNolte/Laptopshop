@@ -28,10 +28,10 @@ def searchBinary():
     query = bin_obj.createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
 
-    final_result = [res,data]
+    final_result = [Backend_Helper.refineResult(res),data]
 
 
-    return jsonify(Backend_Helper.refineResult(res))
+    return jsonify(final_result)
 
 @app.route('/api/search/alexa', methods=['POST'])
 def alexa_search():
