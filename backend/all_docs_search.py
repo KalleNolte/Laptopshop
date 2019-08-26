@@ -1,4 +1,4 @@
-from backend.main import es
+from main import es
 
 
 def search_for_all_docs():

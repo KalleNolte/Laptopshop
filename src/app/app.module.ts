@@ -25,6 +25,8 @@ import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
 import { StarRatingModule } from 'angular-star-rating';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { WebsocketService } from './websocket.service';
 import {DataService} from './data.service';
@@ -38,6 +40,8 @@ import {DataService} from './data.service';
     CartComponent
   ],
   imports: [
+    BrowserAnimationsModule,
+    MatTooltipModule,
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,

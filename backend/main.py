@@ -18,7 +18,7 @@ from helper import Backend_Helper
 from addMatchedInformation.add_Matched_Information import ColorInformation
 from sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
 from vagueFunctions.vague_search_price import VagueSearchPrice
-import backend.services_b as service
+import services_b as service
 
 es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 app = Flask(__name__) #Create the flask instance, __name__ is the name of the current Python module
@@ -36,7 +36,7 @@ def alexa_search():
     data = Backend_Helper.clean_for_alexa(data)
     allDocs = service.get_all_documents()
 
-    outputProducts = service.do_query(data, allDocs)
+    outputProducts = service.do_query(data)
 
     return jsonify(outputProducts[0])
 

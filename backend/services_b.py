@@ -2,15 +2,15 @@ import collections
 import os
 from collections import Counter
 
-from backend.addMatchedInformation.add_Matched_Information import ColorInformation
-from backend.binaryFunctions import binary_search, binary_search_text
-from backend.helper import Backend_Helper
-from backend.main import es
-from backend.sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
-from backend.vagueFunctions import vague_search_range, vague_search_harddrive, vague_search_value, vague_search_price, \
+from addMatchedInformation.add_Matched_Information import ColorInformation
+from binaryFunctions import binary_search, binary_search_text
+from helper import Backend_Helper
+from main import es
+from sortByPriceSameVagunessScore.sort_by_price_same_vaguness_score import SortByPrice
+from vagueFunctions import vague_search_range, vague_search_harddrive, vague_search_value, vague_search_price, \
   alexa_functions
-import backend.all_docs_search as dao
-from backend.vagueFunctions.vague_search_price import VagueSearchPrice
+import all_docs_search as dao
+from vagueFunctions.vague_search_price import VagueSearchPrice
 import pickle
 
 
@@ -426,6 +426,3 @@ def get_alexa_search_result(allDocs, field_value_dict, alexa_searcher):
 def get_test_documents():
    some_docs = dao.search_for_some_docs()
    return some_docs
-
-
-

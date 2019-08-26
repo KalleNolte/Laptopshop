@@ -27,7 +27,7 @@
 <section class="mainArea" fxLayout="row" fxLayoutAlign="start">
   <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
     <form [formGroup]="widgetForm" (ngSubmit)="onSubmit()">
-      <mat-card fxLayout="column" formGroupName="brandName">
+      <mat-card fxLayout="column" formGroupName="brandName"  [matTooltip]="onHover(0)" >
         <mat-card-title>Brand Name</mat-card-title>
         <div *ngFor="let brand of brands">
           <mat-checkbox
@@ -61,7 +61,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="price">
+      <mat-card fxLayout="column" formGroupName="price" [matTooltip]="onHover(1)">
         <mat-card-title>Price</mat-card-title>
         <div *ngFor="let option of prices">
           <mat-checkbox
@@ -95,7 +95,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="avgRating">
+      <mat-card fxLayout="column" formGroupName="avgRating" [matTooltip]="onHover(2)">
         <mat-card-title>Rating</mat-card-title>
         <div *ngFor="let option of ratings">
           <mat-checkbox
@@ -129,7 +129,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorManufacturer">
+      <mat-card fxLayout="column" formGroupName="processorManufacturer" [matTooltip]="onHover(3)">
         <mat-card-title>Processor Manufacturer</mat-card-title>
         <div *ngFor="let option of processorManufacturers">
           <mat-checkbox
@@ -163,7 +163,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="screenSize">
+      <mat-card fxLayout="column" formGroupName="screenSize" [matTooltip]="onHover(4)">
         <mat-card-title>Screen Size</mat-card-title>
         <div *ngFor="let option of screenSizes">
           <mat-checkbox
@@ -197,7 +197,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorCount">
+      <mat-card fxLayout="column" formGroupName="processorCount" [matTooltip]="onHover(5)">
         <mat-card-title>Processor Type</mat-card-title>
         <div *ngFor="let option of processorCores">
           <mat-checkbox
@@ -231,7 +231,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorSpeed">
+      <mat-card fxLayout="column" formGroupName="processorSpeed" [matTooltip]="onHover(6)">
         <mat-card-title>Processor Speed</mat-card-title>
         <div *ngFor="let option of processorSpeeds">
           <mat-checkbox
@@ -265,7 +265,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveType">
+      <mat-card fxLayout="column" formGroupName="hardDriveType" [matTooltip]="onHover(7)">
         <mat-card-title>Hard Drive Type</mat-card-title>
         <div *ngFor="let option of hardDriveTypes">
           <mat-checkbox
@@ -299,7 +299,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveSize">
+      <mat-card fxLayout="column" formGroupName="hardDriveSize" [matTooltip]="onHover(8)">
         <mat-card-title>Hard Drive Size</mat-card-title>
         <div *ngFor="let option of hardDriveSizes">
           <mat-checkbox
@@ -333,7 +333,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="operatingSystem">
+      <mat-card fxLayout="column" formGroupName="operatingSystem" [matTooltip]="onHover(9)">
         <mat-card-title>Operating System</mat-card-title>
         <div *ngFor="let option of operatingSystems">
           <mat-checkbox
@@ -369,7 +369,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="ram">
+      <mat-card fxLayout="column" formGroupName="ram" [matTooltip]="onHover(10)">
         <mat-card-title>Ram Size</mat-card-title>
         <div *ngFor="let option of ramOptions">
           <mat-checkbox
@@ -403,7 +403,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="itemWeight">
+      <mat-card fxLayout="column" formGroupName="itemWeight" [matTooltip]="onHover(11)">
         <mat-card-title>Weight</mat-card-title>
         <div *ngFor="let option of weights">
           <mat-checkbox
@@ -524,4 +524,3 @@
     ></mat-paginator>
   </div>
 </section>
-
