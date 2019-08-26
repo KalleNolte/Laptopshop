@@ -28,6 +28,8 @@ def searchBinary():
     query = bin_obj.createBinarySearchQuery(clean_data)
     res = es.search(index="amazon", body=query)
 
+    final_result = [res,data]
+
 
     return jsonify(Backend_Helper.refineResult(res))
 
