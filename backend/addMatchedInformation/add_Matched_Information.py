@@ -1,4 +1,5 @@
 from vagueFunctions.vague_search_price import VagueSearchPrice
+# from backend.vagueFunctions.vague_search_price import VagueSearchPrice
 import numpy as np
 
 #Changed vague_search_price to access vagnuess-scores
@@ -11,7 +12,7 @@ class ColorInformation:
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
 
-
+    print("add_matched_information function")
     for laptop in laptops:
         result = dict()
         for field in laptop :
@@ -22,17 +23,17 @@ class ColorInformation:
                         result.update({field:color_value})
 
                 elif field in query :
-
                     field_range_name = field+"Range"
                     field_value_name = field+"Value"
 
-                    if field is "price" :
+                    # if field is "price" :  # This code is never being reached
+                    #   print("price")
+                    #   print("!!!!!!!!!!!")
+                    #
+                    #   color_value = self.get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
+                    #   result.update({field:color_value})
 
-                      color_value = get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
-                      result.update({field:color_value})
-
-                    elif field_range_name in query[field] :
-
+                    if field_range_name in query[field] :
                       color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
                       result.update({field:color_value})
 
@@ -78,6 +79,7 @@ class ColorInformation:
             return "yellow"
 
       return "red"
+
   def get_ranged_field_color(self,laptop_value,query_values,allDocs,field_name):
 
       for value in query_values :
@@ -115,43 +117,51 @@ class ColorInformation:
           if minValue is None:
               minValue = allValues[0]
 
-          lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
-          upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
+          # lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
+          # upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
+          # if minValue == 0:
+          #     lowerSupport = 0
+
+          lowerSupport = float(minValue) - (float(maxValue) - float(minValue))
+          upperSupport = float(maxValue) + float(maxValue) - float(minValue)
+
           if minValue == 0:
-              lowerSupport = 0
+            lowerSupport = 0
 
           if float(laptop_value) >= lowerSupport and float(laptop_value) <= upperSupport :
               return "yellow"
       return "red"
 
-  def get_price_field_color(self,laptop_value,query_values,allDocs,field_name):
-      best_answer = "red"
-      for value in query_values :
-
-          if "minValue" in value and "maxValue" in value :
-              if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
-                  answer =  "green"
-
-          elif "minValue" in value  :
-              if laptop_value >= value["minValue"]:
-                  answer =  "green"
-
-          elif "maxValue" in value  :
-              if laptop_value <= value["maxValue"]:
-                  answer =  "green"
-
-          if answer == "green" :
-              return answer
-
-          else :
-              answer = self.prozessColorAttributePrice(value,laptop_value)
-
-          if answer == "green" :
-              return answer
-          if answer == "yellow" :
-              best_answer = "yellow"
-
-      return best_answer
+  # def get_price_field_color(self,laptop_value,query_values,allDocs,field_name):
+  #     print("in get_price_field_color function")
+  #     best_answer = "red"
+  #     for value in query_values :
+  #
+  #         if "minValue" in value and "maxValue" in value :
+  #             if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
+  #                 answer =  "green"
+  #
+  #         elif "minValue" in value  :
+  #             if laptop_value >= value["minValue"]:
+  #                 answer =  "green"
+  #
+  #         elif "maxValue" in value  :
+  #             if laptop_value <= value["maxValue"]:
+  #                 answer =  "green"
+  #
+  #         if answer == "green" :
+  #             return answer
+  #
+  #         else :
+  #             # print("What is value, laptop_value in function add_matched_information", value, " ", laptop_value)
+  #             answer = self.prozessColorAttributePrice(value,laptop_value) # laptop_value is price range
+  #
+  #         if answer == "green" :
+  #             return answer
+  #         if answer == "yellow" :
+  #             best_answer = "yellow"
+  #
+  #     return best_answer
 
 
   def prozessDataBinary(self,searchedValues):
@@ -221,24 +231,25 @@ class ColorInformation:
 
   #Price can be green, yellow or red, depending on the threshhold-----------------#
   #-------------------------------------------------------------------------------#
-  def prozessColorAttributePrice(self,searchedValues,laptop_value):
-    threshholdPrice = self.prozessThreshholdPrice(searchedValues)
-    try:
-      if (laptop_value >= float(searchedValues['minValue'])-threshholdPrice):
-        if (float(laptop_value) < float(searchedValues["minValue"])):
-          return 'yellow'
-      else:
-        return 'red'
-    except:
-      pass
-    try:
-      if (laptop_value <= float(searchedValues['maxValue'])+threshholdPrice):
-        if (float(laptop_value) > float(searchedValues["maxValue"])):
-          return 'yellow'
-      else:
-        return 'red'
-    except:
-      pass
+  # def prozessColorAttributePrice(self,searchedValues,laptop_value):
+  #   print("in prozessColorAttributePrice function")
+  #   threshholdPrice = self.prozessThreshholdPrice(searchedValues)
+  #   try:
+  #     if (laptop_value >= float(searchedValues['minValue'])-threshholdPrice):
+  #       if (float(laptop_value) < float(searchedValues["minValue"])):
+  #         return 'yellow'
+  #     else:
+  #       return 'red'
+  #   except:
+  #     pass
+  #   try:
+  #     if (laptop_value <= float(searchedValues['maxValue'])+threshholdPrice):
+  #       if (float(laptop_value) > float(searchedValues["maxValue"])):
+  #         return 'yellow'
+  #     else:
+  #       return 'red'
+  #   except:
+  #     pass
 
 
   def prozessColorAttributeByVaguenessScore(self,laptop):
