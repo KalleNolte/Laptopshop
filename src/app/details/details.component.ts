@@ -11,7 +11,7 @@ import { NgModule } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import { keyValuesToMap } from '@angular/flex-layout/extended/typings/style/style-transforms';
-import {WebsocketService} from '../websocket.service';
+// import {WebsocketService} from '../websocket.service';
 import {MatTableDataSource} from '@angular/material';
 
 

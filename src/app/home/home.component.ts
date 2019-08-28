@@ -15,7 +15,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
 import * as $ from 'jquery/dist/jquery.min.js';
-import {WebsocketService} from '../websocket.service';
+// import {WebsocketService} from '../websocket.service';
 
 
 declare const callme: any;

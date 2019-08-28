@@ -181,6 +181,7 @@ def do_query(data):
   #Needed in frontend
 
   outputProducts_vaguenessGreaterZero_with_original_query = [outputProducts_vaguenessGreaterZero,data]
+  print("last output", outputProducts_vaguenessGreaterZero_with_original_query)
 
   return outputProducts_vaguenessGreaterZero_with_original_query
 

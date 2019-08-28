@@ -62,13 +62,12 @@ def searchText():
   data = request.get_json()
 
   query = data['searchValue']
-  outputProducts =[]
 
   allDocs = service.get_all_documents()
 
   free_text_searcher =vague_search_freetext.VagueFreeText(es)
   res_search= free_text_searcher.compute_vague_freetext(allDocs, query, False) #False => not boolean search
-  #print(res_search)
+
 
   #Move this to the services layer..
   outputProducts = Backend_Helper.refineResult(res_search)
