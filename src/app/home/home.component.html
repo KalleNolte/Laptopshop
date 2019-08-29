@@ -475,6 +475,7 @@
           [routerLink]="['/details', element.asin]"
         >
           <h3 class="title">{{ (element.productTitle.length > 100)? (element.productTitle | slice:0:100)+'..':(element.productTitle) }}</h3>
+          <h4 class="title">ID: {{element.asin}}</h4>
           <star-rating  class="stars" *ngIf="element.avgRating" [starType]="'svg'" [rating]="element.avgRating"></star-rating>
           <star-rating class="stars" *ngIf="!element.avgRating" [starType]="'svg'" [rating]="0"></star-rating>
           <div *ngFor="let x of attributes">

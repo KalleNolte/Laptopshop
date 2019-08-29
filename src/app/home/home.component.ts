@@ -236,6 +236,8 @@ export class HomeComponent implements OnInit, OnDestroy{
       this.dataService
         .search(JSON.stringify(this.widgetForm.value))
         .subscribe(laptops => {
+          //@ts-ignore
+          this.dataService.laptops = laptops[0];
           // console.log(laptops[1]);
           this.attributes = [];
           // @ts-ignore
