@@ -3,9 +3,9 @@ import {
   OnInit,
   ViewChild,
   HostListener,
-  ElementRef,OnDestroy
-
-} from '@angular/core';
+  ElementRef,
+  OnDestroy
+} from "@angular/core";
 import { FormBuilder, FormGroup, FormControl, FormArray } from "@angular/forms";
 import { NgForm } from "@angular/forms";
 import { DataService } from "../data.service";
@@ -14,23 +14,21 @@ import data from "../../assets/dummyData.json";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource, MatSort } from "@angular/material";
 import { DataSource } from "@angular/cdk/table";
-import * as $ from 'jquery/dist/jquery.min.js';
-import {WebsocketService} from '../websocket.service';
-
+import * as $ from "jquery/dist/jquery.min.js";
+import { WebsocketService } from "../websocket.service";
 
 declare const callme: any;
-
 
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  styleUrls: ["./home.component.scss"]
 })
-export class HomeComponent implements OnInit, OnDestroy{
+export class HomeComponent implements OnInit, OnDestroy {
   // dummyData = <any>data;
   state: string = "";
   laptops: Laptop[] = [];
-  attributes : any[] = [];
+  attributes: any[] = [];
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
 
@@ -70,7 +68,10 @@ export class HomeComponent implements OnInit, OnDestroy{
     { id: { minValue: 1, maxValue: 5 }, name: "1 Star and more" }
   ];
 
-  processorManufacturers = [{ id: "amd", name: "AMD" }, { id: "intel", name: "Intel" }];
+  processorManufacturers = [
+    { id: "amd", name: "AMD" },
+    { id: "intel", name: "Intel" }
+  ];
 
   screenSizes = [
     { id: { maxValue: 10 }, name: "< 25 cm (10'')" },
@@ -193,16 +194,13 @@ export class HomeComponent implements OnInit, OnDestroy{
   ngOnInit() {
     if (this.dataService.firstTime) {
       this.getSample();
-      this.dataService.firstTime = false
+      this.dataService.firstTime = false;
     } else {
       this.getLaptops();
     }
-    this.arr = new Array(12)
+    this.arr = new Array(12);
     this.arr.fill(0);
-
   }
-
-
 
   get brandNames() {
     return this.widgetForm.get("brandNames") as FormArray;
@@ -216,7 +214,6 @@ export class HomeComponent implements OnInit, OnDestroy{
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-
   onSubmit() {
     if (this.widgetForm.touched) {
       // console.log(this.widgetForm.value);
@@ -228,36 +225,39 @@ export class HomeComponent implements OnInit, OnDestroy{
           // @ts-ignore
           this.laptops = laptops[0];
           let attributes = laptops[1];
-          for (let attributesKey in attributes){
-            for(let y in attributes[attributesKey]){
-              let values = '';
-              if(y.includes("Value")){
+          for (let attributesKey in attributes) {
+            for (let y in attributes[attributesKey]) {
+              let values = "";
+              if (y.includes("Value")) {
                 length = attributes[attributesKey][y].length;
                 for (var i = 0; i < length; i++) {
-                    values +=  attributes[attributesKey][y][i];
-                    if (i != length - 1){
-                        values += "," + " ";
-                    }
+                  values += attributes[attributesKey][y][i];
+                  if (i != length - 1) {
+                    values += "," + " ";
+                  }
                 }
-              }else if (y.includes("Range")){
+              } else if (y.includes("Range")) {
                 length = attributes[attributesKey][y].length;
                 for (var i = 0; i < length; i++) {
-                    let range = "";
-                    if (! ("maxValue" in attributes[attributesKey][y][i])){
-                      range = " > " + attributes[attributesKey][y][i]["minValue"] ;
-                    }else if (! ("minValue" in attributes[attributesKey][y][i])){
-                      range = "< " + attributes[attributesKey][y][i]["maxValue"] ;
-                    }else{
-                      range = attributes[attributesKey][y][i]["minValue"] + " - " +  attributes[attributesKey][y][i]["maxValue"];
-                    }
-                    values +=  range;
-                    if (i != length - 1){
-                        values += "," + " ";
-                    }
+                  let range = "";
+                  if (!("maxValue" in attributes[attributesKey][y][i])) {
+                    range = " > " + attributes[attributesKey][y][i]["minValue"];
+                  } else if (!("minValue" in attributes[attributesKey][y][i])) {
+                    range = "< " + attributes[attributesKey][y][i]["maxValue"];
+                  } else {
+                    range =
+                      attributes[attributesKey][y][i]["minValue"] +
+                      " - " +
+                      attributes[attributesKey][y][i]["maxValue"];
+                  }
+                  values += range;
+                  if (i != length - 1) {
+                    values += "," + " ";
+                  }
                 }
               }
               let obj = {};
-              obj[attributesKey] = values
+              obj[attributesKey] = values;
               this.attributes.push(obj);
               break;
             }
@@ -266,7 +266,7 @@ export class HomeComponent implements OnInit, OnDestroy{
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
         });
-      window.scroll(0,0);
+      window.scroll(0, 0);
     }
   }
 
@@ -279,7 +279,6 @@ export class HomeComponent implements OnInit, OnDestroy{
       this.dataSource.paginator = this.paginator;
     });
   }
-
 
   onChange(event, groupName, fieldName) {
     let field = (<FormArray>(
@@ -300,34 +299,33 @@ export class HomeComponent implements OnInit, OnDestroy{
     this.dataSource = new MatTableDataSource(this.laptops);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-
   }
   onInputChange(event: any, index: number) {
-    if(event.value == 5){
+    console.log(event.value);
+    if (event.value == 5) {
       this.arr[index] = 1;
-    }else{
+    } else {
       this.arr[index] = 0;
     }
   }
-  createRange(number){
-  var items: number[] = [];
-  for(var i = 1; i <= number; i++){
-     items.push(i);
+  createRange(number) {
+    var items: number[] = [];
+    for (var i = 1; i <= number; i++) {
+      items.push(i);
+    }
+    return items;
   }
-  return items;
-}
 
-  checkMatched(element:string){
+  checkMatched(element: string) {
     if (element) {
       return true;
     }
     return false;
   }
 
-  send(){
+  send() {
     // this.websocket.sendMessage('helllo');
   }
-
 
   ngOnDestroy() {
     // console.log("destroyyyyyeeeed");
