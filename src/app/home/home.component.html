@@ -27,7 +27,7 @@
 <section class="mainArea" fxLayout="row" fxLayoutAlign="start">
   <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
     <form [formGroup]="widgetForm" (ngSubmit)="onSubmit()">
-      <mat-card fxLayout="column" formGroupName="brandName"  [matTooltip]="onHover(0)" >
+      <mat-card fxLayout="column" formGroupName="brandName" [ngClass]="arr[0] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(0)">
         <mat-card-title>Brand Name</mat-card-title>
         <div *ngFor="let brand of brands">
           <mat-checkbox
@@ -44,6 +44,7 @@
           step="1"
           *ngIf="!arr[0]"
           (change)="onInputChange($event,0)"
+          matTooltip="Pushing the slider all the way to the right will make this a must have requirement" [matTooltipPosition]="'after'"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -61,7 +62,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="price" [matTooltip]="onHover(1)">
+      <mat-card fxLayout="column" formGroupName="price" [ngClass]="arr[1] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(1)">
         <mat-card-title>Price</mat-card-title>
         <div *ngFor="let option of prices">
           <mat-checkbox
@@ -95,7 +96,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="avgRating" [matTooltip]="onHover(2)">
+      <mat-card fxLayout="column" formGroupName="avgRating" [ngClass]="arr[2] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(2)">
         <mat-card-title>Rating</mat-card-title>
         <div *ngFor="let option of ratings">
           <mat-checkbox
@@ -129,7 +130,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorManufacturer" [matTooltip]="onHover(3)">
+      <mat-card fxLayout="column" formGroupName="processorManufacturer" [ngClass]="arr[3] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(3)">
         <mat-card-title>Processor Manufacturer</mat-card-title>
         <div *ngFor="let option of processorManufacturers">
           <mat-checkbox
@@ -163,7 +164,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="screenSize" [matTooltip]="onHover(4)">
+      <mat-card fxLayout="column" formGroupName="screenSize" [ngClass]="arr[4] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(4)">
         <mat-card-title>Screen Size</mat-card-title>
         <div *ngFor="let option of screenSizes">
           <mat-checkbox
@@ -197,7 +198,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorCount" [matTooltip]="onHover(5)">
+      <mat-card fxLayout="column" formGroupName="processorCount" [ngClass]="arr[5] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(5)">
         <mat-card-title>Processor Type</mat-card-title>
         <div *ngFor="let option of processorCores">
           <mat-checkbox
@@ -231,7 +232,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorSpeed" [matTooltip]="onHover(6)">
+      <mat-card fxLayout="column" formGroupName="processorSpeed" [ngClass]="arr[6] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(6)">
         <mat-card-title>Processor Speed</mat-card-title>
         <div *ngFor="let option of processorSpeeds">
           <mat-checkbox
@@ -265,7 +266,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveType" [matTooltip]="onHover(7)">
+      <mat-card fxLayout="column" formGroupName="hardDriveType" [ngClass]="arr[7] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(7)">
         <mat-card-title>Hard Drive Type</mat-card-title>
         <div *ngFor="let option of hardDriveTypes">
           <mat-checkbox
@@ -299,7 +300,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveSize" [matTooltip]="onHover(8)">
+      <mat-card fxLayout="column" formGroupName="hardDriveSize" [ngClass]="arr[8] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(8)">
         <mat-card-title>Hard Drive Size</mat-card-title>
         <div *ngFor="let option of hardDriveSizes">
           <mat-checkbox
@@ -333,7 +334,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="operatingSystem" [matTooltip]="onHover(9)">
+      <mat-card fxLayout="column" formGroupName="operatingSystem" [ngClass]="arr[9] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(9)">
         <mat-card-title>Operating System</mat-card-title>
         <div *ngFor="let option of operatingSystems">
           <mat-checkbox
@@ -369,7 +370,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="ram" [matTooltip]="onHover(10)">
+      <mat-card fxLayout="column" formGroupName="ram" [ngClass]="arr[10] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(10)">
         <mat-card-title>Ram Size</mat-card-title>
         <div *ngFor="let option of ramOptions">
           <mat-checkbox
@@ -403,7 +404,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="itemWeight" [matTooltip]="onHover(11)">
+      <mat-card fxLayout="column" formGroupName="itemWeight" [ngClass]="arr[11] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(11)">
         <mat-card-title>Weight</mat-card-title>
         <div *ngFor="let option of weights">
           <mat-checkbox

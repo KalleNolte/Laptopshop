@@ -22,7 +22,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatCardModule } from "@angular/material/card";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
-import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule} from "@angular/material";
+import {MatTableModule, MatPaginatorModule,  MatSortModule, MatRadioModule, MatSelectModule, MatTooltipModule} from "@angular/material";
 import { StarRatingModule } from 'angular-star-rating';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -63,6 +63,7 @@ import {DataService} from './data.service';
     MatSortModule,
     MatRadioModule,
     MatSelectModule,
+    MatTooltipModule,
     StarRatingModule.forRoot()
   ],
   providers: [HomeComponent, DetailsComponent,DataService, WebsocketService],
