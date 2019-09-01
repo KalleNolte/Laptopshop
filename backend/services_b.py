@@ -1,6 +1,7 @@
 import collections
 import os
 from collections import Counter
+from elasticsearch import Elasticsearch
 
 from addMatchedInformation.add_Matched_Information import ColorInformation
 from binaryFunctions import binary_search, binary_search_text
@@ -16,10 +17,49 @@ import pickle
 
 allDocs_path = './allDocs.obj'
 
-def do_query(data):
 
-  with open(allDocs_path, 'rb') as input:
-    allDocs = pickle.load(input)
+def scroll_through_database():
+    #Don't even ask
+
+    result = dict()
+    result.update({"hits" : {"hits":[]}})
+    allDocs = es.search(
+      index="amazon",
+      scroll='2m',
+      size=10000,
+      body={}
+      )
+
+
+
+    sid = allDocs['_scroll_id']
+    scroll_size = len(allDocs['hits']['hits'])
+
+
+
+
+
+    result_list = list()
+
+    while scroll_size > 0:
+
+        result_list.extend(allDocs['hits']['hits'])
+
+        allDocs = es.scroll(scroll_id=sid, scroll='2m')
+
+        # Update the scroll ID
+        sid = allDocs['_scroll_id']
+
+        # Get the number of results that returned in the last scroll
+        scroll_size = len(allDocs['hits']['hits'])
+    result['hits']['hits'] = result_list
+    return result
+def do_query(data,es):
+
+
+  allDocs = scroll_through_database()
+
+  print("hi",len(allDocs["hits"]["hits"]))
 
 
   data = Backend_Helper.clean_frontend_json(data)

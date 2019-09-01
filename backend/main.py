@@ -36,7 +36,7 @@ def alexa_search():
     data = Backend_Helper.clean_for_alexa(data)
     allDocs = service.get_all_documents()
 
-    outputProducts = service.do_query(data)
+    outputProducts = service.do_query(data,es)
 
     return jsonify(outputProducts[0])
 
@@ -52,7 +52,7 @@ def search():
 
     #set serialized object
     service.get_all_documents()
-    outputProducts = service.do_query(data)
+    outputProducts = service.do_query(data,es)
 
     return jsonify(outputProducts)
 
