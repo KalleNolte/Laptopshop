@@ -34,9 +34,9 @@ def alexa_search():
     #TODO: boolean method for intentVariable
     #TODO: delete intentVariable with its Value
     data = Backend_Helper.clean_for_alexa(data)
-    allDocs = service.get_all_documents()
+    allDocs = service.get_all_documents(es)
 
-    outputProducts = service.do_query(data,es)
+    outputProducts = service.do_query(data,allDocs)
 
     return jsonify(outputProducts[0])
 
@@ -51,8 +51,10 @@ def search():
     #outputProducts = service.do_query(data, allDocs)
 
     #set serialized object
-    service.get_all_documents()
-    outputProducts = service.do_query(data,es)
+    allDocs = service.get_all_documents(es)
+    outputProducts = service.do_query(data,allDocs)
+
+    print("Hello",len(outputProducts))
 
     return jsonify(outputProducts)
 
@@ -64,7 +66,7 @@ def searchText():
   query = data['searchValue']
   outputProducts =[]
 
-  allDocs = service.get_all_documents()
+  allDocs = service.get_all_documents(es)
 
   free_text_searcher =vague_search_freetext.VagueFreeText(es)
   res_search= free_text_searcher.compute_vague_freetext(allDocs, query, False) #False => not boolean search

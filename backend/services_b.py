@@ -18,9 +18,8 @@ import pickle
 allDocs_path = './allDocs.obj'
 
 
-def scroll_through_database():
+def scroll_through_database(es):
     #Don't even ask
-
     result = dict()
     result.update({"hits" : {"hits":[]}})
     allDocs = es.search(
@@ -29,15 +28,8 @@ def scroll_through_database():
       size=10000,
       body={}
       )
-
-
-
     sid = allDocs['_scroll_id']
     scroll_size = len(allDocs['hits']['hits'])
-
-
-
-
 
     result_list = list()
 
@@ -54,12 +46,7 @@ def scroll_through_database():
         scroll_size = len(allDocs['hits']['hits'])
     result['hits']['hits'] = result_list
     return result
-def do_query(data,es):
-
-
-  allDocs = scroll_through_database()
-
-  print("hi",len(allDocs["hits"]["hits"]))
+def do_query(data,allDocs):
 
 
   data = Backend_Helper.clean_frontend_json(data)
@@ -417,18 +404,9 @@ def getElementsByAsin(asinKeys):
   return Backend_Helper.refineResult(result)
 
 
-def get_all_documents():
+def get_all_documents(es):
 
-  if os.path.exists('./allDocs.obj'):
-    # print("allDocs exists")
-    if os.path.getsize(allDocs_path)>0:
-      with open(allDocs_path, "rb") as f:
-        unpickler = pickle.Unpickler(f)
-        allDocs = unpickler.load()
-  else:
-    allDocs = dao.search_for_all_docs()
-    with open(allDocs_path, 'wb') as output:
-      pickle.dump(allDocs, output, pickle.HIGHEST_PROTOCOL)
+  return scroll_through_database(es)
 
   #return allDocs
 
