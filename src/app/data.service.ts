@@ -12,7 +12,8 @@ export class DataService {
   //sampleUrl = "../assets/amazonDataSample.json";
   private url = 'http://localhost:5004/';
   private socket;
-  laptops : Laptop[];
+  laptops : any[];
+  attributes : any[];
   firstTime = true ;
   laptop : Laptop;
 

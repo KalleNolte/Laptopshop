@@ -27,7 +27,7 @@ declare const callme: any;
 export class HomeComponent implements OnInit, OnDestroy {
   // dummyData = <any>data;
   state: string = "";
-  laptops: Laptop[] = [];
+  laptops: any[] = [];
   attributes: any[] = [];
   displayedColumns: string[] = ["image", "name", "price"];
   dataSource: MatTableDataSource<Laptop>;
@@ -282,6 +282,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.attributes.push(obj);
               break;
             }
+            this.dataService.attributes = this.attributes;
           }
           this.dataSource = new MatTableDataSource(this.laptops);
           this.dataSource.sort = this.sort;
@@ -317,6 +318,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getLaptops() {
     this.laptops = this.dataService.laptops;
+    this.attributes = this.dataService.attributes;
+    console.log(this.laptops[0].matched);
     this.dataSource = new MatTableDataSource(this.laptops);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -349,7 +352,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // console.log("destroyyyyyeeeed");
     // this.subscription.unsubscribe();
   }
 }

@@ -6,7 +6,7 @@ interface productDimension {
 }
 export interface Laptop {
   asin: string;
-  productTitle: string; 
+  productTitle: string;
   price: number;
   displaySize: number;
   screenResoultionSize: screenResolutionSize;
@@ -46,7 +46,7 @@ export interface Laptop {
 // export class Laptop {
 //   constructor(
 //     asin ?: string,
-//     productTitle ?: string, 
+//     productTitle ?: string,
 //     price ?: number,
 //     displaySize ?: number,
 //     screenResoultionSize ?: screenResolutionSize,
