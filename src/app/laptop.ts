@@ -18,7 +18,8 @@ export interface Laptop {
   ram: number;
   brandName: string;
   hardDriveType: string;
-  hardDriveSize: number;
+  hddSize: number;
+  ssdSize: number;
   graphicsCoprocessor: string;
   chipsetBrand: string;
   operatingSystem: string;

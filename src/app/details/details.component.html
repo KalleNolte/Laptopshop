@@ -13,16 +13,16 @@
 <mat-card fxLayout="row" fxLayoutGap="20px" style="padding:20px; position:center" *ngIf="item">
 
   <mat-card-content>
-    <img mat-card-lg-image src="{{item.imagePath}}" />
+    <img style="width:200px" src="{{item.imagePath}}" />
   </mat-card-content>
 
   <mat-card-content>
-    <p><strong>{{item.productTitle}} </strong> </p>
+    <h2>{{item.productTitle}} </h2>
     <div>
       <strong>Brand: </strong> {{item.brandName}}<br>
       <strong>RAM: </strong> {{item.ram}} GB<br>
       <strong>Hard drive type: </strong>{{item.hardDriveType}}<br>
-      <strong>Hard drive capacity: </strong>{{item.hardDriveSize}} GB<br>
+      <strong>Hard drive capacity: </strong>{{item.hddSize}} GB<br>
       <strong>Display size: </strong>{{item.displaySize}} Zoll<br>
       <strong>Operating System: </strong>{{item.operatingSystem}}<br>
         <strong>Chipset brand: </strong>{{item.chipsetBrand}}<br>
