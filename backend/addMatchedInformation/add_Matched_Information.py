@@ -25,13 +25,6 @@ class ColorInformation:
                     field_range_name = field+"Range"
                     field_value_name = field+"Value"
 
-                    # if field is "price" :  # This code is never being reached
-                    #   print("price")
-                    #   print("!!!!!!!!!!!")
-                    #
-                    #   color_value = self.get_price_field_color(laptop[field],query[field]["priceRange"],allDocs,field)
-                    #   result.update({field:color_value})
-
                     if field_range_name in query[field] :
                       color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
                       result.update({field:color_value})

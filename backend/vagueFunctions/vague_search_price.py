@@ -27,6 +27,10 @@ class VagueSearchPrice():
     if maxPrice is None:
         maxPrice = allPrices[-1]
 
+
+    print("What is minPrice: ", minPrice)
+    print("What is maxPrice: ", maxPrice)
+
     lowerSupport = float(minPrice) - (float(maxPrice) - float(minPrice))
     upperSupport = float(maxPrice) + float(maxPrice) - float(minPrice)
 

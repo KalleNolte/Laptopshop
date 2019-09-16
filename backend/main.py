@@ -46,6 +46,7 @@ def search():
 
 
     data = request.get_json()
+    print(data)
 
     #allDocs = service.get_all_documents()
     #outputProducts = service.do_query(data, allDocs)
