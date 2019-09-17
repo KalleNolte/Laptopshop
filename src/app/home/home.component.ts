@@ -35,7 +35,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-
+  sortingOptions: string[] = [
+    "Relevance (default)",
+    "Price (asc)",
+    "Price (desc)",
+    "Star Rating"
+  ];
 
   brands = [
     { id: "acer", name: "Acer" },
@@ -216,16 +221,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onHover(index:number) {
+  sortTable(sortingOption: string): void {
+    if (sortingOption === "Price (asc)") {
+      this.sort.sort({ id: "price", start: "asc", disableClear: false });
+    }
+    else if (sortingOption === "Price (desc)") {
+      this.sort.sort({ id: "price", start: "desc", disableClear: false });
+    }
+    else if (sortingOption === "Star Rating") {
+      this.sort.sort({ id: "starRating", start: "desc", disableClear: false });
+    }
+    else {
+      this.sort.sort({ id: "relevance", start: "desc", disableClear: false });
+    }
+  }
+  
+  onHover(index: number) {
     //Sherif here, no idea why the hell arr has either 0 or 1, but noticed in onInputChange that arr[index ] = 1 only when weight = 5 so abused this.
-    if(index != null  && this.arr[index] === 1){
+    if (index != null && this.arr[index] === 1) {
+      return "You chose weight 5 for this field, this means all the results will have the chosen value for this field.";
+    }
 
-    return "You chose weight 5 for this field, this means all the results will have the chosen value for this field."
+    return "";
   }
-
-    return ""
-  }
-
 
   onSubmit() {
     if (this.widgetForm.touched) {
@@ -273,10 +291,10 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
               }
               let obj = {};
-              if(attributesKey == 'hardDriveSize'){
-                obj['ssdSize'] = values;
-                obj['hddSize'] = values;
-              }else {
+              if (attributesKey == "hardDriveSize") {
+                obj["ssdSize"] = values;
+                obj["hddSize"] = values;
+              } else {
                 obj[attributesKey] = values;
               }
               this.attributes.push(obj);
