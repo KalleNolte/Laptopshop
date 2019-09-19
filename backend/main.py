@@ -47,10 +47,7 @@ def search():
 
     data = request.get_json()
 
-    #allDocs = service.get_all_documents()
-    #outputProducts = service.do_query(data, allDocs)
-
-    #set serialized object
+    """The following line: set serialized object allDocs, which is a copy of the database"""
     service.get_all_documents()
     outputProducts = service.do_query(data)
 
@@ -68,9 +65,7 @@ def searchText():
 
   free_text_searcher =vague_search_freetext.VagueFreeText(es)
   res_search= free_text_searcher.compute_vague_freetext(allDocs, query, False) #False => not boolean search
-  #print(res_search)
 
-  #Move this to the services layer..
   outputProducts = Backend_Helper.refineResult(res_search)
   for item in outputProducts: #binary search results all have a vagueness score of 1
     item['vaguenessScore'] =1 #todo: change vagueness score to reflect score

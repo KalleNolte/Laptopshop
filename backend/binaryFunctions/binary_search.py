@@ -98,9 +98,6 @@ class BinarySearch():
       value_field_name = fieldName + "Value"
       range_field_name = fieldName + "Range"
       if range_field_name in fieldNameToValueDict[fieldName]:
-        # Extract name of field, and set the name of min and max values to minField and maxField, example : minRam and maxRam.
-        # minValueName = "min"+fieldName[0].upper()+fieldName[1:]
-        # maxValueName = "max"+fieldName[0].upper()+fieldName[1:]
 
         # Extract the values of minField and maxField from the JSON coming from the front end
           field_ranges = list()
@@ -161,5 +158,5 @@ class BinarySearch():
     body.update({"size": 10000})
 
 
-    #print("body", body)
+    print("body", body)
     return body

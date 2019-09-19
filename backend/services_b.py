@@ -21,9 +21,9 @@ def do_query(data):
   with open(allDocs_path, 'rb') as input:
     allDocs = pickle.load(input)
 
-
+  print("data is: ", data)
   data = Backend_Helper.clean_frontend_json(data)
-
+  print("after cleanup: ", data)
 
   #create binary clean data if weighting is equal to 5
   binary_clean_data = {}
@@ -48,11 +48,7 @@ def do_query(data):
 
   if len(binary_clean_data) > 0:
       query = bin_obj.createBinarySearchQuery(binary_clean_data)
-
       res = es.search(index="amazon", body=query)
-
-
-
       output_binary = Backend_Helper.refineResult(res)
 
 
@@ -64,18 +60,12 @@ def do_query(data):
 
   res_search = list()
 
-  # if(len(output_binary)) > 0:
-  #     allDocs = [item for item in allDocs if item['asin']  in output_binary]
-
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
-  # print(field_value_dict)
-
 
   #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
   #For normalization
-
   weight_sum = 0
   for field_type in field_value_dict.keys():
     for field_name in field_value_dict[field_type]:
@@ -323,9 +313,6 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
   # --------------------------------------------------------------------#
   # Extracts each field and its value and weight to the dict
   for field_type in field_value_dict.keys():
-    # print("field_type")
-    # print(field_type)
-
     for field_name in field_value_dict[field_type]:
       if field_name != "price" and field_name != "hardDriveSize":
         field_weight = field_value_dict[field_type][field_name]["weight"]
@@ -335,22 +322,34 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
           res_search.append(binary_searcher.compute_binary_text(field_name, field_weight, field_value))
 
         # --------------------------------------------------------------------#
+
+
         # Values for range key in the dict, these will be searched in the range_searcher
         elif field_type is "range":
-          for range in field_value_dict[field_type][field_name]["range"] :
-              if "minValue" in range and "maxValue" in range:
-                min_value = range["minValue"]
-                max_value = range["maxValue"]
-                res_search.append(
+          print("field_value_dict: ", field_value_dict[field_type][field_name]["range"])
+
+          """The length of field_value_dict is the length of the interval range for a field (For example, for weight).
+            If it has length ==1, then only one interval for this field has been entered by user.  The function continues 
+            with default implementation of vague function and membership function calculations."""
+          if len(field_value_dict[field_type][field_name]["range"]) ==1:
+            for range in field_value_dict[field_type][field_name]["range"] :
+                if "minValue" in range and "maxValue" in range:
+                  min_value = range["minValue"]
+                  max_value = range["maxValue"]
+                  res_search.append(
                   range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value))
 
-              elif "minValue" in range:
-                min_value = range["minValue"]
-                res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
+                elif "minValue" in range:
+                  min_value = range["minValue"]
+                  res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
 
-              elif "maxValue" in field_value_dict[field_type][field_name]:
-                max_value = range["maxValue"]
-                res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
+                elif "maxValue" in field_value_dict[field_type][field_name]:
+                  max_value = range["maxValue"]
+                  res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
+
+          else:# Price range consists of at least two non-consecutive intervals
+            res_search.append(range_searcher.compute_vague_range_mult_intervals(allDocs, field_name, field_weight,
+                                                              field_value_dict[field_type][field_name]["range"]))
         # --------------------------------------------------------------------#
         # Values for binary key in the dict, these will be searched in the value_searcher
         elif field_type is "vague":
