@@ -21,18 +21,18 @@ class VagueSearchValue():
     query = []
     for value in values :
         # OLD:
-        # lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
-        # upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
+        lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
+        upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
         """ Triangular function is symmetrical if upper and lower boundaries are equally far from the entered value."""
         #NEW:
-        if (float(value)- support) > allValues[0]:
-          lowerSupport = float(value)- support
-        else:
-          lowerSupport = allValues[0]
-        if (float(value) + support) < allValues[-1]:
-          upperSupport = float(value) + support
-        else:
-          upperSupport = allValues[-1]
+        # if (float(value)- support) > allValues[0]:
+        #   lowerSupport = float(value)- support
+        # else:
+        #   lowerSupport = allValues[0]
+        # if (float(value) + support) < allValues[-1]:
+        #   upperSupport = float(value) + support
+        # else:
+        #   upperSupport = allValues[-1]
         trimf = fuzz.trimf(allValues, [lowerSupport, float(value), upperSupport])
         fuzzy_logic_results.append(trimf)
         print(lowerSupport)
