@@ -28,11 +28,19 @@ class ColorInformation:
 
                     if field_range_name in query[field] :
                       if len(query[field][field_range_name])==1 :
-                        print(laptop[field])
                         color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
                         result.update({field:color_value})
-                      else:
+                      else: # There are multiple non-consecutive intervals
                         colors =[]
+                        for interval_range in query[field][field_range_name]:
+                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], allDocs, field)
+                          colors.append(color_value)
+                        if "green" in colors:
+                          result.update({field:'green'})
+                        elif "yellow" in colors:
+                          result.update({field:'yellow'})
+                        else:
+                          result.update({field: color_value})
 
 
 
