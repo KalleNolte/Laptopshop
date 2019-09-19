@@ -12,7 +12,6 @@ class ColorInformation:
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
 
-    print("add_matched_information function")
     for laptop in laptops:
         result = dict()
         for field in laptop :
@@ -41,8 +40,6 @@ class ColorInformation:
                           result.update({field:'yellow'})
                         else:
                           result.update({field: color_value})
-
-
 
                     elif field_value_name in query[field]:
                       if len(query[field][field_value_name]) > 0 and type(query[field][field_value_name][0]) is str :
