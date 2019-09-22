@@ -352,6 +352,7 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
                                                               field_value_dict[field_type][field_name]["range"]))
         # --------------------------------------------------------------------#
         # Values for binary key in the dict, these will be searched in the value_searcher
+
         elif field_type is "vague":
           field_value = field_value_dict[field_type][field_name]["value"]
           res_search.append(value_searcher.compute_vague_value(allDocs, field_name, field_weight, field_value))

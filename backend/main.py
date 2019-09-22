@@ -50,7 +50,6 @@ def search():
     """The following line: set serialized object allDocs, which is a copy of the database"""
     service.get_all_documents()
     outputProducts = service.do_query(data)
-
     return jsonify(outputProducts)
 
 
