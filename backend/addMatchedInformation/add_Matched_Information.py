@@ -82,8 +82,8 @@ class ColorInformation:
       for value in query_values :
 
         if field_name == "processorCount":
-          lowerSupport = float(value) - 2.1
-          upperSupport = float(value) + 2.1
+          lowerSupport = float(value) - 3
+          upperSupport = float(value) + 3
         elif field_name == "ram":
           lowerSupport, upperSupport = self.lower_upper_ram(value)
         else:
@@ -283,26 +283,26 @@ class ColorInformation:
     upperSupport = 128.1
     if value == 2:
       lowerSupport = 0.0
-      upperSupport = 4.1
+      upperSupport = 5
     elif value == 4:
-      lowerSupport = 1.9
-      upperSupport = 6.1
+      lowerSupport = 1
+      upperSupport = 7
     elif value == 6:
-      lowerSupport = 3.9
-      upperSupport = 8.1
+      lowerSupport = 3
+      upperSupport = 9
     elif value == 8:
-      lowerSupport = 5.9
-      upperSupport = 12.1
+      lowerSupport = 5
+      upperSupport = 13
     elif value == 12:
-      lowerSupport = 7.9
-      upperSupport = 16.1
+      lowerSupport = 7
+      upperSupport = 17
     elif value == 16:
-      lowerSupport = 11.9
-      upperSupport = 24.1
+      lowerSupport = 11
+      upperSupport = 25
     elif value == 24:
-      lowerSupport = 15.9
-      upperSupport = 32.1
+      lowerSupport = 15
+      upperSupport = 33
     elif value == 32:
-      lowerSupport = 23.9
-      upperSupport = 128.1
+      lowerSupport = 23
+      upperSupport = 129
     return lowerSupport, upperSupport
