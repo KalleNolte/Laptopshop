@@ -117,7 +117,7 @@ class VagueHardDrive():
       body = {
         "query": {
           "bool": {
-            "should": query
+            "should": [query]
           }
         },
         "sort": {"price": {"order": "asc"}}
@@ -128,13 +128,27 @@ class VagueHardDrive():
       res = self.es.search(index="amazon", body=body)
 
       result = []
+      scores = []
+      # print("size of results ", len(res['hits']['hits']['_source']))
       for hit in res['hits']['hits']:
-        scores = []
-        for score in fuzzy_logic_results:
-          score1 = fuzz.interp_membership(allDocs, score, float(hit['_source']['hddSize']))
-          score2 = fuzz.interp_membership(allDocs, score, float(hit['_source']['sddSize']))
-          scores.append(score1)
-          scores.append(score2)
+
+        # in case there is two types, we should take the one with the higher score
+        if hit['_source']['hddSize'] and hit['_source']['ssdSize']:
+          if hit['_source']['hddSize'] != 0 and hit['_source']['ssdSize'] != 0:
+            scores.append(weight * max(
+                             fuzz.interp_membership(allHardDrives, vagueFunction, float(hit['_source']['hddSize'])),
+                             fuzz.interp_membership(allHardDrives, vagueFunction, float(hit['_source']['ssdSize']))))
+
+
+        # laptop has only hdd Drive
+        elif hit['_source']['hddSize'] and hit['_source']['hddSize'] != 0:
+          scores.append(weight * fuzz.interp_membership(allHardDrives, vagueFunction,
+                                                         float(hit['_source']['hddSize'])))
+
+        # laptop has only ssd Drive
+        elif hit['_source']['ssdSize'] and hit['_source']['ssdSize'] != 0:
+          scores.append(weight * fuzz.interp_membership(allHardDrives, vagueFunction,
+                                                         float(hit['_source']['ssdSize'])))
 
         if len(scores) > 0:
           max_score = scores[0]
@@ -158,7 +172,7 @@ class VagueHardDrive():
       # print("computeVagueHardDrive_alternative function ", clean_data["range"]["hardDriveSize"])
       if "range" in clean_data["range"]["hardDriveSize"]:
 
-        if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
+        # if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
 
           for range in clean_data["range"]["hardDriveSize"]["range"]:
               if "minValue" in range and "maxValue" in range:
@@ -170,5 +184,7 @@ class VagueHardDrive():
                 else:
                   res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, max_value, 1)) # Discrete value needed not a range
           return res_search
-        else:
-          res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
+        # else:
+        #   res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
+        #   print("res search ", len(res_search))
+        #   return res_search
