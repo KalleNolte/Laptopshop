@@ -21,6 +21,8 @@ def do_query(data):
   with open(allDocs_path, 'rb') as input:
     allDocs = pickle.load(input)
 
+  print(len(allDocs))
+
   print("data is: ", data)
   data = Backend_Helper.clean_frontend_json(data)
   print("after cleanup: ", data)
@@ -75,13 +77,7 @@ def do_query(data):
 
   # --------------------------------------------------------------------#
   # Objects for each class to use the vague searching functions
-  range_searcher = vague_search_range.VagueSearchRange(es)
 
-  binary_searcher = binary_search_text.BinarySearchText(es)
-
-  harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
-
-  value_searcher = vague_search_value.VagueSearchValue(es)
 
   ######################################################################## NEW #########################################
   #Function call in ColorInformation to extract searched values.
@@ -91,7 +87,13 @@ def do_query(data):
   ######################################################################## NEW #########################################
 
 
+  range_searcher = vague_search_range.VagueSearchRange(es)
 
+  binary_searcher = binary_search_text.BinarySearchText(es)
+
+  harddrive_searcher = vague_search_harddrive.VagueHardDrive(es)
+
+  value_searcher = vague_search_value.VagueSearchValue(es)
   # --------------------------------------------------------------------#
   # # Special case to handle hardDriveSize, length is >1 if it has values other than weight
   if 'hardDriveSize' in clean_data and len(clean_data["hardDriveSize"]) > 1:

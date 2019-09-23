@@ -77,10 +77,18 @@ class ColorInformation:
 
       allValues = np.sort((np.array(allValues)))
       # print("allPrices: ", allPrices)
+      ############################
+      #COLOR VALUE
       for value in query_values :
 
-        lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
-        upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
+        if field_name == "processorCount":
+          lowerSupport = float(value) - 2.1
+          upperSupport = float(value) + 2.1
+        elif field_name == "ram":
+          lowerSupport, upperSupport = self.lower_upper_ram(value)
+        else:
+          lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
+          upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
 
         if float(laptop_value) >= lowerSupport and float(laptop_value) <= upperSupport :
             return "yellow"
@@ -269,3 +277,32 @@ class ColorInformation:
       self.matched['price'] = 'yellow'
     if score < 0.985:
       self.matched['price'] = 'red'
+
+  def lower_upper_ram(self, value):
+    lowerSupport = 0.0
+    upperSupport = 128.1
+    if value == 2:
+      lowerSupport = 0.0
+      upperSupport = 4.1
+    elif value == 4:
+      lowerSupport = 1.9
+      upperSupport = 6.1
+    elif value == 6:
+      lowerSupport = 3.9
+      upperSupport = 8.1
+    elif value == 8:
+      lowerSupport = 5.9
+      upperSupport = 12.1
+    elif value == 12:
+      lowerSupport = 7.9
+      upperSupport = 16.1
+    elif value == 16:
+      lowerSupport = 11.9
+      upperSupport = 24.1
+    elif value == 24:
+      lowerSupport = 15.9
+      upperSupport = 32.1
+    elif value == 32:
+      lowerSupport = 23.9
+      upperSupport = 128.1
+    return lowerSupport, upperSupport

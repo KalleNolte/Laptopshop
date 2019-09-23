@@ -17,8 +17,14 @@ class VagueSearchValue():
     # print("allPrices: ", allPrices)
     result = []
     for value in values :
-        lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
-        upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
+        if fieldName == "processorCount":
+          lowerSupport = float(value) - 2.1
+          upperSupport = (float(value) + 2.1)
+        elif fieldName == "ram":
+          lowerSupport, upperSupport = self.lower_upper_ram(value)
+        else:
+          lowerSupport = float(value) - ((float(value) - allValues[0]) / 2)
+          upperSupport = float(value) + ((allValues[-1] - float(value)) / 2)
         trimf = fuzz.trimf(allValues, [lowerSupport, float(value), upperSupport])
 
         body = {
@@ -48,3 +54,32 @@ class VagueSearchValue():
     result = list(map(tuple, result))
     # print(result)
     return result
+
+  def lower_upper_ram(self, value):
+    lowerSupport = 0.0
+    upperSupport = 128.1
+    if value == 2:
+      lowerSupport = 0.0
+      upperSupport = 4.1
+    elif value == 4:
+      lowerSupport = 1.9
+      upperSupport = 6.1
+    elif value == 6:
+      lowerSupport = 3.9
+      upperSupport = 8.1
+    elif value == 8:
+      lowerSupport = 5.9
+      upperSupport = 12.1
+    elif value == 12:
+      lowerSupport = 7.9
+      upperSupport = 16.1
+    elif value == 16:
+      lowerSupport = 11.9
+      upperSupport = 24.1
+    elif value == 24:
+      lowerSupport = 15.9
+      upperSupport = 32.1
+    elif value == 32:
+      lowerSupport = 23.9
+      upperSupport = 128.1
+    return lowerSupport, upperSupport
