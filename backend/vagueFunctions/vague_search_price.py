@@ -10,7 +10,25 @@ class VagueSearchPrice():
   def __init__(self, es):
         self.es = es
 
-  def computeVaguePrice(self, allDocs,weight, minPrice, maxPrice):
+  def computeVaguePrice(self, allDocs,weight, minPrice, maxPrice, counter):
+    """This function takes a min and max, as entered through the checkboxes on the website if one interval is selected.
+       Based on the min and max, calcalate the lower and upper limits.
+       Then compose an elastic search which searches for items within the lower and upper limits.
+
+       Calculation of the membership function: =A score of 1.0 is given to values within the min and max of the interval.
+       A score between (0,1] is given to a value within the lower boundaries and the minimum and between the max and upper
+       boundary.
+
+       The lower and upper boundaries for the trapezoid function are symmetrical.  The larger the interval, the smaller the
+       size of wings of the trapezoid. Because the intervals are set on the front end, we can say that if one interval is
+       clicked, then the wing size is the size of the interval (200 Euro).  If two consecutive intervals
+       are clicked, then the wing size becames smaller ->for n intervals clicked, 1/n times the length of one interval.
+       We count the number of intervals used with counter, so wing size = interval/n * 1/n = interval/n*2
+
+       Calculation of the vagueness Score: For each item in the result list, this function calculates vagueness score for
+       each item.
+
+       :returns A list of Tuples, one for each relevant document. Tuples:  (asin number,  Membership function score)"""
 
     allPrices = []
     for doc in allDocs['hits']['hits']:
@@ -27,9 +45,13 @@ class VagueSearchPrice():
     if maxPrice is None:
         maxPrice = allPrices[-1]
 
-    lowerSupport = float(minPrice) - (float(maxPrice) - float(minPrice))
-    upperSupport = float(maxPrice) + float(maxPrice) - float(minPrice)
+    # lowerSupport = float(minPrice) - (float(maxPrice) - float(minPrice))
+    # upperSupport = float(maxPrice) + float(maxPrice) - float(minPrice)
 
+    interval = float(maxPrice) - float(minPrice)
+    trapezoid_wing_size = (interval / counter) * (1 / counter)
+    lowerSupport = float(minPrice) - trapezoid_wing_size
+    upperSupport = float(maxPrice) + trapezoid_wing_size
     if minPrice == 0:
         lowerSupport = 0
 
@@ -68,6 +90,11 @@ class VagueSearchPrice():
 
 
   def computeVaguePriceMultiple(self, allDocs, weight, interval_list):
+    """ This function calculated a result set of relevant documents in case there is more than one interval entered
+    by the user, but this interval cannot be calculated as one large interval, but rather mutiple distinct, non-consecutive
+    intervals
+    :returns: A list of tuples, one for each relevant document (product) found matching the query. The tuples contain
+    the asin score and membership function score."""
     allPrices = []
     for doc in allDocs['hits']['hits']:
       allPrices.append(float(doc['_source']['price']))
@@ -88,7 +115,7 @@ class VagueSearchPrice():
         maxPrice = allPrices[-1]
       lowerSupport = float(minPrice) - (float(maxPrice) - float(minPrice))
       upperSupport = float(maxPrice) + (float(maxPrice) - float(minPrice))
-      # print( "support: ", lowerSupport, upperSupport)
+
       if minPrice == 0:
         lowerSupport = 0
       query.append({"range": {"price": {"gte": lowerSupport, "lte": upperSupport }}},)
@@ -139,16 +166,14 @@ class VagueSearchPrice():
               if "minValue" in range and "maxValue" in range:
                 min_value = range["minValue"]
                 max_value = range["maxValue"]
-                res_search.append(
-                  price_searcher.computeVaguePrice(allDocs,  price_weight, min_value, max_value))
+                if "counter" in range: # multiple intervals merged into one large interval=> counter>1
+                  counter = range["counter"]
+                  res_search.append(
+                    price_searcher.computeVaguePrice(allDocs,  price_weight, min_value, max_value, counter))
+                else:
+                  res_search.append(
+                    price_searcher.computeVaguePrice(allDocs, price_weight, min_value, max_value, 1))
 
-              elif "minValue" in range:
-                min_value = range["minValue"]
-                res_search.append(price_searcher.computeVaguePrice(allDocs,  price_weight, min_value, None))
-
-              elif "maxValue" in range:
-                max_value = range["maxValue"]
-                res_search.append(price_searcher.computeVaguePrice(allDocs,  price_weight, None, max_value))
         else: # multiple intervals
           res_search.append( price_searcher.computeVaguePriceMultiple(allDocs, price_weight,clean_data["range"]["price"]["range"] ))
 

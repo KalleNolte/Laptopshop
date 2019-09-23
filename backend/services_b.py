@@ -149,11 +149,6 @@ def do_query(data):
   # concatenate with products with weighting 5 ***
   outputProducts = outputProducts + output_binary
   # products with same vagueness score should be listed according to price descending
-
-  #searchedValues = c_i.extractKeyValuePairs()
-  #c_i.prozessDataBinary(searchedValues)
-
-  # If possible, apply sorting before weigthing, so it does not interfere with the list sorted by weighting
   s_p = SortByPrice()
 
 
@@ -326,7 +321,7 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
         # --------------------------------------------------------------------#
 
 
-        # Values for range key in the dict, these will be searched in the range_searcher
+          """ The range key is the key used for Facets with an interval. For example: weight, screen size, processor size, etc."""
         elif field_type is "range":
           print("field_value_dict: ", field_value_dict[field_type][field_name]["range"])
 
@@ -335,19 +330,24 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
             with default implementation of vague function and membership function calculations."""
           if len(field_value_dict[field_type][field_name]["range"]) ==1:
             for range in field_value_dict[field_type][field_name]["range"] :
+                print("range: ", range)
                 if "minValue" in range and "maxValue" in range:
                   min_value = range["minValue"]
                   max_value = range["maxValue"]
-                  res_search.append(
-                  range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value))
+                  if "counter" in range:
+                    counter = range["counter"]
+                    res_search.append(
+                    range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value, counter))
+                  else:
+                    res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, max_value, 1))
 
-                elif "minValue" in range:
-                  min_value = range["minValue"]
-                  res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
-
-                elif "maxValue" in field_value_dict[field_type][field_name]:
-                  max_value = range["maxValue"]
-                  res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
+                # elif "minValue" in range:
+                #   min_value = range["minValue"]
+                #   res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, min_value, None))
+                #
+                # elif "maxValue" in field_value_dict[field_type][field_name]:
+                #   max_value = range["maxValue"]
+                #   res_search.append(range_searcher.compute_vague_range(allDocs, field_name, field_weight, None, max_value))
 
           else:# Price range consists of at least two non-consecutive intervals
             res_search.append(range_searcher.compute_vague_range_mult_intervals(allDocs, field_name, field_weight,
