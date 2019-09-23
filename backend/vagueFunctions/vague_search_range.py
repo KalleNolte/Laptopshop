@@ -15,10 +15,12 @@ class VagueSearchRange():
     to values within the min and max of the interval.  A score between (0,1] is given to a value within the lower boundaries
     and the minimum and between the max and upperboundary.  This score is calculated per interval.
 
+    Wing size for the trapezoid membership function is simply the size of the interval on front end, so maxValue - minValue.
+
     Calculation of the vagueness Score: For each item in the result list, this function compares the membership function
     result calculation of a vaguessness score and saves the maximum vagueness score for each item.
 
-    :returns vagueness scores"""
+    :returns A list of Tuples, one for each relevant document. Tuples:  (asin number,  Membership function score)"""
 
     allValues = []
     for doc in allDocs['hits']['hits']:
@@ -43,7 +45,6 @@ class VagueSearchRange():
 
       lowerSupport = float(min) - (float(max) - float(min))
       upperSupport = float(max) + float(max) - float(min)
-      print("support: ", lowerSupport, upperSupport)
       if min == 0:
         lowerSupport = 0
       query.append({"range": {fieldName: {"gte": lowerSupport, "lte": upperSupport}}}, )
@@ -59,6 +60,7 @@ class VagueSearchRange():
       "sort": {"price": {"order": "asc"}}
 
     }
+    print("body ", body)
 
     res = self.es.search(index="amazon", body=body, size=10000)
 
@@ -79,10 +81,9 @@ class VagueSearchRange():
     result = np.array(result, dtype=object)
     result = result[np.argsort(-result[:, 1])]
     result = list(map(tuple, result))
-    print(result)
     return result
 
-  def compute_vague_range(self, allDocs, fieldName,weight, minValue, maxValue):
+  def compute_vague_range(self, allDocs, fieldName,weight, minValue, maxValue, counter):
     """This function takes a min and max, as entered through the checkboxes on the website if one interval is selected.
     Based on the min and max, calcalate the lower and upper limits.
     Then compose an elastic search which searches for items within the lower and upper limits.
@@ -91,10 +92,18 @@ class VagueSearchRange():
     A score between (0,1] is given to a value within the lower boundaries and the minimum and between the max and upper
     boundary.
 
+    The lower and upper boundaries for the trapezoid function are symmetrical.  The larger the interval, the smaller the
+    size of wings of the trapezoid. Because the intervals are set on the front end, we can say that if one interval is
+    clicked, then the wing size is the size of the interval (for example 1.5 kg for weight).  If two consecutive intervals
+    are clicked, then the wing size becames smaller ->for n intervals clicked, 1/n times the length of one interval.
+    We count the number of intervals used with counter, so wing size = interval/n * 1/n = interval/n*2
+
     Calculation of the vagueness Score: For each item in the result list, this function calculates vagueness score for
     each item.
 
-    :returns vagueness scores"""
+    :returns A list of Tuples, one for each relevant document. Tuples:  (asin number,  Membership function score)"""
+
+
 
     allValues = []
     for doc in allDocs['hits']['hits']:
@@ -109,12 +118,10 @@ class VagueSearchRange():
     if minValue is None:
         minValue = allValues[0]
 
-    # OLD
-    # lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
-    # upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
-    # NEW
-    lowerSupport = float(minValue) - (float(maxValue) - float(minValue))
-    upperSupport = float(maxValue) + (float(maxValue) - float(minValue))
+    interval = float(maxValue) - float(minValue)
+    trapezoid_wing_size = (interval /counter) * (1/counter)
+    lowerSupport = float(minValue) - trapezoid_wing_size
+    upperSupport = float(maxValue) + trapezoid_wing_size
     if minValue == 0:
         lowerSupport = 0
 
@@ -131,8 +138,6 @@ class VagueSearchRange():
       }
     }
 
-    # size in range queries should be as many as possible, because when the difference upperSupport and lowerSupport is big, we can lose some products
-    # (whose price actually between the minPrice and maxPrice) because we just want to get the first 100 element
     res = self.es.search(index="amazon", body=body, size=10000)
 
     result = []
@@ -146,5 +151,4 @@ class VagueSearchRange():
     # just return the first 100 element(i think 1000 is just too many, but we can change it later)
     #result = result[:100]
     result = list(map(tuple, result))
-    # print(result)
     return result
