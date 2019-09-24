@@ -12,15 +12,27 @@ class ColorInformation:
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
 
-    print("add_matched_information function")
     for laptop in laptops:
         result = dict()
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
                     if "hardDriveSize" in query :
+                      if len(query["hardDriveSize"]["hardDriveSizeRange"]) == 1:
                         color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
                         result.update({field:color_value})
+
+                      else:# There are multiple non-consecutive intervals
+                        colors = []
+                        for interval_range in query["hardDriveSize"]["hardDriveSizeRange"]:
+                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], allDocs, field)
+                          colors.append(color_value)
+                        if "green" in colors:
+                          result.update({field: 'green'})
+                        elif "yellow" in colors:
+                          result.update({field: 'yellow'})
+                        else:
+                          result.update({field: color_value})
 
                 elif field in query :
                     field_range_name = field+"Range"
@@ -43,7 +55,6 @@ class ColorInformation:
                           result.update({field: color_value})
 
 
-
                     elif field_value_name in query[field]:
                       if len(query[field][field_value_name]) > 0 and type(query[field][field_value_name][0]) is str :
                           color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
@@ -52,7 +63,6 @@ class ColorInformation:
                           color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
                           result.update({field:color_value})
         laptop.update({"matched":result})
-
 
   def get_text_value_field_color(self,laptop_value,query_values,allDocs,field_name):
 
@@ -76,7 +86,6 @@ class ColorInformation:
             allValues.append(float(doc['_source'][field_name]))
 
       allValues = np.sort((np.array(allValues)))
-      # print("allPrices: ", allPrices)
       ############################
       #COLOR VALUE
       for value in query_values :
@@ -132,13 +141,15 @@ class ColorInformation:
           if minValue is None:
               minValue = allValues[0]
 
-          # lowerSupport = float(minValue) - ((float(minValue) - allValues[0]) / 2)
-          # upperSupport = float(maxValue) + ((allValues[-1] - float(maxValue)) / 2)
-          # if minValue == 0:
-          #     lowerSupport = 0
 
-          lowerSupport = float(minValue) - (float(maxValue) - float(minValue))
-          upperSupport = float(maxValue) + float(maxValue) - float(minValue)
+          if 'counter' in query_values[0]:
+            interval = float(maxValue) - float(minValue)
+            trapezoid_wing_size = (interval / query_values[0]['counter']) * (1 / query_values[0]['counter'])
+            lowerSupport = float(minValue) - trapezoid_wing_size
+            upperSupport = float(maxValue) + trapezoid_wing_size
+          else:
+            lowerSupport = float(minValue) - (float(maxValue) - float(minValue))
+            upperSupport = float(maxValue) + float(maxValue) - float(minValue)
 
           if minValue == 0:
             lowerSupport = 0
