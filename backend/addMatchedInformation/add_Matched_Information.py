@@ -169,36 +169,6 @@ class ColorInformation:
       if 'maxValue' in searchedValues:
         self.matched['price'] = 'green'
 
-
-      '''for key in searchedValues:
-      #special case for price field, containing 3 infos instead of 2-------------------------------------#
-        if key   == 'minValue':
-          self.prozessColorAttributePrice(searchedValues,laptop)
-          #self.prozessColorAttributeByVaguenessScore(laptop)
-        elif key == 'maxValue':
-          self.prozessColorAttributePrice(searchedValues,laptop)
-          #self.prozessColorAttributeByVaguenessScore(laptop)
-      #--------------------------------------------------------------------------------------------------#
-
-        else: #all other attributes
-        # --------------------------------------------------------------------------------------------------#
-        # Strings needs to be converted to lowercase-------------------------------------------------------#
-          try:
-            if ((laptop[key[:-5]] is not None)and not laptop[key[:-5]].lower() == searchedValues[key].lower()):
-              self.matched[key[:-5]] = 'red'
-            else:
-              self.matched[key[:-5]] = 'green'
-        #--------------------------------------------------------------------------------------------------#
-
-        #Numbers cant be converted, so except for control flow if lower() - function fails-----------------#
-          except:
-            if ((laptop[key[:-5]] is not None) and not laptop[key[:-5]] == searchedValues[key]):
-              self.matched[key[:-5]] = 'red'
-            else:
-             self.matched[key[:-5]] = "green"'''
-        #---------------------------------------------------------------------------------------------------#
-
-
       #Sort the created matched dict ----------------------------------------#
       matchedSortedKeys = sorted(self.matched.keys())
       matchedSorted = {}
@@ -221,29 +191,6 @@ class ColorInformation:
       threshhold = 50
     #print(threshhold)
     return threshhold
-
-
-  #Price can be green, yellow or red, depending on the threshhold-----------------#
-  #-------------------------------------------------------------------------------#
-  # def prozessColorAttributePrice(self,searchedValues,laptop_value):
-  #   print("in prozessColorAttributePrice function")
-  #   threshholdPrice = self.prozessThreshholdPrice(searchedValues)
-  #   try:
-  #     if (laptop_value >= float(searchedValues['minValue'])-threshholdPrice):
-  #       if (float(laptop_value) < float(searchedValues["minValue"])):
-  #         return 'yellow'
-  #     else:
-  #       return 'red'
-  #   except:
-  #     pass
-  #   try:
-  #     if (laptop_value <= float(searchedValues['maxValue'])+threshholdPrice):
-  #       if (float(laptop_value) > float(searchedValues["maxValue"])):
-  #         return 'yellow'
-  #     else:
-  #       return 'red'
-  #   except:
-  #     pass
 
 
   def prozessColorAttributeByVaguenessScore(self,laptop):
