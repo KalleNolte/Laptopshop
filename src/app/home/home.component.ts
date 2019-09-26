@@ -236,8 +236,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   onHover(index:string) {
     //Sherif here, no idea why the hell arr has either 0 or 1, but noticed in onInputChange that arr[index ] = 1 only when weight = 5 so abused this.
     if(index != null  && this.arr[index] === 1){
-
-    return "You chose weight 5 for this field, this means all the results will have the chosen value for this field."
+        return "You chose weight 5 for this field, this means all the results will have the chosen value for this field."
+    }
+  }
 
   sortTable(sortingOption: string): void {
     if (sortingOption === "Price (asc)") {
