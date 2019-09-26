@@ -445,6 +445,7 @@
   </div>
 
   <div class="listArea" fxLayout="column" fxLayoutAlign="start">
+    <div style="padding: 1rem" fxLayout="row" fxLayoutAlign="space-between">
     <mat-form-field>
       <input
         matInput
@@ -452,6 +453,16 @@
         placeholder="Filter"
       />
     </mat-form-field>
+
+    <mat-form-field >
+      <mat-select #select placeholder="Sort by:" (selectionChange)="sortTable($event.value)">
+        <mat-option *ngFor="let option of sortingOptions" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    </div>
 
     <table mat-table [dataSource]="dataSource" matSort *ngIf="laptops[0]">
       <ng-container matColumnDef="image">
