@@ -232,10 +232,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sort.sort({ id: "avgRating", start: "desc", disableClear: false });
     }
     else {
-      this.sort.sort({ id: "relevance", start: "desc", disableClear: false });
+      this.sort.sort({ id: "vaguenessScore", start: "desc", disableClear: false });
     }
   }
-  
+
   onHover(index: number) {
     //Sherif here, no idea why the hell arr has either 0 or 1, but noticed in onInputChange that arr[index ] = 1 only when weight = 5 so abused this.
     if (index != null && this.arr[index] === 1) {
