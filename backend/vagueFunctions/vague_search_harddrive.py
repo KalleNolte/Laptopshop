@@ -89,26 +89,25 @@ class VagueHardDrive():
       fuzzy_logic_results = []
 
       for i in range(len(interval_list)):
-        print(interval_list[i]['minValue'])
-        if interval_list[i]['minValue'] is not None:
+
+        if 'minValue' in interval_list[i]:
           minValue = interval_list[i]['minValue']
         else:
-          minValue = allDocs[0]
+          minValue = allHardDrives[0]
 
-        if interval_list[i]['maxValue'] is not None:
+        if 'maxValue' in interval_list[i]:
           maxValue = interval_list[i]['maxValue']
         else:
-          maxValue = allDocs[-1]
+          maxValue = allHardDrives[-1]
 
         interval = float(maxValue) - float(minValue)
         trapezoid_wing_size = (interval / counter) * (1 / counter)
         lowerSupport = float(minValue) - trapezoid_wing_size
-        upperSupport = float(maxValue) + trapezoid_wing_size
-        vagueFunction = fuzz.trapmf(allHardDrives, [lowerSupport, float(minValue), float(maxValue), upperSupport])
         if minValue == 0:
           lowerSupport = 0
+        upperSupport = float(maxValue) + trapezoid_wing_size
+        vagueFunction = fuzz.trapmf(allHardDrives, [lowerSupport, float(minValue), float(maxValue), upperSupport])
 
-        #vague_function = fuzz.trapmf(allDocs, [lowerSupport, float(minValue), float(maxValue), upperSupport])
         fuzzy_logic_results.append(vagueFunction)
 
         query.append({"range": {'hddSize': {"gte": lowerSupport, "lte": upperSupport}}}, )
@@ -117,7 +116,7 @@ class VagueHardDrive():
       body = {
         "query": {
           "bool": {
-            "should": [query]
+            "should": query
           }
         },
         "sort": {"price": {"order": "asc"}}
@@ -129,7 +128,6 @@ class VagueHardDrive():
 
       result = []
       scores = []
-      # print("size of results ", len(res['hits']['hits']['_source']))
       for hit in res['hits']['hits']:
 
         # in case there is two types, we should take the one with the higher score
@@ -160,7 +158,6 @@ class VagueHardDrive():
       result = np.array(result, dtype=object)
       result = result[np.argsort(-result[:, 1])]
       result = list(map(tuple, result))
-      print(result)
       return result
 
 
@@ -172,7 +169,7 @@ class VagueHardDrive():
       # print("computeVagueHardDrive_alternative function ", clean_data["range"]["hardDriveSize"])
       if "range" in clean_data["range"]["hardDriveSize"]:
 
-        if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
+        # if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
 
           for range in clean_data["range"]["hardDriveSize"]["range"]:
               if "minValue" in range and "maxValue" in range:
@@ -184,7 +181,6 @@ class VagueHardDrive():
                 else:
                   res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, max_value, 1)) # Discrete value needed not a range
           return res_search
-        else:
-          res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
-          print("res search ", len(res_search))
-          return res_search
+        # else:
+        #   res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
+        #   return res_search

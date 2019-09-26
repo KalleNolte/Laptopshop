@@ -21,11 +21,7 @@ def do_query(data):
   with open(allDocs_path, 'rb') as input:
     allDocs = pickle.load(input)
 
-  print(len(allDocs))
-
-  print("data is: ", data)
   data = Backend_Helper.clean_frontend_json(data)
-  print("after cleanup: ", data)
 
   #create binary clean data if weighting is equal to 5
   binary_clean_data = {}
