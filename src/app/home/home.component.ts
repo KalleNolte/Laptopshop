@@ -229,7 +229,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sort.sort({ id: "price", start: "desc", disableClear: false });
     }
     else if (sortingOption === "Star Rating") {
-      this.sort.sort({ id: "starRating", start: "desc", disableClear: false });
+      this.sort.sort({ id: "avgRating", start: "desc", disableClear: false });
     }
     else {
       this.sort.sort({ id: "relevance", start: "desc", disableClear: false });
