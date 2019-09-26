@@ -201,7 +201,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.getLaptops();
     }
     this.arr = new Array(12);
-    this.arr.fill(0);
+    this.arr["brandName"] = 0 ;
+    this.arr["price"] = 0;
+    this.arr["avgRating"] = 0;
+    this.arr["processorManufacturer"] = 0;
+    this.arr["screenSize"] = 0;
+    this.arr["processorCount"] = 0;
+    this.arr["processorSpeed"] = 0;
+    this.arr["hardDriveType"] = 0;
+    this.arr["hardDriveSize"] = 0;
+    this.arr["operatingSystem"] = 0;
+    this.arr["ram"] = 0;
+    this.arr["itemWeight"] = 0;
   }
 
   get brandNames() {
@@ -216,7 +227,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onHover(index:number) {
+  onHover(index:string) {
     //Sherif here, no idea why the hell arr has either 0 or 1, but noticed in onInputChange that arr[index ] = 1 only when weight = 5 so abused this.
     if(index != null  && this.arr[index] === 1){
 
@@ -324,8 +335,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
-  onInputChange(event: any, index: number) {
-    console.log(event.value);
+  onInputChange(event: any, index: string) {
+    // console.log(event.value);
     if (event.value == 5) {
       this.arr[index] = 1;
     } else {

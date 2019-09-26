@@ -27,7 +27,7 @@
 <section class="mainArea" fxLayout="row" fxLayoutAlign="start">
   <div class="widgetArea" fxLayout="column" fxLayoutAlign="start">
     <form [formGroup]="widgetForm" (ngSubmit)="onSubmit()">
-      <mat-card fxLayout="column" formGroupName="brandName" [ngClass]="arr[0] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(0)">
+      <mat-card fxLayout="column" formGroupName="brandName" [ngClass]="arr['brandName'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('brandName')">
         <mat-card-title>Brand Name</mat-card-title>
         <div *ngFor="let brand of brands">
           <mat-checkbox
@@ -42,8 +42,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[0]"
-          (change)="onInputChange($event,0)"
+          *ngIf="!arr['brandName']"
+          (change)="onInputChange($event,'brandName')"
           matTooltip="Pushing the slider all the way to the right will make this a must have requirement" [matTooltipPosition]="'after'"
         ></mat-slider>
         <mat-slider
@@ -53,8 +53,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[0]"
-          (change)="onInputChange($event,0)"
+          *ngIf="arr['brandName']"
+          (change)="onInputChange($event,'brandName')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -62,7 +62,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="price" [ngClass]="arr[1] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(1)">
+      <mat-card fxLayout="column" formGroupName="price" [ngClass]="arr['price'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('price')">
         <mat-card-title>Price</mat-card-title>
         <div *ngFor="let option of prices">
           <mat-checkbox
@@ -77,8 +77,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[1]"
-          (change)="onInputChange($event,1)"
+          *ngIf="!arr['price']"
+          (change)="onInputChange($event,'price')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -87,8 +87,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[1]"
-          (change)="onInputChange($event,1)"
+          *ngIf="arr['price']"
+          (change)="onInputChange($event,'price')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -96,7 +96,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="avgRating" [ngClass]="arr[2] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(2)">
+      <mat-card fxLayout="column" formGroupName="avgRating" [ngClass]="arr['avgRating'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('avgRating')">
         <mat-card-title>Rating</mat-card-title>
         <div *ngFor="let option of ratings">
           <mat-checkbox
@@ -111,8 +111,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[2]"
-          (change)="onInputChange($event,2)"
+          *ngIf="!arr['avgRating']"
+          (change)="onInputChange($event,'avgRating')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -121,8 +121,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[2]"
-          (change)="onInputChange($event,2)"
+          *ngIf="arr['avgRating']"
+          (change)="onInputChange($event,'avgRating')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -130,7 +130,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorManufacturer" [ngClass]="arr[3] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(3)">
+      <mat-card fxLayout="column" formGroupName="processorManufacturer" [ngClass]="arr['processorManufacturer'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('processorManufacturer')">
         <mat-card-title>Processor Manufacturer</mat-card-title>
         <div *ngFor="let option of processorManufacturers">
           <mat-checkbox
@@ -145,8 +145,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[3]"
-          (change)="onInputChange($event,3)"
+          *ngIf="!arr['processorManufacturer']"
+          (change)="onInputChange($event,'processorManufacturer')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -155,8 +155,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[3]"
-          (change)="onInputChange($event,3)"
+          *ngIf="arr['processorManufacturer']"
+          (change)="onInputChange($event,'processorManufacturer')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -164,7 +164,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="screenSize" [ngClass]="arr[4] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(4)">
+      <mat-card fxLayout="column" formGroupName="screenSize" [ngClass]="arr['screenSize'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('screenSize')">
         <mat-card-title>Screen Size</mat-card-title>
         <div *ngFor="let option of screenSizes">
           <mat-checkbox
@@ -179,8 +179,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[4]"
-          (change)="onInputChange($event,4)"
+          *ngIf="!arr['screenSize']"
+          (change)="onInputChange($event,'screenSize')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -189,8 +189,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[4]"
-          (change)="onInputChange($event,4)"
+          *ngIf="arr['screenSize']"
+          (change)="onInputChange($event,'screenSize')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -198,7 +198,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorCount" [ngClass]="arr[5] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(5)">
+      <mat-card fxLayout="column" formGroupName="processorCount" [ngClass]="arr['processorCount'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('processorCount')">
         <mat-card-title>Processor Type</mat-card-title>
         <div *ngFor="let option of processorCores">
           <mat-checkbox
@@ -213,8 +213,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[5]"
-          (change)="onInputChange($event,5)"
+          *ngIf="!arr['processorCount']"
+          (change)="onInputChange($event,'processorCount')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -223,8 +223,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[5]"
-          (change)="onInputChange($event,5)"
+          *ngIf="arr['processorCount']"
+          (change)="onInputChange($event,'processorCount')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -232,7 +232,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="processorSpeed" [ngClass]="arr[6] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(6)">
+      <mat-card fxLayout="column" formGroupName="processorSpeed" [ngClass]="arr['processorSpeed'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('processorSpeed')">
         <mat-card-title>Processor Speed</mat-card-title>
         <div *ngFor="let option of processorSpeeds">
           <mat-checkbox
@@ -247,8 +247,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[6]"
-          (change)="onInputChange($event,6)"
+          *ngIf="!arr['processorSpeed']"
+          (change)="onInputChange($event,'processorSpeed')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -257,8 +257,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[6]"
-          (change)="onInputChange($event,6)"
+          *ngIf="arr['processorSpeed']"
+          (change)="onInputChange($event,'processorSpeed')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -266,7 +266,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveType" [ngClass]="arr[7] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(7)">
+      <mat-card fxLayout="column" formGroupName="hardDriveType" [ngClass]="arr['hardDriveType'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('hardDriveType')">
         <mat-card-title>Hard Drive Type</mat-card-title>
         <div *ngFor="let option of hardDriveTypes">
           <mat-checkbox
@@ -281,8 +281,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[7]"
-          (change)="onInputChange($event,7)"
+          *ngIf="!arr['hardDriveType']"
+          (change)="onInputChange($event,'hardDriveType')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -291,8 +291,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[7]"
-          (change)="onInputChange($event,7)"
+          *ngIf="arr['hardDriveType']"
+          (change)="onInputChange($event,'hardDriveType')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -300,7 +300,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="hardDriveSize" [ngClass]="arr[8] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(8)">
+      <mat-card fxLayout="column" formGroupName="hardDriveSize" [ngClass]="arr['hardDriveSize'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('hardDriveSize')">
         <mat-card-title>Hard Drive Size</mat-card-title>
         <div *ngFor="let option of hardDriveSizes">
           <mat-checkbox
@@ -315,8 +315,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[8]"
-          (change)="onInputChange($event,8)"
+          *ngIf="!arr['hardDriveSize']"
+          (change)="onInputChange($event,'hardDriveSize')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -325,8 +325,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[8]"
-          (change)="onInputChange($event,8)"
+          *ngIf="arr['hardDriveSize']"
+          (change)="onInputChange($event,'hardDriveSize')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -334,7 +334,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="operatingSystem" [ngClass]="arr[9] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(9)">
+      <mat-card fxLayout="column" formGroupName="operatingSystem" [ngClass]="arr['operatingSystem'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('operatingSystem')">
         <mat-card-title>Operating System</mat-card-title>
         <div *ngFor="let option of operatingSystems">
           <mat-checkbox
@@ -351,8 +351,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[9]"
-          (change)="onInputChange($event,9)"
+          *ngIf="!arr['operatingSystem']"
+          (change)="onInputChange($event,'operatingSystem')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -361,8 +361,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[9]"
-          (change)="onInputChange($event,9)"
+          *ngIf="arr['operatingSystem']"
+          (change)="onInputChange($event,'operatingSystem')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -370,7 +370,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="ram" [ngClass]="arr[10] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(10)">
+      <mat-card fxLayout="column" formGroupName="ram" [ngClass]="arr['ram'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('ram')">
         <mat-card-title>Ram Size</mat-card-title>
         <div *ngFor="let option of ramOptions">
           <mat-checkbox
@@ -385,8 +385,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[10]"
-          (change)="onInputChange($event,10)"
+          *ngIf="!arr['ram']"
+          (change)="onInputChange($event,'ram')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -395,8 +395,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[10]"
-          (change)="onInputChange($event,10)"
+          *ngIf="arr['ram']"
+          (change)="onInputChange($event,'ram')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -404,7 +404,7 @@
         </div>
       </mat-card>
 
-      <mat-card fxLayout="column" formGroupName="itemWeight" [ngClass]="arr[11] === 0 ? '' : 'mustHave'" [matTooltip]="onHover(11)">
+      <mat-card fxLayout="column" formGroupName="itemWeight" [ngClass]="arr['itemWeight'] === 0 ? '' : 'mustHave'" [matTooltip]="onHover('itemWeight')">
         <mat-card-title>Weight</mat-card-title>
         <div *ngFor="let option of weights">
           <mat-checkbox
@@ -419,8 +419,8 @@
           min="1"
           max="5"
           step="1"
-          *ngIf="!arr[11]"
-          (change)="onInputChange($event,11)"
+          *ngIf="!arr['itemWeight']"
+          (change)="onInputChange($event,'itemWeight')"
         ></mat-slider>
         <mat-slider
           formControlName="weight"
@@ -429,8 +429,8 @@
           max="5"
           step="1"
           value="5"
-          *ngIf="arr[11]"
-          (change)="onInputChange($event,11)"
+          *ngIf="arr['itemWeight']"
+          (change)="onInputChange($event,'itemWeight')"
         ></mat-slider>
         <div fxLayout="row" fxLayoutAlign="space-between">
           <span>optional</span>
@@ -497,7 +497,7 @@
           <div class="flex-container" *ngIf="checkMatched(element.matched)">
                 <div class = "feedback" *ngFor="let x of attributes">
                     <div *ngFor="let y of x | keyvalue">
-                        <div *ngIf="element.matched[y.key]=='green' " class="element">
+                        <div *ngIf="element.matched[y.key]=='green'" [ngClass]="arr[y.key] === 0 ? '' : 'mustHave'" class="element">
                             <span>{{y.key | titlecase}} : {{ (y.value.length > 50)? (y.value | slice:0:50)+'..':(y.value) }}</span>
                             <img src="../assets/images/check.jpg" />
                         </div>
