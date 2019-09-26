@@ -125,7 +125,7 @@ class VagueHardDrive():
       }
 
       print("body ", body)
-      res = self.es.search(index="amazon", body=body)
+      res = self.es.search(index="amazon", body=body, size=10000)
 
       result = []
       scores = []
@@ -172,7 +172,7 @@ class VagueHardDrive():
       # print("computeVagueHardDrive_alternative function ", clean_data["range"]["hardDriveSize"])
       if "range" in clean_data["range"]["hardDriveSize"]:
 
-        # if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
+        if len(clean_data["range"]["hardDriveSize"]["range"]) == 1:
 
           for range in clean_data["range"]["hardDriveSize"]["range"]:
               if "minValue" in range and "maxValue" in range:
@@ -184,7 +184,7 @@ class VagueHardDrive():
                 else:
                   res_search.append(harddrive_searcher.computeVagueHardDrive(allDocs,  hd_size_weight, min_value, max_value, 1)) # Discrete value needed not a range
           return res_search
-        # else:
-        #   res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
-        #   print("res search ", len(res_search))
-        #   return res_search
+        else:
+          res_search.append(harddrive_searcher.computeVagueHardDrive_multiple(allDocs, hd_size_weight,clean_data["range"]["hardDriveSize"]["range"], 1 ))
+          print("res search ", len(res_search))
+          return res_search
