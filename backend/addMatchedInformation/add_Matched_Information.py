@@ -158,38 +158,6 @@ class ColorInformation:
               return "yellow"
       return "red"
 
-  # def get_price_field_color(self,laptop_value,query_values,allDocs,field_name):
-  #     print("in get_price_field_color function")
-  #     best_answer = "red"
-  #     for value in query_values :
-  #
-  #         if "minValue" in value and "maxValue" in value :
-  #             if laptop_value >= value["minValue"] and laptop_value<=value["maxValue"]:
-  #                 answer =  "green"
-  #
-  #         elif "minValue" in value  :
-  #             if laptop_value >= value["minValue"]:
-  #                 answer =  "green"
-  #
-  #         elif "maxValue" in value  :
-  #             if laptop_value <= value["maxValue"]:
-  #                 answer =  "green"
-  #
-  #         if answer == "green" :
-  #             return answer
-  #
-  #         else :
-  #             # print("What is value, laptop_value in function add_matched_information", value, " ", laptop_value)
-  #             answer = self.prozessColorAttributePrice(value,laptop_value) # laptop_value is price range
-  #
-  #         if answer == "green" :
-  #             return answer
-  #         if answer == "yellow" :
-  #             best_answer = "yellow"
-  #
-  #     return best_answer
-
-
   def prozessDataBinary(self,searchedValues):
     self.threshholdPrice = self.prozessThreshholdPrice(searchedValues)
 
