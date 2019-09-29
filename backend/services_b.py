@@ -18,9 +18,11 @@ allDocs_path = './allDocs.obj'
 
 def do_query(data):
 
+
+
   with open(allDocs_path, 'rb') as input:
     allDocs = pickle.load(input)
-
+  print('Before cleaning..')
   data = Backend_Helper.clean_frontend_json(data)
 
   #create binary clean data if weighting is equal to 5
@@ -49,18 +51,23 @@ def do_query(data):
       res = es.search(index="amazon", body=query)
       output_binary = Backend_Helper.refineResult(res)
 
+  print('binary done ..')
+
 
   if len(alexa_clean_data) > 0 :
 
   #Add alexa search results to output_binary, same mechanism and logic for both.
       alexa_result = get_alexa_search_result(allDocs, alexa_clean_data, alexa_searcher)
       output_binary += alexa_result
+  print('alexa done ..')
 
   res_search = list()
 
   # field_value_dict has the form:
   # {'binary' : { 'brandName': ['acer', 'hp'], 'weight':1}, ...}, 'vague' : {....},
   field_value_dict = extract_fields_and_values(clean_data)
+
+  print('extracting done ..')
 
   #Get total cumulative weight weight_sum (for example for all attributes weights were 7) and dividue each score by this weight_sum
   #For normalization
@@ -111,6 +118,8 @@ def do_query(data):
   res_search += call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_searcher, value_searcher,
                                          alexa_searcher)
 
+  print('calling methods done ..')
+
 
 
   # --------------------------------------------------------------------#
@@ -128,8 +137,13 @@ def do_query(data):
   # call the search function
   outputProducts = getElementsByAsin(asinKeys) #calls helper class method refineResuls
 
+  print('before boolean filtering ..')
+
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
+
+
+  print('after boolean filtering ..')
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -159,7 +173,10 @@ def do_query(data):
   #outputProducts_vaguenessGreaterZero , output_binary = filter_from_boolean(outputProducts_vaguenessGreaterZero, output_binary)
 
   #outputProducts_vaguenessGreaterZero = outputProducts_vaguenessGreaterZero[:1000]
+
+  print('before matched Info ..')
   c_i_helper.add_matched_information(data,outputProducts_vaguenessGreaterZero,allDocs)
+  print('after matched Info ..')
 
   #Needed in frontend
 
@@ -322,7 +339,7 @@ def call_responsible_methods(allDocs, field_value_dict, range_searcher, binary_s
           print("field_value_dict: ", field_value_dict[field_type][field_name]["range"])
 
           """The length of field_value_dict is the length of the interval range for a field (For example, for weight).
-            If it has length ==1, then only one interval for this field has been entered by user.  The function continues 
+            If it has length ==1, then only one interval for this field has been entered by user.  The function continues
             with default implementation of vague function and membership function calculations."""
           if len(field_value_dict[field_type][field_name]["range"]) ==1:
             for range in field_value_dict[field_type][field_name]["range"] :

@@ -27,6 +27,7 @@ app = Flask(__name__) #Create the flask instance, __name__ is the name of the cu
 @app.route('/api/search/alexa', methods=['POST'])
 def alexa_search():
 
+    print('Entered end point..')
     data = request.get_json()
     intent = data["intent"]
     intent_variable = data["intentVariable"]
@@ -34,9 +35,13 @@ def alexa_search():
     #TODO: boolean method for intentVariable
     #TODO: delete intentVariable with its Value
     data = Backend_Helper.clean_for_alexa(data)
+    print('Cleaned Date..')
     allDocs = service.get_all_documents()
+    print('Got all docs')
 
     outputProducts = service.do_query(data)
+
+    print('Query done')
 
     return jsonify(outputProducts[0])
 
@@ -70,8 +75,8 @@ def searchText():
   for item in outputProducts: #binary search results all have a vagueness score of 1
     item['vaguenessScore'] =1 #todo: change vagueness score to reflect score
 
-
-  return jsonify(outputProducts)
+    print(outputProducts)
+    return jsonify(outputProducts)
 
 
 @app.route('/api/sample', methods=['GET'])

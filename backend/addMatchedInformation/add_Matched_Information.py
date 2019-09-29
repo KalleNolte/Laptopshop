@@ -11,21 +11,25 @@ class ColorInformation:
   #return as a dictionary---------
   #------------------------------#
   def add_matched_information(self,query,laptops,allDocs):
-
+    all_values_dict = dict()
     for laptop in laptops:
         result = dict()
+        if (laptops.index(laptop) == 0) :
+            self.fill_all_values_dict(all_values_dict,laptop,allDocs)
+
         for field in laptop :
             if laptop[field] is not None :
                 if (field == "hddSize" or field == "ssdSize") and( laptop[field] >0) :
                     if "hardDriveSize" in query :
                       if len(query["hardDriveSize"]["hardDriveSizeRange"]) == 1:
-                        color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],allDocs,field)
+                        color_value = self.get_ranged_field_color(laptop[field],query["hardDriveSize"]["hardDriveSizeRange"],all_values_dict,field)
                         result.update({field:color_value})
 
                       else:# There are multiple non-consecutive intervals
                         colors = []
                         for interval_range in query["hardDriveSize"]["hardDriveSizeRange"]:
-                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], allDocs, field)
+                          print(all_values_dict)
+                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], all_values_dict, field)
                           colors.append(color_value)
                         if "green" in colors:
                           result.update({field: 'green'})
@@ -40,12 +44,12 @@ class ColorInformation:
 
                     if field_range_name in query[field] :
                       if len(query[field][field_range_name])==1 :
-                        color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],allDocs,field)
+                        color_value = self.get_ranged_field_color(laptop[field],query[field][field_range_name],all_values_dict,field)
                         result.update({field:color_value})
                       else: # There are multiple non-consecutive intervals
                         colors =[]
                         for interval_range in query[field][field_range_name]:
-                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], allDocs, field)
+                          color_value = self.get_ranged_field_color(laptop[field], [interval_range], all_values_dict, field)
                           colors.append(color_value)
                         if "green" in colors:
                           result.update({field:'green'})
@@ -60,7 +64,7 @@ class ColorInformation:
                           color_value = self.get_text_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
                           result.update({field:color_value})
                       else :
-                          color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],allDocs,field)
+                          color_value = self.get_discrete_value_field_color(laptop[field],query[field][field_value_name],all_values_dict,field)
                           result.update({field:color_value})
         laptop.update({"matched":result})
 
@@ -73,19 +77,15 @@ class ColorInformation:
 
       return "red"
 
-  def get_discrete_value_field_color(self,laptop_value,query_values,allDocs,field_name):
+  def get_discrete_value_field_color(self,laptop_value,query_values,all_values_dict,field_name):
 
       for value in query_values :
           if value == laptop_value :
               return "green"
       #==========================Yellow=========================#
-      allValues = []
 
-      for doc in allDocs['hits']['hits']:
-        if (doc['_source'][field_name]) :
-            allValues.append(float(doc['_source'][field_name]))
 
-      allValues = np.sort((np.array(allValues)))
+      allValues = np.sort((np.array(all_values_dict[field_name])))
       ############################
       #COLOR VALUE
       for value in query_values :
@@ -104,7 +104,7 @@ class ColorInformation:
 
       return "red"
 
-  def get_ranged_field_color(self,laptop_value,query_values,allDocs,field_name):
+  def get_ranged_field_color(self,laptop_value,query_values,all_values_dict,field_name):
 
       for value in query_values :
 
@@ -129,12 +129,9 @@ class ColorInformation:
               minValue = None
 
       #==========================Yellow=========================#
-      allValues = []
-      for doc in allDocs['hits']['hits']:
-        if (doc['_source'][field_name]) :
-            allValues.append(float(doc['_source'][field_name]))
 
-      allValues = np.sort((np.array(allValues)))
+
+      allValues = np.sort((np.array(all_values_dict[field_name])))
       for value in query_values :
           if maxValue is None :
               maxValue = allValues[-1]
@@ -285,3 +282,17 @@ class ColorInformation:
       lowerSupport = 23
       upperSupport = 129
     return lowerSupport, upperSupport
+  def fill_all_values_dict(self,all_values_dict,laptop,allDocs):
+
+      for field_name in laptop:
+          allValues = []
+
+          for doc in allDocs['hits']['hits']:
+            if (field_name in doc['_source']) :
+                try:
+                    allValues.append(float(doc['_source'][field_name]))
+                except :
+                    pass
+
+          allValues = np.sort((np.array(allValues)))
+          all_values_dict.update({field_name : allValues})
