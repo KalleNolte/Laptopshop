@@ -28,7 +28,6 @@ class ColorInformation:
                       else:# There are multiple non-consecutive intervals
                         colors = []
                         for interval_range in query["hardDriveSize"]["hardDriveSizeRange"]:
-                          print(all_values_dict)
                           color_value = self.get_ranged_field_color(laptop[field], [interval_range], all_values_dict, field)
                           colors.append(color_value)
                         if "green" in colors:

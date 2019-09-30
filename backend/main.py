@@ -29,6 +29,7 @@ def alexa_search():
 
     print('Entered end point..')
     data = request.get_json()
+    print(data)
     intent = data["intent"]
     intent_variable = data["intentVariable"]
     intent_variable_value = data[data["intentVariable"]][data["intentVariable"]+"Value"]

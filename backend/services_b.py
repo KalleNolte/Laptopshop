@@ -61,6 +61,7 @@ def do_query(data):
       output_binary += alexa_result
   print('alexa done ..')
 
+
   res_search = list()
 
   # field_value_dict has the form:
@@ -139,11 +140,19 @@ def do_query(data):
 
   print('before boolean filtering ..')
 
+
+
   # Compare outputProducts and output_binary to select only items that also occur in boolean search
+
+
   outputProducts, output_binary = filter_from_boolean(outputProducts, output_binary)
 
 
   print('after boolean filtering ..')
+
+
+
+
 
   # add a vagueness score to the returned objects and normalize
   for item in outputProducts:
@@ -239,23 +248,14 @@ def filter_from_boolean(outputProducts, output_binary):
   if len(output_binary) == 0:
       return outputProducts,output_binary
 
-  count_asin_in_list = []
-  for item in outputProducts + output_binary:
-    count_asin_in_list.append(item['asin'])
 
-  counter = collections.Counter(count_asin_in_list)
-  duplicate_list = []  # list of duplicate items in concatenated list
-  for key, value in counter.items():
-    if value > 1:
-      duplicate_list.append(key)
+  intersection = get_list_intersection(outputProducts,output_binary);
 
-  # copy only items that are in both lists
-  outputProducts = [item for item in outputProducts if item['asin']  in duplicate_list]
-  #erase duplicates from output_binary
-  output_binary = [item for item in output_binary if item['asin'] not in duplicate_list]
+  return intersection, output_binary
 
-  return outputProducts , output_binary
-
+def get_list_intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
 
 def callAttributeMethod(attributeName, attributeValue, attributeWeight, allDocs):
   methodName = "computeVague" + attributeName[0].upper() + attributeName[1:]

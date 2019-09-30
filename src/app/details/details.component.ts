@@ -42,11 +42,13 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.asin = this.route.snapshot.params['asin'];
     this.showDetails();
+
   }
 
   showDetails() {
     this.dataService.getLaptop_details(this.asin).subscribe(data => {
       this.item = data[0];
+      this.sendItem();
       // console.log(this.item.imagePath);
     });
   }
@@ -87,7 +89,7 @@ export class DetailsComponent implements OnInit {
     laptop += "}";
     // console.log(laptop);
     laptop = JSON.parse(JSON.stringify(laptop));
-    console.log(laptop);
+    // console.log(laptop);
     this.dataService.setLaptop(laptop).subscribe(data=>console.log(data));
   }
 
